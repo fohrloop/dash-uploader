@@ -10,7 +10,7 @@ The upload package for [Dash](https://dash.plotly.com/) applications using large
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ☎ Call easily a callback after uploading is finished.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 📦 Upload files using [resumable.js](https://github.com/23/resumable.js) rather than the HTML5 API, since the [dcc.Upload](https://dash.plotly.com/dash-core-components/upload) of the Dash core has limitations for file size (see [this](https://community.plotly.com/t/chrome-crashes-on-uploading-large-files/7530), [this](https://community.plotly.com/t/upload-a-file-larger-than-800-gb/34995/3) and [this](https://community.plotly.com/t/dash-upload-component-decoding-large-files/8033/2))
 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✅ Works with Dash 0.11.0. & Python 3.7.2. Possibly with many other versions, too.
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✅ Works with Dash 1.11.0. & Python 3.7.2. Possibly with many other versions, too.<br>
 
 # Installing
 ```
