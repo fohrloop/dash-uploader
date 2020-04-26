@@ -1,0 +1,321 @@
+{
+  "src/lib/components/Upload_ReactComponent.react.js": {
+    "description": "",
+    "displayName": "Upload_ReactComponent",
+    "methods": [
+      {
+        "name": "resetBuilder",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      },
+      {
+        "name": "cancelUpload",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      },
+      {
+        "name": "pauseUpload",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      },
+      {
+        "name": "startUpload",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      },
+      {
+        "name": "toggleHovered",
+        "docblock": null,
+        "modifiers": [],
+        "params": [],
+        "returns": null
+      }
+    ],
+    "props": {
+      "maxFiles": {
+        "type": {
+          "name": "number"
+        },
+        "required": false,
+        "description": "Maximum number of files that can be uploaded in one session",
+        "defaultValue": {
+          "value": "1",
+          "computed": false
+        }
+      },
+      "maxFileSize": {
+        "type": {
+          "name": "number"
+        },
+        "required": false,
+        "description": "Maximum size per file in bytes.",
+        "defaultValue": {
+          "value": "1024 * 1024 * 10",
+          "computed": false
+        }
+      },
+      "chunkSize": {
+        "type": {
+          "name": "number"
+        },
+        "required": false,
+        "description": "Size of file chunks to send to server.",
+        "defaultValue": {
+          "value": "1024 * 1024",
+          "computed": false
+        }
+      },
+      "simultaneousUploads": {
+        "type": {
+          "name": "number"
+        },
+        "required": false,
+        "description": "Number of simultaneous uploads to select"
+      },
+      "service": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "The service to send the files to",
+        "defaultValue": {
+          "value": "'/API/resumable'",
+          "computed": false
+        }
+      },
+      "className": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "Class to add to the upload component by default",
+        "defaultValue": {
+          "value": "'resumable-default'",
+          "computed": false
+        }
+      },
+      "hoveredClass": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "Class to add to the upload component when it is hovered",
+        "defaultValue": {
+          "value": "'resumable-hovered'",
+          "computed": false
+        }
+      },
+      "disabledClass": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "Class to add to the upload component when it is disabled",
+        "defaultValue": {
+          "value": "'resumable-disabled'",
+          "computed": false
+        }
+      },
+      "pausedClass": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "Class to add to the upload component when it is paused",
+        "defaultValue": {
+          "value": "'resumable-paused'",
+          "computed": false
+        }
+      },
+      "completeClass": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "Class to add to the upload component when it is complete",
+        "defaultValue": {
+          "value": "'resumable-complete'",
+          "computed": false
+        }
+      },
+      "uploadingClass": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "Class to add to the upload component when it is uploading",
+        "defaultValue": {
+          "value": "'resumable-uploading'",
+          "computed": false
+        }
+      },
+      "defaultStyle": {
+        "type": {
+          "name": "object"
+        },
+        "required": false,
+        "description": "Style attributes to add to the upload component",
+        "defaultValue": {
+          "value": "{}",
+          "computed": false
+        }
+      },
+      "activeStyle": {
+        "type": {
+          "name": "object"
+        },
+        "required": false,
+        "description": "Style when upload component is hovered over",
+        "defaultValue": {
+          "value": "{}",
+          "computed": false
+        }
+      },
+      "completeStyle": {
+        "type": {
+          "name": "object"
+        },
+        "required": false,
+        "description": "Style when upload is completed (upload finished)",
+        "defaultValue": {
+          "value": "{}",
+          "computed": false
+        }
+      },
+      "textLabel": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "The string to display in the upload component",
+        "defaultValue": {
+          "value": "'Click Here to Select a File'",
+          "computed": false
+        }
+      },
+      "completedMessage": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "Message to display when upload completed",
+        "defaultValue": {
+          "value": "'Complete! '",
+          "computed": false
+        }
+      },
+      "fileNames": {
+        "type": {
+          "name": "arrayOf",
+          "value": {
+            "name": "string"
+          }
+        },
+        "required": false,
+        "description": "The names of the files uploaded",
+        "defaultValue": {
+          "value": "[]",
+          "computed": false
+        }
+      },
+      "filetypes": {
+        "type": {
+          "name": "arrayOf",
+          "value": {
+            "name": "string"
+          }
+        },
+        "required": false,
+        "description": "List of allowed file types, e.g. ['jpg', 'png']",
+        "defaultValue": {
+          "value": "undefined",
+          "computed": true
+        }
+      },
+      "startButton": {
+        "type": {
+          "name": "bool"
+        },
+        "required": false,
+        "description": "Whether or not to have a start button",
+        "defaultValue": {
+          "value": "true",
+          "computed": false
+        }
+      },
+      "pauseButton": {
+        "type": {
+          "name": "bool"
+        },
+        "required": false,
+        "description": "Whether or not to have a pause button",
+        "defaultValue": {
+          "value": "true",
+          "computed": false
+        }
+      },
+      "cancelButton": {
+        "type": {
+          "name": "bool"
+        },
+        "required": false,
+        "description": "Whether or not to have a cancel button",
+        "defaultValue": {
+          "value": "true",
+          "computed": false
+        }
+      },
+      "disableDragAndDrop": {
+        "type": {
+          "name": "bool"
+        },
+        "required": false,
+        "description": "Whether or not to allow file drag and drop",
+        "defaultValue": {
+          "value": "false",
+          "computed": false
+        }
+      },
+      "setProps": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "Dash-supplied function for updating props"
+      },
+      "id": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "User supplied id of this component",
+        "defaultValue": {
+          "value": "'default-uploader-id'",
+          "computed": false
+        }
+      },
+      "simultaneuosUploads": {
+        "defaultValue": {
+          "value": "1",
+          "computed": false
+        },
+        "required": false
+      },
+      "onUploadErrorCallback": {
+        "defaultValue": {
+          "value": "undefined",
+          "computed": true
+        },
+        "required": false
+      }
+    }
+  }
+}
