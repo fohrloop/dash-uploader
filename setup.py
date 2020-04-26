@@ -11,7 +11,10 @@ setup(
     name=package_name,
     version=package["version"],
     author=package['author'],
-    packages=[package_name],
+    packages=[
+        package_name,
+        package_name + '._build',
+    ],
     include_package_data=True,
     license=package['license'],
     description=package.get('description', package_name),

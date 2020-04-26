@@ -198,7 +198,7 @@ export default class Upload_ReactComponent extends Component {
                             cursor: this.state.isUploading ? 'pointer' : 'default',
                         }}
                         disabled={this.state.isUploading}
-                        className="resumable-btn-start btn"
+                        className="resumable-btn-start btn btn-outline-secondary"
                         onClick={this.startUpload}>{this.props.startButton && 'upload'}
                     </button>
                 </div>;
@@ -216,7 +216,7 @@ export default class Upload_ReactComponent extends Component {
                             cursor: this.state.isUploading ? 'pointer' : 'default',
                         }}
                         disabled={!this.state.isUploading}
-                        className="resumable-btn-cancel btn"
+                        className="resumable-btn-cancel btn btn-outline-secondary"
                         onClick={this.cancelUpload}>{this.props.cancelButton && 'cancel'}
                     </button>
                 </div>;
@@ -234,7 +234,7 @@ export default class Upload_ReactComponent extends Component {
                             cursor: this.state.isUploading ? 'pointer' : 'default',
                         }}
                         disabled={!this.state.isUploading}
-                        className="resumable-btn-pause btn"
+                        className="resumable-btn-pause btn btn-outline-secondary"
                         onClick={this.pauseUpload}>
                         {this.props.pauseButton
                             && (this.state.isPaused ? 'resume' : 'pause')}
