@@ -57,6 +57,9 @@ export default class Upload_ReactComponent extends Component {
             forceChunkSize: false
         });
 
+        this.props.setProps({
+            isCompleted: false
+        });
         // Clicking the component will open upload dialog 
         ResumableField.assignBrowse(this.uploader);
 
@@ -66,10 +69,17 @@ export default class Upload_ReactComponent extends Component {
         }
 
         ResumableField.on('fileAdded', (file) => {
+            this.props.setProps({
+                // Currently supports uploading only one file at a time.
+                isCompleted: false,
+                fileNames: [],
+            });
             this.setState({
                 messageStatus: this.props.fileAddedMessage || ' Starting upload! of ' + file.fileName,
+                showEnabledButtons: true,
+                // Currently supports uploading only one file at a time.
                 isComplete: false,
-                showEnabledButtons: true
+                fileList: { files: [] },
             });
 
             if (typeof this.props.onFileAdded === 'function') {
@@ -80,6 +90,8 @@ export default class Upload_ReactComponent extends Component {
         });
 
         // Uploading a file is completed
+        // The "fileNames" is a list, even though currently uploading
+        // only one file at a time is supported.
         ResumableField.on('fileSuccess', (file, fileServer) => {
 
             if (this.props.fileNameServer) {
@@ -96,7 +108,8 @@ export default class Upload_ReactComponent extends Component {
 
             if (this.props.setProps) {
                 this.props.setProps({
-                    fileNames: fileNames
+                    fileNames: fileNames,
+                    isCompleted: true
                 });
             }
             this.setState({
@@ -110,6 +123,31 @@ export default class Upload_ReactComponent extends Component {
                 }
             });
         });
+
+
+
+        ResumableField.on('progress', () => {
+
+
+            this.setState({
+                isUploading: ResumableField.isUploading()
+            });
+
+            if ((ResumableField.progress() * 100) < 100) {
+                this.setState({
+                    messageStatus: parseInt(ResumableField.progress() * 100, 10) + '%',
+                    progressBar: ResumableField.progress() * 100
+                });
+            } else {
+                setTimeout(() => {
+                    this.setState({
+                        progressBar: 0
+                    })
+                }, 1000);
+            }
+
+        });
+
 
         ResumableField.on('progress', () => {
 
@@ -447,15 +485,9 @@ Upload_ReactComponent.propTypes = {
      */
     id: PropTypes.string,
     /**
-     * internal
+     *  The boolean flag telling if upload is completed.
      */
-    // fileAddedMessage: PropTypes.string,
-    // onFileAdded: PropTypes.func,
-    // fileNameServer: PropTypes.string,
-    // onFileSuccess: PropTypes.func,
-    // onUploadErrorCallback: PropTypes.func,
-    // disabledInput: PropTypes.bool
-
+    isCompleted: PropTypes.bool
 
 }
 
@@ -484,4 +516,5 @@ Upload_ReactComponent.defaultProps = {
     disableDragAndDrop: false,
     id: 'default-uploader-id',
     onUploadErrorCallback: undefined,
+    isCompleted: false,
 };

@@ -3,7 +3,7 @@ from pathlib import Path
 import dash_uploader as du
 import dash
 import dash_html_components as html
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 
 app = dash.Dash(__name__)
 
@@ -38,10 +38,15 @@ app.layout = html.Div(
 )
 
 
-@app.callback(Output('callback-output', 'children'),
-              [Input('upload-files-div', 'fileNames')])
-def display_files(fileNames):
+@app.callback(
+    Output('callback-output', 'children'),
+    [Input('upload-files-div', 'isCompleted')],
+    [State('upload-files-div', 'fileNames')],
+)
+def display_files(isCompleted, fileNames):
 
+    if not isCompleted:
+        return
     if fileNames is not None:
         out = []
         for filename in fileNames:

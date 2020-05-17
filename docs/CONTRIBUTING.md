@@ -87,6 +87,12 @@ npm run build
 ```
 This will create all the auto-generated (JS, json, python) files into the `dash_uploader/_build` folder.
 
+### Testing built React with python
+
+```
+python usage.py
+```
+
 
 ### Testing React components without python
 - Before creating the "python/Dash" versions, it is possible to test the component(s) by

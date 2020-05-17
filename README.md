@@ -44,6 +44,8 @@ if __name__ == '__main__':
 
 ## Example with callback
 - The `display_files`-function is called after each upload.
+- The `isCompleted` property will be set to `True`, when upload is finished.
+- The `fileNames` property (list of str) have the name of the uploaded file. Note that in *current version*, only one file can be uploaded at the time, and he length of this list is one.
 
 ```python
 from pathlib import Path
@@ -51,7 +53,7 @@ from pathlib import Path
 import dash_uploader as du
 import dash
 import dash_html_components as html
-from dash.dependencies import Input, Output
+from dash.dependencies import Input, Output, State
 
 app = dash.Dash(__name__)
 
@@ -86,9 +88,15 @@ app.layout = html.Div(
 )
 
 
-@app.callback(Output('callback-output', 'children'),
-              [Input('upload-files-div', 'fileNames')])
-def display_files(fileNames):
+@app.callback(
+    Output('callback-output', 'children'),
+    [Input('upload-files-div', 'isCompleted')],
+    [State('upload-files-div', 'fileNames')],
+)
+def display_files(isCompleted, fileNames):
+
+    if not isCompleted:
+        return
     if fileNames is not None:
         out = []
         for filename in fileNames:
@@ -100,7 +108,6 @@ def display_files(fileNames):
 
 if __name__ == '__main__':
     app.run_server(debug=True)
-
 ```
 - Below, there are three screenshots using the code above, and uploading an imporant data file. (1) Before uploading (2) During upload process (3) After upload is complete.
 

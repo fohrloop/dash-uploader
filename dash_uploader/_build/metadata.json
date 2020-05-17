@@ -302,6 +302,17 @@
           "computed": false
         }
       },
+      "isCompleted": {
+        "type": {
+          "name": "bool"
+        },
+        "required": false,
+        "description": "The boolean flag telling if upload is completed.",
+        "defaultValue": {
+          "value": "false",
+          "computed": false
+        }
+      },
       "simultaneuosUploads": {
         "defaultValue": {
           "value": "1",
