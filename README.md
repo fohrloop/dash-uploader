@@ -128,4 +128,4 @@ See [CONTRIBUTING.md](./docs/CONTRIBUTING.md)
 See [CHANGELOG.md](./docs/CHANGELOG.md)
 
 ## Credits
-This package is based on the React 16 compatible version [dash-resume-upload](https://github.com/westonkjones/dash-uploader) (0.0.4) by [Weston Jones](https://github.com/westonkjones/) which in turn is based on [dash-resume-upload](https://github.com/rmarren1/dash-uploader) (0.0.3). 
+This package is based on the React 16 compatible version [dash-resumable-upload](https://github.com/westonkjones/dash-resumable-upload) (0.0.4) by [Weston Jones](https://github.com/westonkjones/) which in turn is based on [dash-resumable-upload](https://github.com/rmarren1/dash-resumable-upload) (0.0.3) by [Ryan Marren](https://github.com/rmarren1). 
