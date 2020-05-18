@@ -45,7 +45,7 @@ if __name__ == '__main__':
 ## Example with callback
 - The `display_files`-function is called after each upload.
 - The `isCompleted` property will be set to `True`, when upload is finished.
-- The `fileNames` property (list of str) have the name of the uploaded file. Note that in *current version*, only one file can be uploaded at the time, and he length of this list is one.
+- The `fileNames` property (list of str) have the name of the uploaded file. Note that in current version, *only one file can be uploaded at the time*, and the length of this list is one.
 
 ```python
 from pathlib import Path
