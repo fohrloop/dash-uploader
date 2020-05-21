@@ -19,9 +19,13 @@ setup(
     license=package['license'],
     description=package.get('description', package_name),
     install_requires=[
-        'dash~=1.11.0',
-        'pyyaml~=5.3.1',  #building with dash-generate-components
+        'dash>=1.1.0',
     ],
+    extras_require={
+        'dev': [
+            'pyyaml~=5.3.1',  #building with dash-generate-components
+        ]
+    },
     classifiers=[
         'Framework :: Dash',
     ],

@@ -20,7 +20,7 @@ app.layout = html.Div(
                 pause_button=False,
                 cancel_button=True,
                 max_file_size=1800,  # 1800 Mb
-                filetypes=['zip', 'rar'],
+                # filetypes=['zip', 'rar'],
                 css_id='upload-files-div',
             ),
             style={
