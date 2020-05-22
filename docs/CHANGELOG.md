@@ -3,6 +3,7 @@
 ### v.0.1.2 (2020-05-22)
 - Added progressbar
 - Loosened `dash` requirements;  `dash~=0.11.0` -> `dash>=1.1.0`.
+- `activeStyle` replaced with `uploadingStyle`.
   
   
 ### v.0.1.1 (2020-05-18)
