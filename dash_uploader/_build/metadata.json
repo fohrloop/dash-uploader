@@ -168,12 +168,12 @@
           "computed": false
         }
       },
-      "activeStyle": {
+      "uploadingStyle": {
         "type": {
           "name": "object"
         },
         "required": false,
-        "description": "Style when upload component is hovered over",
+        "description": "Style when upload is in progress",
         "defaultValue": {
           "value": "{}",
           "computed": false

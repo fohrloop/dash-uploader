@@ -109,14 +109,7 @@ def display_files(isCompleted, fileNames):
 if __name__ == '__main__':
     app.run_server(debug=True)
 ```
-- Below, there are three screenshots using the code above, and uploading an imporant data file. (1) Before uploading (2) During upload process (3) After upload is complete.
 
-<p float="left" align="middle" >
-  <a href="docs/01_demo.png"><img src="docs/01_demo.png" width="150" /></a>
-  <a href="docs/02_demo.png"><img src="docs/02_demo.png" width="150" /></a>
-  <a href="docs/03_demo.png"><img src="docs/03_demo.png" width="150" /></a>
-
-</p>
 
 
 

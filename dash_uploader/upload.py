@@ -73,6 +73,8 @@ def Upload(
     else:
         default_style = {**DEFAULT_STYLE, **default_style}
 
+    upload_style = {**default_style, **{'lineHeight': '0px'}}
+
     arguments = dict(
         # Have not tested if using many files
         # is reliable -> Do not allow
@@ -87,7 +89,7 @@ def Upload(
         cancelButton=cancel_button,
         pauseButton=pause_button,
         defaultStyle=default_style,
-        activeStyle=default_style,
+        uploadingStyle=upload_style,
         completeStyle=default_style,
     )
 

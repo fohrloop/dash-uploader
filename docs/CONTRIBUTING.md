@@ -105,5 +105,15 @@ npm start
 - The url can be changed in the package.json -> scripts -> start, by changing the `host` argument to the [`webpack-serve`](https://www.npmjs.com/package/webpack-serve).
 - **Note**: There is not handler for POST requests in the demo! (the Upload component will not work without a POST handler)
 
+### Creating new version to pip
+- Update version in `package.json`
+- Create new `dash_uploader-x.x.x.tar.gz` with 
+```
+python .\setup.py sdist
+```
+- Upload to pip with
+```
+twine upload .\dist\dash_uploader-x.x.x.tar.gz
+```
 ## More help?
 Read also the automatically generated README text at [README-COOKIECUTTER.md](README-COOKIECUTTER.md).

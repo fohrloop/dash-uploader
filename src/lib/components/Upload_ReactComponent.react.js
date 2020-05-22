@@ -8,6 +8,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Resumablejs from 'resumablejs';
+import './progressbar.css';
+import './button.css';
 
 export default class Upload_ReactComponent extends Component {
 
@@ -19,7 +21,8 @@ export default class Upload_ReactComponent extends Component {
         isUploading: false,
         isHovered: false,
         isComplete: false,
-        showEnabledButtons: false
+        showEnabledButtons: false,
+        currentFile: ''
     }
 
     constructor(props) {
@@ -80,6 +83,7 @@ export default class Upload_ReactComponent extends Component {
                 // Currently supports uploading only one file at a time.
                 isComplete: false,
                 fileList: { files: [] },
+                currentFile: file.fileName,
             });
 
             if (typeof this.props.onFileAdded === 'function') {
@@ -135,7 +139,7 @@ export default class Upload_ReactComponent extends Component {
 
             if ((ResumableField.progress() * 100) < 100) {
                 this.setState({
-                    messageStatus: parseInt(ResumableField.progress() * 100, 10) + '%',
+                    messageStatus: 'Uploading "' + this.state.currentFile + '"',
                     progressBar: ResumableField.progress() * 100
                 });
             } else {
@@ -149,27 +153,6 @@ export default class Upload_ReactComponent extends Component {
         });
 
 
-        ResumableField.on('progress', () => {
-
-
-            this.setState({
-                isUploading: ResumableField.isUploading()
-            });
-
-            if ((ResumableField.progress() * 100) < 100) {
-                this.setState({
-                    messageStatus: parseInt(ResumableField.progress() * 100, 10) + '%',
-                    progressBar: ResumableField.progress() * 100
-                });
-            } else {
-                setTimeout(() => {
-                    this.setState({
-                        progressBar: 0
-                    })
-                }, 1000);
-            }
-
-        });
 
         ResumableField.on('fileError', (file, errorCount) => {
 
@@ -236,7 +219,7 @@ export default class Upload_ReactComponent extends Component {
                             cursor: this.state.isUploading ? 'pointer' : 'default',
                         }}
                         disabled={this.state.isUploading}
-                        className="resumable-btn-start btn btn-outline-secondary"
+                        className="resumable-btn-start btn btn-sm btn-outline-secondary"
                         onClick={this.startUpload}>{this.props.startButton && 'upload'}
                     </button>
                 </div>;
@@ -254,7 +237,7 @@ export default class Upload_ReactComponent extends Component {
                             cursor: this.state.isUploading ? 'pointer' : 'default',
                         }}
                         disabled={!this.state.isUploading}
-                        className="resumable-btn-cancel btn btn-outline-secondary"
+                        className="resumable-btn-cancel btn btn-sm btn-outline-secondary"
                         onClick={this.cancelUpload}>{this.props.cancelButton && 'cancel'}
                     </button>
                 </div>;
@@ -272,7 +255,7 @@ export default class Upload_ReactComponent extends Component {
                             cursor: this.state.isUploading ? 'pointer' : 'default',
                         }}
                         disabled={!this.state.isUploading}
-                        className="resumable-btn-pause btn btn-outline-secondary"
+                        className="resumable-btn-pause btn btn-sm btn-outline-secondary"
                         onClick={this.pauseUpload}>
                         {this.props.pauseButton
                             && (this.state.isPaused ? 'resume' : 'pause')}
@@ -285,8 +268,8 @@ export default class Upload_ReactComponent extends Component {
         const getStyle = () => {
             if (this.state.isComplete) {
                 return this.props.completeStyle;
-            } else if (this.state.isHovered || this.state.isUploading) {
-                return this.props.activeStyle;
+            } else if (this.state.isUploading) {
+                return this.props.uploadingStyle;
             }
             return this.props.defaultStyle;
 
@@ -316,17 +299,19 @@ export default class Upload_ReactComponent extends Component {
                     }}>
                     <label
                         style={{
-                            display: 'inline-block',
+                            display: this.state.isUploading ? 'block' : 'inline-block',
                             verticalAlign: 'middle', lineHeight: 'normal',
                             width: this.state.isUploading ? 'auto' : '100%',
                             paddingRight: this.state.isUploading ? '10px' : '0',
                             textAlign: 'center', wordWrap: 'break-word',
                             cursor: this.state.isUploading ? 'default' : 'pointer',
+                            fontSize: this.state.isUploading ? '10px' : 'inherit',
                         }}
                         onMouseEnter={this.toggleHovered}
                         onMouseLeave={this.toggleHovered}
                     >
-                        {this.state.messageStatus == '' ? textLabel : this.state.messageStatus}
+
+                        {(this.state.messageStatus === '') ? textLabel : this.state.messageStatus}
                         <input
                             ref={node => this.uploader = node}
                             type="file"
@@ -346,20 +331,37 @@ export default class Upload_ReactComponent extends Component {
                     </label>
                     <div className="progress"
                         style={{
-                            display: this.state.isUploading ? 'inline-block' : 'none',
+                            display: this.state.isUploading ? 'flex' : 'none',
+                            textAlign: 'center',
+                            marginTop: '10px',
+                            marginBottom: '10px',
+
                         }}>
-                        <div className="progress-bar"
+
+
+
+                        <div className="progress-bar progress-bar-striped progress-bar-animated"
                             style={{
                                 width: this.state.progressBar + '%',
                                 height: '100%'
-                            }}></div>
+                            }}>
+
+                            <span className="progress-value"
+                                style={{
+                                    position: 'absolute',
+                                    right: 0,
+                                    left: 0,
+                                }}
+                            >{this.state.progressBar.toFixed(2) + '%'}</span>
+
+                        </div>
                     </div>
                     {fileList}
                     {startButton}
                     {pauseButton}
                     {cancelButton}
                 </div>
-            </div>
+            </div >
         );
     }
 }
@@ -426,9 +428,9 @@ Upload_ReactComponent.propTypes = {
     defaultStyle: PropTypes.object,
 
     /**
-     * Style when upload component is hovered over
+     * Style when upload is in progress
      */
-    activeStyle: PropTypes.object,
+    uploadingStyle: PropTypes.object,
 
     /**
      * Style when upload is completed (upload finished)
@@ -504,7 +506,7 @@ Upload_ReactComponent.defaultProps = {
     pausedClass: 'resumable-paused',
     uploadingClass: 'resumable-uploading',
     defaultStyle: {},
-    activeStyle: {},
+    uploadingStyle: {},
     completeStyle: {},
     textLabel: 'Click Here to Select a File',
     completedMessage: 'Complete! ',
