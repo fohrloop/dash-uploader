@@ -14,7 +14,6 @@ The upload package for [Dash](https://dash.plotly.com/) applications using large
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✅ Works with Dash 1.1.0.+ & Python 3.6+. (Possibly with other versions, too)<br>
 
-## Properties
 
 ### dash-uploader vs. [dcc.Upload](https://dash.plotly.com/dash-core-components/upload)
 
