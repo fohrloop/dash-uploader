@@ -152,7 +152,7 @@ if __name__ == '__main__':
 - The `callback_on_completion`-function is called after each upload.
 - The `isCompleted` property will be set to `True`, when upload is finished.
 - The `fileNames` property (list of str) have the name of the uploaded file. Note that in current version, *only one file can be uploaded at the time*, and the length of this list is one.
-- The `upload_id` property (str) is used to distinguish different users/sessions. (new in v.0.2.0)
+- The `upload_id` property (str) is used to distinguish different users/sessions. In the example above, a simple [uuid.uuid1()](https://docs.python.org/3/library/uuid.html#uuid.uuid1) is used, which can be also converted back to a timestamp. This way, uploads with same filename from different users will be in different folders.  (new in **v.0.2.0**)
 
 
 ## Contributing
