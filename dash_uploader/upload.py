@@ -1,3 +1,7 @@
+import uuid
+
+import dash_html_components as html
+
 from dash_uploader._build.Upload_ReactComponent import Upload_ReactComponent
 
 DEFAULT_STYLE = {
@@ -13,18 +17,25 @@ DEFAULT_STYLE = {
 }
 
 
+def combine(overiding_dict, base_dict):
+    if overiding_dict is None:
+        return dict(base_dict)
+    return {**base_dict, **overiding_dict}
+
+
 # Implemented as function, but still uppercase.
 # This is because subclassing the Dash-auto-generated
-# "Upload from Upload.py" will give some errorss
+# "Upload from Upload.py" will give some errors
 def Upload(
+    id='dash-uploader',
     text='Drag and Drop Here to upload!',
     text_completed='Uploaded: ',
     cancel_button=True,
     pause_button=False,
     filetypes=None,
     max_file_size=1024,
-    css_id=None,
     default_style=None,
+    upload_id=None,
 ):
     """
     Parameters
@@ -52,8 +63,6 @@ def Upload(
         By default, all filetypes are accepted.
     max_file_size: numeric
         The maximum file size in Megabytes. Optional.
-    css_id: str
-        The CSS id for the component. Optional.
     default_style: None or dict
         Inline CSS styling for the main div element. 
         If None, use the default style of the component.
@@ -61,6 +70,11 @@ def Upload(
         and the default style. (you may override
         part of the style by giving a dictionary)
         More styling options through the CSS classes.
+    upload_id: None or str
+        The upload id, created with uuid.uuid1() or uuid.uuid4(), 
+        for example. If none, creates random session id with
+        uuid.uuid1().
+
     Returns
     -------
     Upload: dash component
@@ -68,14 +82,14 @@ def Upload(
     """
 
     # Handle styling
-    if default_style is None:
-        default_style = dict(DEFAULT_STYLE)
-    else:
-        default_style = {**DEFAULT_STYLE, **default_style}
+    default_style = combine(default_style, DEFAULT_STYLE)
+    upload_style = combine({'lineHeight': '0px'}, default_style)
 
-    upload_style = {**default_style, **{'lineHeight': '0px'}}
+    if upload_id is None:
+        upload_id = uuid.uuid1()
 
     arguments = dict(
+        id=id,
         # Have not tested if using many files
         # is reliable -> Do not allow
         maxFiles=1,
@@ -91,12 +105,9 @@ def Upload(
         defaultStyle=default_style,
         uploadingStyle=upload_style,
         completeStyle=default_style,
+        upload_id=str(upload_id),
     )
 
-    if css_id:
-        arguments['id'] = css_id
-    else:
-        arguments['id'] = 'resumable-upload-component'
     if filetypes:
         arguments['filetypes'] = filetypes
 

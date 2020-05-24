@@ -1,5 +1,10 @@
 # Changelog
 
+### v.0.2.0 (2020-05-25)
+- Upload folder for each file defined with a upload id (`upload_id`), which may be defined by the user.
+- Bugfix: Uploading file with similar name now overwrites the old file (previously, file chunks were uploaded, but never merged.)
+- Removed potential cause of infinite wait
+  
 ### v.0.1.2 (2020-05-22)
 - Added progressbar
 - Loosened `dash` requirements;  `dash~=0.11.0` -> `dash>=1.1.0`.

@@ -298,7 +298,7 @@
         "required": false,
         "description": "User supplied id of this component",
         "defaultValue": {
-          "value": "'default-uploader-id'",
+          "value": "'default-dash-uploader-id'",
           "computed": false
         }
       },
@@ -310,6 +310,17 @@
         "description": "The boolean flag telling if upload is completed.",
         "defaultValue": {
           "value": "false",
+          "computed": false
+        }
+      },
+      "upload_id": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "The ID for the upload event (for example, session ID)",
+        "defaultValue": {
+          "value": "''",
           "computed": false
         }
       },

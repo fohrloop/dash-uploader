@@ -43,7 +43,7 @@ export default class Upload_ReactComponent extends Component {
 
         const ResumableField = new Resumablejs({
             target: this.props.service,
-            query: {},
+            query: { upload_id: this.props.upload_id },
             fileType: this.props.filetypes,
             maxFiles: this.props.maxFiles,
             maxFileSize: this.props.maxFileSize,
@@ -486,11 +486,16 @@ Upload_ReactComponent.propTypes = {
      * User supplied id of this component
      */
     id: PropTypes.string,
+
     /**
      *  The boolean flag telling if upload is completed.
      */
-    isCompleted: PropTypes.bool
+    isCompleted: PropTypes.bool,
 
+    /**
+     *  The ID for the upload event (for example, session ID)
+     */
+    upload_id: PropTypes.string,
 }
 
 Upload_ReactComponent.defaultProps = {
@@ -516,7 +521,8 @@ Upload_ReactComponent.defaultProps = {
     pauseButton: true,
     cancelButton: true,
     disableDragAndDrop: false,
-    id: 'default-uploader-id',
+    id: 'default-dash-uploader-id',
     onUploadErrorCallback: undefined,
     isCompleted: false,
+    upload_id: ''
 };
