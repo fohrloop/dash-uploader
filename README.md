@@ -10,8 +10,8 @@ The upload package for [Dash](https://dash.plotly.com/) applications using large
 ## Short summary
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 💾 Data file size has no limits. (Except the hard disk size)<bR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ☎ Call easily a callback after uploading is finished.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 📦 Upload files using [resumable.js](https://github.com/23/resumable.js) 
-<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 📤 Upload files using [resumable.js](https://github.com/23/resumable.js) <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 📦 All JS and CSS bundled with the package. No need for network calls for CSS/JS.<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✅ Works with Dash 1.1.0.+ & Python 3.6+. (Possibly with other versions, too)<br>
 
 
@@ -163,4 +163,8 @@ See [CONTRIBUTING.md](./docs/CONTRIBUTING.md)
 See [CHANGELOG.md](./docs/CHANGELOG.md)
 
 ## Credits
-This package is based on the React 16 compatible version [dash-resumable-upload](https://github.com/westonkjones/dash-resumable-upload) (0.0.4) by [Weston Jones](https://github.com/westonkjones/) which in turn is based on [dash-resumable-upload](https://github.com/rmarren1/dash-resumable-upload) (0.0.3) by [Ryan Marren](https://github.com/rmarren1). 
+- History: This package is based on the React 16 compatible version [dash-resumable-upload](https://github.com/westonkjones/dash-resumable-upload) (0.0.4) by [Weston Jones](https://github.com/westonkjones/) which in turn is based on [dash-resumable-upload](https://github.com/rmarren1/dash-resumable-upload) (0.0.3) by [Ryan Marren](https://github.com/rmarren1) 
+- The package boilerplate is taken from the [dash-component-boilerplate](https://github.com/plotly/dash-component-boilerplate).
+- The uploading JS function utilizes the [resumable.js](http://www.resumablejs.com/) (1.1.0).
+- The JS component is created using [React](https://github.com/facebook/react) (16.8.6)
+- The CSS styling is mostly from [Bootstrap](https://getbootstrap.com/) 4.
