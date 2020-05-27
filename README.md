@@ -157,7 +157,39 @@ if __name__ == '__main__':
 
 ## Contributing
 
-See [CONTRIBUTING.md](./docs/CONTRIBUTING.md)
+<table class="tg">
+<thead>
+  <tr>
+    <th class="tg-0pky">What?</th>
+    <th class="tg-0pky">How?</th>
+  </tr>
+</thead>
+<tbody>
+  <tr>
+    <td class="tg-0pky">🐞 Found a bug? </td>
+    <td class="tg-0pky">🎟 <a href="https://github.com/np-8/dash-uploader/issues">File an Issue</a>  </td>
+  </tr>
+  <tr>
+    <td class="tg-0pky" rowspan="2"> 🙋‍♂️ Need help?</td>
+    <td class="tg-0pky">❔  <a href="https://stackoverflow.com/questions/ask">Ask a question on StackOverflow</a></td>
+  </tr>
+  <tr>
+    <td class="tg-0pky"> <a href="https://community.plotly.com/t/show-and-tell-dash-uploader-upload-large-files/38451">📧 Use this thread on community.plotly.com</a></td>
+  </tr>
+  <tr>
+    <td class="tg-0pky" rowspan="2"> 💡  Want to submit a feature request?  </td>
+    <td class="tg-0pky"><a href="https://github.com/np-8/dash-uploader/issues">🎫 File an Issue (feature request)</a> </td>
+  </tr>
+  <tr>
+    <td class="tg-0lax"><a href="https://community.plotly.com/t/show-and-tell-dash-uploader-upload-large-files/38451">🎭 Discuss about it on community.plotly.com</a></td>
+  </tr>
+  <tr>
+    <td class="tg-0lax">🧙  Want to write code? </td>
+    <td class="tg-0lax">🔥 <a href="./docs/CONTRIBUTING.md">Here's how you get started!</a> </td>
+  </tr>
+</tbody>
+</table>
+
 ## Changelog
 
 See [CHANGELOG.md](./docs/CHANGELOG.md)
