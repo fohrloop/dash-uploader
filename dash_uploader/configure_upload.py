@@ -10,10 +10,12 @@ import dash_html_components as html
 from flask import request
 from flask import abort
 
+import dash_uploader.settings as settings
+
 logger = logging.getLogger('dash_uploader')
 
 
-def configure_upload(app, folder, use_upload_id=True):
+def configure_upload(app, folder, use_upload_id=True, upload_api=None):
     """
     Parameters
     ---------
@@ -33,15 +35,57 @@ def configure_upload(app, folder, use_upload_id=True):
         session id) will use their own folder. If False, 
         all files from all sessions are uploaded into
         same folder (not recommended).
+    upload_api: None or str
+        The upload api endpoint to use; the url that is used
+        internally for the upload component POST and GET HTTP
+        requests. For example: "/API/resumable"
     """
-    decorate_server(app.server, folder, use_upload_id=use_upload_id)
+    if upload_api is None:
+        upload_api = settings.upload_api
+    else:
+        # Set the upload api since du.Upload components
+        # that are created after du.configure_upload
+        # need to be able to read the api endpoint.
+        settings.upload_api = upload_api
+
+    decorate_server(app.server,
+                    folder,
+                    upload_api,
+                    use_upload_id=use_upload_id)
 
 
-def decorate_server(server, temp_base, use_upload_id=True):
+def decorate_server(
+    server,
+    temp_base,
+    upload_api,
+    use_upload_id=True,
+):
+    """
+    Parameters
+    ----------
+    server: flask.Flask
+        The flask server instance
+    temp_base: str
+        The upload root folder
+    upload_api: str
+        The upload api endpoint to use; the url that is used
+        internally for the upload component POST and GET HTTP
+        requests.
+    use_upload_id: bool
+        Determines if the uploads are put into
+        folders defined by a "upload id" (upload_id).
+        If True, uploads will be put into `folder`/<upload_id>/;
+        that is, every user (for example with different 
+        session id) will use their own folder. If False, 
+        all files from all sessions are uploaded into
+        same folder (not recommended).
+    """
+
     # resumable.js uses a GET request to check if it uploaded the file already.
     # NOTE: your validation here needs to match whatever you do in the POST
     # (otherwise it will NEVER find the files)
-    @server.route("/API/resumable", methods=['GET'])
+
+    @server.route(upload_api, methods=['GET'])
     def resumable():
 
         resumableIdentifier = request.args.get('resumableIdentifier', type=str)
@@ -76,7 +120,7 @@ def decorate_server(server, temp_base, use_upload_id=True):
             abort(404, 'Not found')
 
     # if it didn't already upload, resumable.js sends the file here
-    @server.route("/API/resumable", methods=['POST'])
+    @server.route(upload_api, methods=['POST'])
     def resumable_post():
 
         resumableTotalChunks = request.form.get('resumableTotalChunks',

@@ -4,6 +4,8 @@ import dash_html_components as html
 
 from dash_uploader._build.Upload_ReactComponent import Upload_ReactComponent
 
+import dash_uploader.settings as settings
+
 DEFAULT_STYLE = {
     'width': '100%',
     # min-height and line-height should be the same to make
@@ -74,7 +76,7 @@ def Upload(
         The upload id, created with uuid.uuid1() or uuid.uuid4(), 
         for example. If none, creates random session id with
         uuid.uuid1().
-
+         
     Returns
     -------
     Upload: dash component
@@ -95,7 +97,7 @@ def Upload(
         maxFiles=1,
         maxFileSize=max_file_size * 1024 * 1024,
         textLabel=text,
-        service='/API/resumable',
+        service=settings.upload_api,
         startButton=False,
         # Not tested so default to one.
         simultaneousUploads=1,

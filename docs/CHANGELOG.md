@@ -1,5 +1,8 @@
 # Changelog
 
+### v.0.2.4 (2020-06-05)
+- Added possibility to determine the uploader component API endpoint using the `upload_api` argument of the `configure_upload` function. 
+  
 ### v.0.2.0 (2020-05-25)
 - Upload folder for each file defined with a upload id (`upload_id`), which may be defined by the user.
 - Bugfix: Uploading file with similar name now overwrites the old file (previously, file chunks were uploaded, but never merged.)

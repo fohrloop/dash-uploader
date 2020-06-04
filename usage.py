@@ -9,7 +9,11 @@ from dash.dependencies import Input, Output, State
 app = dash.Dash(__name__)
 
 UPLOAD_FOLDER_ROOT = r"C:\tmp\Uploads"
-du.configure_upload(app, UPLOAD_FOLDER_ROOT)
+du.configure_upload(
+    app,
+    UPLOAD_FOLDER_ROOT,
+    upload_api="/api/dash-upload",
+)
 
 
 def get_upload_component(id):

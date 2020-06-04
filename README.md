@@ -60,7 +60,7 @@ if __name__ == '__main__':
 
 ```
 
-## Example with callback
+## Example with callback (and other options)
 
 - **New in version 0.2.0:** The configure_upload accepts additional parameter `use_upload_id`, which is a boolean flag (Defaults to True). When True, the uploaded files are put into subfolders `<upload_folder>/<upload_id>`. This way different users can be forced to upload to different folders. 
 
@@ -76,8 +76,11 @@ from dash.dependencies import Input, Output, State
 app = dash.Dash(__name__)
 
 UPLOAD_FOLDER_ROOT = r"C:\tmp\Uploads"
-du.configure_upload(app, UPLOAD_FOLDER_ROOT)
-
+du.configure_upload(
+    app,
+    UPLOAD_FOLDER_ROOT,
+    upload_api="/API/dash-upload", 
+)
 
 def get_upload_component(id):
     return du.Upload(
