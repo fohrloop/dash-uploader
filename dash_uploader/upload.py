@@ -1,9 +1,6 @@
 import uuid
 
-import dash_html_components as html
-
 from dash_uploader._build.Upload_ReactComponent import Upload_ReactComponent
-
 import dash_uploader.settings as settings
 
 DEFAULT_STYLE = {
@@ -17,6 +14,15 @@ DEFAULT_STYLE = {
     'borderStyle': 'dashed',
     'borderRadius': '7px',
 }
+
+
+def get_service(requests_pathname_prefix, upload_api):
+    if requests_pathname_prefix == '/':
+        return upload_api
+    return '/'.join([
+        requests_pathname_prefix.rstrip('/'),
+        upload_api.lstrip('/'),
+    ])
 
 
 def combine(overiding_dict, base_dict):
@@ -38,6 +44,7 @@ def Upload(
     max_file_size=1024,
     default_style=None,
     upload_id=None,
+    max_files=1,
 ):
     """
     Parameters
@@ -76,7 +83,27 @@ def Upload(
         The upload id, created with uuid.uuid1() or uuid.uuid4(), 
         for example. If none, creates random session id with
         uuid.uuid1().
-         
+    max_files: int (default: 1)
+        EXPERIMENTAL feature. Read below. For bulletproof
+        implementation, force usage of zip files and keep
+        max_files = 1.
+        
+        The number of files that can be added to 
+        the upload field simultaneously.
+
+        Notes: 
+        (1) If even a single file which is not supported file
+         type, is added to the upload queue, upload process of
+         all files will be permanently interrupted. 
+        (2) Use reasonably small amount in "max_files". 
+        (3) When uploading two folders with Chrome, there is 
+         a bug in resumable.js which makes only one of the
+         folders to be uploaded. See:
+         https://github.com/23/resumable.js/issues/416
+        (4) When uploading folders, note that the subdirectories
+          are NOT created -> All files in the folders will
+          be uploaded to the single upload folder.
+
     Returns
     -------
     Upload: dash component
@@ -90,14 +117,17 @@ def Upload(
     if upload_id is None:
         upload_id = uuid.uuid1()
 
+    service = get_service(settings.requests_pathname_prefix,
+                          settings.upload_api)
+
     arguments = dict(
         id=id,
         # Have not tested if using many files
         # is reliable -> Do not allow
-        maxFiles=1,
+        maxFiles=1000,
         maxFileSize=max_file_size * 1024 * 1024,
         textLabel=text,
-        service=settings.upload_api,
+        service=service,
         startButton=False,
         # Not tested so default to one.
         simultaneousUploads=1,

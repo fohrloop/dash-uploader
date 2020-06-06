@@ -126,6 +126,9 @@ export default class Upload_ReactComponent extends Component {
                     this.props.onFileSuccess(file, fileServer);
                 }
             });
+
+            // Make re-upload of a file with same filename possible.
+            ResumableField.removeFile(file);
         });
 
 
@@ -503,7 +506,7 @@ Upload_ReactComponent.defaultProps = {
     maxFileSize: 1024 * 1024 * 10,
     chunkSize: 1024 * 1024,
     simultaneuosUploads: 1,
-    service: '/API/resumable',
+    service: '/API/dash-uploader',
     className: 'resumable-default',
     hoveredClass: 'resumable-hovered',
     completeClass: 'resumable-complete',
