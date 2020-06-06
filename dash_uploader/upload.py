@@ -1,9 +1,6 @@
 import uuid
 
-import dash_html_components as html
-
 from dash_uploader._build.Upload_ReactComponent import Upload_ReactComponent
-
 import dash_uploader.settings as settings
 
 DEFAULT_STYLE = {
@@ -17,6 +14,15 @@ DEFAULT_STYLE = {
     'borderStyle': 'dashed',
     'borderRadius': '7px',
 }
+
+
+def get_service(requests_pathname_prefix, upload_api):
+    if requests_pathname_prefix == '/':
+        return upload_api
+    return '/'.join([
+        requests_pathname_prefix.rstrip('/'),
+        upload_api.lstrip('/'),
+    ])
 
 
 def combine(overiding_dict, base_dict):
@@ -90,6 +96,9 @@ def Upload(
     if upload_id is None:
         upload_id = uuid.uuid1()
 
+    service = get_service(settings.requests_pathname_prefix,
+                          settings.upload_api)
+
     arguments = dict(
         id=id,
         # Have not tested if using many files
@@ -97,7 +106,7 @@ def Upload(
         maxFiles=1,
         maxFileSize=max_file_size * 1024 * 1024,
         textLabel=text,
-        service=settings.upload_api,
+        service=service,
         startButton=False,
         # Not tested so default to one.
         simultaneousUploads=1,

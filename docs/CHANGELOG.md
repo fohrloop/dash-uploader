@@ -1,5 +1,8 @@
 # Changelog
 
+### v.0.2.5 (2020-06-06)
+- Support for proxies; i.e. If app is running on `http://server.com/myapp`, and dash application is configured using `requests_pathname_prefix=myapp`, this is handled automatically by the Upload component.
+
 ### v.0.2.4 (2020-06-05)
 - Added possibility to determine the uploader component API endpoint using the `upload_api` argument of the `configure_upload` function. 
   

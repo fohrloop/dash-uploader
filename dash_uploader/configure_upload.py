@@ -48,6 +48,10 @@ def configure_upload(app, folder, use_upload_id=True, upload_api=None):
         # need to be able to read the api endpoint.
         settings.upload_api = upload_api
 
+    # Needed if using a proxy
+    settings.requests_pathname_prefix = app.config.get(
+        'requests_pathname_prefix', '/')
+
     decorate_server(app.server,
                     folder,
                     upload_api,

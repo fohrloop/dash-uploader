@@ -180,3 +180,4 @@ See [CHANGELOG.md](./docs/CHANGELOG.md)
 - The uploading JS function utilizes the [resumable.js](http://www.resumablejs.com/) (1.1.0).
 - The JS component is created using [React](https://github.com/facebook/react) (16.8.6)
 - The CSS styling is mostly from [Bootstrap](https://getbootstrap.com/) 4.
+- 
