@@ -1,7 +1,7 @@
 # Changelog
 
 ### v.0.3.0 (2020-06-06)
-- Added new [`@du.callback`](dash-uploader#ducallback) decorator for simple callback creation.   
+- Added new [`@du.callback`](dash-uploader.md#ducallback) decorator for simple callback creation.   
 - Added experimental `max_files` parameter for `du.Upload`.
 - Support for proxies; i.e. If app is running on `http://server.com/myapp`, and dash application is configured using `requests_pathname_prefix=myapp`, this is handled automatically by the Upload component. Fixes [#3](https://github.com/np-8/dash-uploader/issues/3).
 - Bugfix: Uploading file with same name multiple times is now possible.
