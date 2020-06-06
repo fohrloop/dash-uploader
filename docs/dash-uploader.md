@@ -1,11 +1,11 @@
 
 
 #  dash-uploader
-To use the upload component you need to two things
+To use the Upload component you need to two things
 - Configure dash-uploader with [`du.configure_upload`](#duconfigure_upload)
 - Create the upload component with [`du.Upload`](#duupload)
 
-Typically you also would like to define [callbacks](#3-callbacks)(functions that are called automatically when upload finishes).
+Typically you also would like to define [callbacks](#3-callbacks) (functions that are called automatically when upload finishes).
 
 > ⚠️**Security note**: The Upload component allows uploads of arbitrary files to the server harddisk and one should take this into account (with user token checking etc.) if used as part of a public website! Particularly, the `configure_upload` opens a route for `POST` HTTP requests.
 
