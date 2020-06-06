@@ -38,8 +38,11 @@ def configure_upload(app, folder, use_upload_id=True, upload_api=None):
     upload_api: None or str
         The upload api endpoint to use; the url that is used
         internally for the upload component POST and GET HTTP
-        requests. For example: "/API/resumable"
+        requests. For example: "/API/dash-uploader"
     """
+    settings.UPLOAD_FOLDER_ROOT = folder
+    settings.app = app
+
     if upload_api is None:
         upload_api = settings.upload_api
     else:

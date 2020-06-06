@@ -12,7 +12,7 @@ Keyword arguments:
 - maxFileSize (number; default 1024 * 1024 * 10): Maximum size per file in bytes.
 - chunkSize (number; default 1024 * 1024): Size of file chunks to send to server.
 - simultaneousUploads (number; optional): Number of simultaneous uploads to select
-- service (string; default '/API/resumable'): The service to send the files to
+- service (string; default '/API/dash-uploader'): The service to send the files to
 - className (string; default 'resumable-default'): Class to add to the upload component by default
 - hoveredClass (string; default 'resumable-hovered'): Class to add to the upload component when it is hovered
 - disabledClass (string; default 'resumable-disabled'): Class to add to the upload component when it is disabled

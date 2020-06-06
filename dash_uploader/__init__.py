@@ -6,6 +6,7 @@ import json
 import dash as _dash
 
 from dash_uploader.configure_upload import configure_upload
+from dash_uploader.callbacks import callback
 from dash_uploader.upload import Upload
 
 # noinspection PyUnresolvedReferences

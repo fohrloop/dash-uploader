@@ -503,7 +503,7 @@ Upload_ReactComponent.defaultProps = {
     maxFileSize: 1024 * 1024 * 10,
     chunkSize: 1024 * 1024,
     simultaneuosUploads: 1,
-    service: '/API/resumable',
+    service: '/API/dash-uploader',
     className: 'resumable-default',
     hoveredClass: 'resumable-hovered',
     completeClass: 'resumable-complete',

@@ -87,7 +87,7 @@
         "required": false,
         "description": "The service to send the files to",
         "defaultValue": {
-          "value": "'/API/resumable'",
+          "value": "'/API/dash-uploader'",
           "computed": false
         }
       },

@@ -4,8 +4,19 @@
 
 # 📤 dash-uploader
 
-The upload package for [Dash](https://dash.plotly.com/) applications using large data files. 
+The alternative upload component for [Dash](https://dash.plotly.com/) applications. 
 
+
+## Table of contents
+- [Short summary](#short-summary)
+- [dash-uploader vs. dcc.Upload](#dash-uploader-vs-dccupload)
+- [Installing](#installing)
+- [Quickstart](#quickstart)
+  - [Simple example](#simple-example)
+  - [Example with callback](#example-with-callback-and-other-options)
+- [Contributing](#contributing)
+- [Links](#links)
+- [Credits](#credits)
 
 ## Short summary
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 💾 Data file size has no limits. (Except the hard disk size)<bR>
@@ -34,9 +45,10 @@ The upload package for [Dash](https://dash.plotly.com/) applications using large
 pip install dash-uploader
 ```
 
-# Usage
+# Quickstart
 
-⚠️**Security note**: The Upload component allows uploads of arbitrary files to arbitrary subfolders (if using raw XHR requests and `use_upload_id` is True) and one should take this into account (with user token checking etc.) if used as part of a public website!
+Full documentation [here](docs/dash-uploader.md) 
+>⚠️**Security note**: The Upload component allows POST requests and uploads of arbitrary files to the server harddisk and one should take this into account (with user token checking etc.) if used as part of a public website! 
 
 ## Simple example
 
@@ -61,7 +73,7 @@ if __name__ == '__main__':
 ```
 
 ## Example with callback (and other options)
-
+- **New in version 0.2.5:** New short callback syntax using `@du.callback`.
 - **New in version 0.2.0:** The configure_upload accepts additional parameter `use_upload_id`, which is a boolean flag (Defaults to True). When True, the uploaded files are put into subfolders `<upload_folder>/<upload_id>`. This way different users can be forced to upload to different folders. 
 
 ```python
@@ -76,20 +88,13 @@ from dash.dependencies import Input, Output, State
 app = dash.Dash(__name__)
 
 UPLOAD_FOLDER_ROOT = r"C:\tmp\Uploads"
-du.configure_upload(
-    app,
-    UPLOAD_FOLDER_ROOT,
-    upload_api="/API/dash-upload", 
-)
+du.configure_upload(app, UPLOAD_FOLDER_ROOT)
 
 def get_upload_component(id):
     return du.Upload(
         id=id,
-        text='Drag and Drop files here',
-        text_completed='Completed: ',
-        cancel_button=True,
         max_file_size=1800,  # 1800 Mb
-        filetypes=['zip', 'rar'],
+        filetypes=['csv', 'zip'],
         upload_id=uuid.uuid1(),  # Unique session id
     )
 
@@ -122,40 +127,18 @@ def get_app_layout():
 app.layout = get_app_layout
 
 
-@app.callback(
-    Output('callback-output', 'children'),
-    [Input('dash-uploader', 'isCompleted')],
-    [State('dash-uploader', 'fileNames'),
-     State('dash-uploader', 'upload_id')],
+@du.callback(
+    output=Output('callback-output', 'children'),
+    id='dash-uploader',
 )
-def callback_on_completion(iscompleted, filenames, upload_id):
-    if not iscompleted:
-        return
-
-    out = []
-    if filenames is not None:
-        if upload_id:
-            root_folder = Path(UPLOAD_FOLDER_ROOT) / upload_id
-        else:
-            root_folder = Path(UPLOAD_FOLDER_ROOT)
-
-        for filename in filenames:
-            file = root_folder / filename
-            out.append(file)
-        return html.Ul([html.Li(str(x)) for x in out])
-
-    return html.Div("No Files Uploaded Yet!")
+def get_a_list(filenames):
+    return html.Ul([html.Li(filenames)])
 
 
 if __name__ == '__main__':
     app.run_server(debug=True)
 
 ```
-**Notes for the example:**
-- The `callback_on_completion`-function is called after each upload.
-- The `isCompleted` property will be set to `True`, when upload is finished.
-- The `fileNames` property (list of str) have the name of the uploaded file. Note that in current version, *only one file can be uploaded at the time*, and the length of this list is one.
-- The `upload_id` property (str) is used to distinguish different users/sessions. In the example above, a simple [uuid.uuid1()](https://docs.python.org/3/library/uuid.html#uuid.uuid1) is used, which can be also converted back to a timestamp. This way, uploads with same filename from different users will be in different folders.  (new in **v.0.2.0**)
 
 
 ## Contributing
@@ -168,11 +151,9 @@ if __name__ == '__main__':
 | 💡  Want to submit a feature request? | <a href="https://community.plotly.com/t/show-and-tell-dash-uploader-upload-large-files/38451">🎭 Discuss about it on community.plotly.com</a><br><a href="https://github.com/np-8/dash-uploader/issues">🎫 File an Issue (feature request)</a> |
 | 🧙  Want to write code?               | 🔥 <a href="./docs/CONTRIBUTING.md">Here's how you get started!</a>                                                                                                                                                                           |
 
-
-
-## Changelog
-
-See [CHANGELOG.md](./docs/CHANGELOG.md)
+## Links
+- [Documentation](docs/dash-uploader.md)
+- [Changelog](./docs/CHANGELOG.md)
 
 ## Credits
 - History: This package is based on the React 16 compatible version [dash-resumable-upload](https://github.com/westonkjones/dash-resumable-upload) (0.0.4) by [Weston Jones](https://github.com/westonkjones/) which in turn is based on [dash-resumable-upload](https://github.com/rmarren1/dash-resumable-upload) (0.0.3) by [Ryan Marren](https://github.com/rmarren1) 
@@ -180,4 +161,3 @@ See [CHANGELOG.md](./docs/CHANGELOG.md)
 - The uploading JS function utilizes the [resumable.js](http://www.resumablejs.com/) (1.1.0).
 - The JS component is created using [React](https://github.com/facebook/react) (16.8.6)
 - The CSS styling is mostly from [Bootstrap](https://getbootstrap.com/) 4.
-- 
