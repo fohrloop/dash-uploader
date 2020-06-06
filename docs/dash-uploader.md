@@ -177,7 +177,7 @@ du.Upload(
 ```
 ###  `@du.callback`
 
-*New in version **2.5.0***
+*New in version **2.3.0***
 
 Easiest way to call a simple callback after uploading would be something like:
 
