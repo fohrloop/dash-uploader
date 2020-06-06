@@ -126,6 +126,9 @@ export default class Upload_ReactComponent extends Component {
                     this.props.onFileSuccess(file, fileServer);
                 }
             });
+
+            // Make re-upload of a file with same filename possible.
+            ResumableField.removeFile(file);
         });
 
 

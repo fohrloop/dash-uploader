@@ -2,10 +2,10 @@
 
 #  dash-uploader
 To use the upload component you need to two things
-- Configure dash-uploader with [`du.configure_upload`]((#duconfigure_upload))
-- Create the upload component with [`du.Upload`]((#duupload))
+- Configure dash-uploader with [`du.configure_upload`](#duconfigure_upload)
+- Create the upload component with [`du.Upload`](#duupload)
 
-Typically you also would like to define [callbacks]((#3-callbacks)) (functions that are called automatically when upload finishes).
+Typically you also would like to define [callbacks](#3-callbacks)(functions that are called automatically when upload finishes).
 
 > ⚠️**Security note**: The Upload component allows uploads of arbitrary files to the server harddisk and one should take this into account (with user token checking etc.) if used as part of a public website! Particularly, the `configure_upload` opens a route for `POST` HTTP requests.
 
@@ -85,6 +85,7 @@ Upload(
     max_file_size=1024,
     default_style=None,
     upload_id=None,
+    max_files=1,
 )
 ```
 
@@ -137,6 +138,27 @@ More styling options through the CSS classes.
 The upload id, created with `uuid.uuid1()` or uuid.uuid4(), for example. If `None`, creates random session id with `uuid.uuid1()`.  Defines a subfolder where the files are to be uploaded.
 
 Only used, if `use_upload_id` parameter is set to `True` in `configure_upload`. 
+
+#### max_files: int (default: 1)
+>⚠️ **Experimental** feature. Read below. For bulletproof
+implementation, force usage of zip files and keep
+max_files = 1.
+
+The number of files that can be added to 
+the upload field simultaneously.
+
+**Notes**: <br>
+**(1)** If even a single file which is not supported file
+    type (i.e. missing in  `filetypes`), is added to the upload queue, upload process of all files will be permanently interrupted. <br>
+**(2)** Use reasonably small number in `max_files`. <br>
+**(3)** When uploading two (or more) folders with Chrome, there is 
+    a bug in resumable.js which makes only one of the
+    folders to be uploaded. See:
+    https://github.com/23/resumable.js/issues/416<br>
+**(4)** When uploading folders, note that the subdirectories
+    are **not** created -> All files in the folders will
+    be uploaded to the single upload folder.<br>
+
 
 
 ## 3 Callbacks

@@ -164,7 +164,6 @@ def decorate_server(
         with open(lock_file_path, 'a'):
             os.utime(lock_file_path, None)
         chunk_data.save(chunk_file)
-        server.logger.debug('Saved chunk: %s', chunk_file)
         os.unlink(lock_file_path)
 
         # check if the upload is complete
