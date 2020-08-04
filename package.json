@@ -1,6 +1,6 @@
 {
   "name": "dash_uploader",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Upload large files using resumable.js",
   "repository": {
     "type": "git",
@@ -41,7 +41,7 @@
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-import": "^2.18.0",
     "eslint-plugin-react": "^7.14.2",
-    "npm": "^6.14.6",
+    "npm": "^6.14.7",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-docgen": "^4.1.1",
