@@ -2,7 +2,7 @@
 
 ## v.0.3.1 (2020-08-04)
 ### Fixed
-- Importing `dash-uploader` with `dash` versions `<1.11.0` was not possible.
+- Importing `dash-uploader` with `dash` versions `<1.11.0` was not possible. (Related [issue](https://github.com/np-8/dash-uploader/issues/9))
 ### Security
 - Javascript package security updates.
   
