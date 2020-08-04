@@ -1,29 +1,46 @@
 # Changelog
 
-### v.0.3.0 (2020-06-06)
-- Added new [`@du.callback`](dash-uploader.md#ducallback) decorator for simple callback creation.   
-- Added experimental `max_files` parameter for `du.Upload`.
-- Support for proxies; i.e. If app is running on `http://server.com/myapp`, and dash application is configured using `requests_pathname_prefix=myapp`, this is handled automatically by the Upload component. Fixes [#3](https://github.com/np-8/dash-uploader/issues/3).
-- Bugfix: Uploading file with same name multiple times is now possible.
-### v.0.2.4 (2020-06-05)
-- Added possibility to determine the uploader component API endpoint using the `upload_api` argument of the `configure_upload` function. 
+## v.0.3.1 (2020-08-04)
+### Fixed
+- Importing `dash-uploader` with `dash` versions `<1.11.0` was not possible.
+### Security
+- Javascript package security updates.
   
-### v.0.2.0 (2020-05-25)
+## v.0.3.0 (2020-06-06)
+### Added 
+- New [`@du.callback`](dash-uploader.md#ducallback) decorator for simple callback creation.   
+- Experimental `max_files` parameter for `du.Upload`.
+- Support for proxies; i.e. If app is running on `http://server.com/myapp`, and dash application is configured using `requests_pathname_prefix=myapp`, this is handled automatically by the Upload component. Fixes [#3](https://github.com/np-8/dash-uploader/issues/3).
+### Fixed
+- Uploading file with same name multiple times is now possible.
+## v.0.2.4 (2020-06-05)
+### Added
+- Possibility to determine the uploader component API endpoint using the `upload_api` argument of the `configure_upload` function. 
+  
+## v.0.2.0 (2020-05-25)
+### Added
 - Upload folder for each file defined with a upload id (`upload_id`), which may be defined by the user.
-- Bugfix: Uploading file with similar name now overwrites the old file (previously, file chunks were uploaded, but never merged.)
+### Fixed
+- Uploading file with similar name now overwrites the old file (previously, file chunks were uploaded, but never merged.)
 - Removed potential cause of infinite wait
   
-### v.0.1.2 (2020-05-22)
-- Added progressbar
+## v.0.1.2 (2020-05-22)
+### Added
+- Progressbar
+### Changed
 - Loosened `dash` requirements;  `dash~=0.11.0` -> `dash>=1.1.0`.
 - `activeStyle` replaced with `uploadingStyle`.
   
   
-### v.0.1.1 (2020-05-18)
-- Bugfix: Callback will now fired even multiple files are uploaded in a row. (Related [Issue](https://github.com/np-8/dash-uploader/issues/1))
+## v.0.1.1 (2020-05-18)
+### Fixed
+- Callback will now fired even multiple files are uploaded in a row. (Related [Issue](https://github.com/np-8/dash-uploader/issues/1))
   
-### v.0.1.0 (2020-04-06)
+## v.0.1.0 (2020-04-06)
 - Initial release based on the [dash-resume-upload](https://github.com/westonkjones/dash-uploader) (0.0.4).
+
+### Changed
 - Restarted project basing on the [dash-component-boilerplate](https://github.com/plotly/dash-component-boilerplate)
-- Added clean, documented python interface for `Upload`
 - Hiding "Pause" and "Cancel" buttons when not uploading
+### Added
+- Clean, documented python interface for `Upload`
