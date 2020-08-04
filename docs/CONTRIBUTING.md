@@ -11,9 +11,9 @@ Maybe you already have an idea. If not, there is also a list for development ide
 - Install [npm and Node.js](https://nodejs.org) for building JS.
 - Install the JS dependencies by running `npm install` on the project root. This will create `node_modules` directory.
 - Create python virtual environment and activate it
-- `pip install` this package in editable state
+- `pip install` this package in editable state with the `[dev]` flag.
 ```
-python -m pip install -e <path_to_this_folder>
+python -m pip install -e <path_to_this_folder>[dev]
 ```
 
 ### Running demo page
