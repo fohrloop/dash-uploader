@@ -324,6 +324,28 @@
           "computed": false
         }
       },
+      "newestUploadedFileName": {
+        "type": {
+          "name": "string"
+        },
+        "required": false,
+        "description": "The name of the newest uploaded file.",
+        "defaultValue": {
+          "value": "''",
+          "computed": false
+        }
+      },
+      "uploadedFiles": {
+        "type": {
+          "name": "number"
+        },
+        "required": false,
+        "description": "The number of uploaded files (integer)",
+        "defaultValue": {
+          "value": "0",
+          "computed": false
+        }
+      },
       "simultaneuosUploads": {
         "defaultValue": {
           "value": "1",

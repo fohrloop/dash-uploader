@@ -1,5 +1,13 @@
 # Changelog
 
+## v.0.5.0dev (2020-10-27)
+### Fixed
+- WIP: Calling callback each time file is added 
+### Changed
+- Updated resumable.js (1.1.0 -> 1.1.2)
+
+  
+
 ## v.0.4.1 (2020-10-27)
 ### Fixed
 - max_files parameter to du.Upload did not have effect (Related [issue](https://github.com/np-8/dash-uploader/issues/12))

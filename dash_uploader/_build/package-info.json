@@ -1,6 +1,6 @@
 {
   "name": "dash_uploader",
-  "version": "0.3.2",
+  "version": "0.4.1",
   "description": "Upload large files using resumable.js",
   "repository": {
     "type": "git",
@@ -25,7 +25,7 @@
   "license": "MIT",
   "dependencies": {
     "ramda": "^0.26.1",
-    "resumablejs": "^1.1.0"
+    "resumablejs": "github:23/resumable.js#master"
   },
   "devDependencies": {
     "@babel/core": "^7.12.3",

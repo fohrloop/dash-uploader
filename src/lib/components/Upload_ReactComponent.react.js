@@ -1,4 +1,4 @@
-// v.0.1.0. https://github.com/np-8/dash-uploader 
+//  https://github.com/np-8/dash-uploader 
 // 
 // Credits:
 // This file is based on following repositories
@@ -61,7 +61,9 @@ export default class Upload_ReactComponent extends Component {
         });
 
         this.props.setProps({
-            isCompleted: false
+            isCompleted: false,
+            newestUploadedFileName: '',
+            uploadedFiles: 0,
         });
         // Clicking the component will open upload dialog 
         ResumableField.assignBrowse(this.uploader);
@@ -96,6 +98,7 @@ export default class Upload_ReactComponent extends Component {
         // Uploading a file is completed
         // The "fileNames" is a list, even though currently uploading
         // only one file at a time is supported.
+        // When uploading multiple files, this will be called every time a file upload completes.
         ResumableField.on('fileSuccess', (file, fileServer) => {
 
             if (this.props.fileNameServer) {
@@ -113,12 +116,12 @@ export default class Upload_ReactComponent extends Component {
             if (this.props.setProps) {
                 this.props.setProps({
                     fileNames: fileNames,
-                    isCompleted: true
+                    newestUploadedFileName: file.fileName,
+                    uploadedFiles: this.props.uploadedFiles + 1,
                 });
             }
             this.setState({
                 fileList: { files: currentFiles },
-                isComplete: true,
                 showEnabledButtons: false,
                 messageStatus: this.props.completedMessage + file.fileName || fileServer
             }, () => {
@@ -156,6 +159,19 @@ export default class Upload_ReactComponent extends Component {
         });
 
 
+        ResumableField.on('fileSuccess', (file, fileServer) => {
+
+            if (this.props.setProps) {
+                this.props.setProps({
+                    isCompleted: true,
+                });
+            }
+            this.setState({
+                isComplete: true,
+                showEnabledButtons: false,
+
+            });
+        })
 
         ResumableField.on('fileError', (file, errorCount) => {
 
@@ -499,6 +515,18 @@ Upload_ReactComponent.propTypes = {
      *  The ID for the upload event (for example, session ID)
      */
     upload_id: PropTypes.string,
+
+
+    /**
+     *  The name of the newest uploaded file.
+     */
+    newestUploadedFileName: PropTypes.string,
+
+    /**
+     *  The number of uploaded files (integer)
+     */
+    uploadedFiles: PropTypes.number,
+
 }
 
 Upload_ReactComponent.defaultProps = {
@@ -519,6 +547,8 @@ Upload_ReactComponent.defaultProps = {
     textLabel: 'Click Here to Select a File',
     completedMessage: 'Complete! ',
     fileNames: [],
+    newestUploadedFileName: '',
+    uploadedFiles: 0,
     filetypes: undefined,
     startButton: true,
     pauseButton: true,
