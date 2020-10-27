@@ -10,6 +10,7 @@ from flask import request
 from flask import abort
 
 import dash_uploader.settings as settings
+from dash_uploader.upload import update_upload_api
 
 logger = logging.getLogger('dash_uploader')
 
@@ -53,6 +54,10 @@ def configure_upload(app, folder, use_upload_id=True, upload_api=None):
     # Needed if using a proxy
     settings.requests_pathname_prefix = app.config.get(
         'requests_pathname_prefix', '/')
+    settings.routes_pathname_prefix = app.config.get('routes_pathname_prefix',
+                                                     '/')
+
+    upload_api = update_upload_api(settings.routes_pathname_prefix, upload_api)
 
     decorate_server(app.server,
                     folder,

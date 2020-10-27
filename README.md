@@ -15,7 +15,8 @@ The alternative upload component for [Dash](https://dash.plotly.com/) applicatio
   - [Simple example](#simple-example)
   - [Example with callback](#example-with-callback-and-other-options)
 - [Contributing](#contributing)
-- [Links](#links)
+- [Documentation](#documentation)
+- [Changelog](#changelog)
 - [Credits](#credits)
 
 ## Short summary
@@ -150,11 +151,12 @@ if __name__ == '__main__':
 | 🙋‍♂️ Need help?                         | ❔  <a href="https://stackoverflow.com/questions/ask">Ask a question on StackOverflow</a> <br><a href="https://community.plotly.com/t/show-and-tell-dash-uploader-upload-large-files/38451">📧 Use this thread on community.plotly.com</a>     |
 | 💡  Want to submit a feature request? | <a href="https://community.plotly.com/t/show-and-tell-dash-uploader-upload-large-files/38451">🎭 Discuss about it on community.plotly.com</a><br><a href="https://github.com/np-8/dash-uploader/issues">🎫 File an Issue (feature request)</a> |
 | 🧙  Want to write code?               | 🔥 <a href="./docs/CONTRIBUTING.md">Here's how you get started!</a>                                                                                                                                                                           |
+## Documentation
+- See: [Documentation](docs/dash-uploader.md)
 
-## Links
-- [Documentation](docs/dash-uploader.md)
-- [Changelog](./docs/CHANGELOG.md)
+## Changelog
 
+- See: [Changelog](./docs/CHANGELOG.md)
 ## Credits
 - History: This package is based on the React 16 compatible version [dash-resumable-upload](https://github.com/westonkjones/dash-resumable-upload) (0.0.4) by [Weston Jones](https://github.com/westonkjones/) which in turn is based on [dash-resumable-upload](https://github.com/rmarren1/dash-resumable-upload) (0.0.3) by [Ryan Marren](https://github.com/rmarren1) 
 - The package boilerplate is taken from the [dash-component-boilerplate](https://github.com/plotly/dash-component-boilerplate).

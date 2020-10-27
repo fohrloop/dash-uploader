@@ -16,7 +16,7 @@ DEFAULT_STYLE = {
 }
 
 
-def get_service(requests_pathname_prefix, upload_api):
+def update_upload_api(requests_pathname_prefix, upload_api):
     if requests_pathname_prefix == '/':
         return upload_api
     return '/'.join([
@@ -117,8 +117,8 @@ def Upload(
     if upload_id is None:
         upload_id = uuid.uuid1()
 
-    service = get_service(settings.requests_pathname_prefix,
-                          settings.upload_api)
+    service = update_upload_api(settings.requests_pathname_prefix,
+                                settings.upload_api)
 
     arguments = dict(
         id=id,

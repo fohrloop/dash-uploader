@@ -1,5 +1,11 @@
 # Changelog
 
+## v.0.4.0 (2020-10-27)
+### Fixed
+- Now dash-uploader works with `url_base_pathname` set in `app = dash.Dash(__name__, server=server, url_base_pathname='/somebase/')` . (Related [issue](https://github.com/np-8/dash-uploader/issues/15))
+### Other
+- Javascript updates (includes security updates)
+
 ## v.0.3.1 (2020-08-04)
 ### Fixed
 - Importing `dash-uploader` with `dash` versions `<1.11.0` was not possible. (Related [issue](https://github.com/np-8/dash-uploader/issues/9))
