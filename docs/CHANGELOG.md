@@ -1,5 +1,9 @@
 # Changelog
 
+## v.0.4.1 (2020-10-27)
+### Fixed
+- max_files parameter to du.Upload did not have effect (Related [issue](https://github.com/np-8/dash-uploader/issues/12))
+  
 ## v.0.4.0 (2020-10-27)
 ### Fixed
 - Now dash-uploader works with `url_base_pathname` set in `app = dash.Dash(__name__, server=server, url_base_pathname='/somebase/')` . (Related [issue](https://github.com/np-8/dash-uploader/issues/15))

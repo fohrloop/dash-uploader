@@ -124,7 +124,7 @@ def Upload(
         id=id,
         # Have not tested if using many files
         # is reliable -> Do not allow
-        maxFiles=1000,
+        maxFiles=max_files,
         maxFileSize=max_file_size * 1024 * 1024,
         textLabel=text,
         service=service,

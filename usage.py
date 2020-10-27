@@ -21,6 +21,7 @@ def get_upload_component(id):
         max_file_size=1800,  # 1800 Mb
         filetypes=['csv', 'zip'],
         upload_id=uuid.uuid1(),  # Unique session id
+        max_files=2,
     )
 
 
