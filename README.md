@@ -161,5 +161,5 @@ if __name__ == '__main__':
 - History: This package is based on the React 16 compatible version [dash-resumable-upload](https://github.com/westonkjones/dash-resumable-upload) (0.0.4) by [Weston Jones](https://github.com/westonkjones/) which in turn is based on [dash-resumable-upload](https://github.com/rmarren1/dash-resumable-upload) (0.0.3) by [Ryan Marren](https://github.com/rmarren1) 
 - The package boilerplate is taken from the [dash-component-boilerplate](https://github.com/plotly/dash-component-boilerplate).
 - The uploading JS function utilizes the [resumable.js](http://www.resumablejs.com/) (1.1.0).
-- The JS component is created using [React](https://github.com/facebook/react) (16.8.6)
+- The JS component is created using [React](https://github.com/facebook/react) (16.14.0)
 - The CSS styling is mostly from [Bootstrap](https://getbootstrap.com/) 4.
