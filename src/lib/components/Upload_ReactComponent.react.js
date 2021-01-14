@@ -324,8 +324,8 @@ export default class Upload_ReactComponent extends Component {
                             disabled={this.state.isUploading || false}
                             style={{
                                 'opacity': '0',
-                                'width': '0.1px%',
-                                'height': '0.1px%',
+                                'width': '0',
+                                'height': '0',
                                 'position': 'absolute',
                                 'overflow': 'hidden',
                                 'zIndex': '-1',
