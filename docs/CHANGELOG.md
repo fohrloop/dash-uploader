@@ -1,5 +1,9 @@
 # Changelog
 
+## v.0.4.2 (2021-02-20)
+
+- Fixed some width related CSS issues in mobile mode. See: [#19](https://github.com/np-8/dash-uploader/issues/19)
+  
 ## v.0.4.1 (2020-10-27)
 ### Fixed
 - max_files parameter to du.Upload did not have effect (Related [issue](https://github.com/np-8/dash-uploader/issues/12))
