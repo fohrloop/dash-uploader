@@ -6,10 +6,15 @@
 // v.0.0.4 from https://github.com/westonkjones/dash-uploader
 
 import React, { Component } from 'react';
+import CreateStartButton from './CreateStartButton.react';
+import CreateCancelButton from './CreateCancelButton.react';
+import CreatePauseButton from './CreatePauseButton.react';
+import ProgressBar from './ProgressBar.react.js'
 import PropTypes from 'prop-types';
 import Resumablejs from 'resumablejs';
 import './progressbar.css';
 import './button.css';
+
 
 export default class Upload_ReactComponent extends Component {
 
@@ -216,16 +221,7 @@ export default class Upload_ReactComponent extends Component {
         let startButton = null;
         if (this.props.startButton) {
             if (typeof this.props.startButton === 'string' || typeof this.props.startButton === 'boolean') {
-                startButton = <div style={{ display: 'inline-block', }}>
-                    <button
-                        style={{
-                            cursor: this.state.isUploading ? 'pointer' : 'default',
-                        }}
-                        disabled={this.state.isUploading}
-                        className="resumable-btn-start btn btn-sm btn-outline-secondary"
-                        onClick={this.startUpload}>{this.props.startButton && 'upload'}
-                    </button>
-                </div>;
+                startButton = <CreateStartButton pdata={this.props} sdata={this.state} upload ={this.startUpload}> </CreateStartButton>
             }
             else { startButton = this.props.startButton }
         }
@@ -234,16 +230,7 @@ export default class Upload_ReactComponent extends Component {
         if (this.props.cancelButton && this.state.showEnabledButtons) {
             if (typeof this.props.cancelButton === 'string' ||
                 typeof this.props.cancelButton === 'boolean') {
-                cancelButton = <div style={{ display: 'inline-block', }}>
-                    <button
-                        style={{
-                            cursor: this.state.isUploading ? 'pointer' : 'default',
-                        }}
-                        disabled={!this.state.isUploading}
-                        className="resumable-btn-cancel btn btn-sm btn-outline-secondary"
-                        onClick={this.cancelUpload}>{this.props.cancelButton && 'cancel'}
-                    </button>
-                </div>;
+                cancelButton = <CreateCancelButton pdata={this.props} sdata={this.state} cancelUpload={this.cancelUpload}></CreateCancelButton>
             }
             else { cancelButton = this.props.cancelButton }
         }
@@ -252,18 +239,7 @@ export default class Upload_ReactComponent extends Component {
         if (this.props.pauseButton && this.state.showEnabledButtons) {
             if (typeof this.props.pauseButton === 'string'
                 || typeof this.props.pauseButton === 'boolean') {
-                pauseButton = <div style={{ display: 'inline-block', }}>
-                    <button
-                        style={{
-                            cursor: this.state.isUploading ? 'pointer' : 'default',
-                        }}
-                        disabled={!this.state.isUploading}
-                        className="resumable-btn-pause btn btn-sm btn-outline-secondary"
-                        onClick={this.pauseUpload}>
-                        {this.props.pauseButton
-                            && (this.state.isPaused ? 'resume' : 'pause')}
-                    </button>
-                </div>;
+                pauseButton = <CreatePauseButton pdata={this.props} sdata={this.state} pauseUpload={this.pauseUpload}></CreatePauseButton>
             }
             else { pauseButton = this.props.pauseButton }
         }
@@ -332,33 +308,7 @@ export default class Upload_ReactComponent extends Component {
                             }}
                         />
                     </label>
-                    <div className="progress"
-                        style={{
-                            display: this.state.isUploading ? 'flex' : 'none',
-                            textAlign: 'center',
-                            marginTop: '10px',
-                            marginBottom: '10px',
-
-                        }}>
-
-
-
-                        <div className="progress-bar progress-bar-striped progress-bar-animated"
-                            style={{
-                                width: this.state.progressBar + '%',
-                                height: '100%'
-                            }}>
-
-                            <span className="progress-value"
-                                style={{
-                                    position: 'absolute',
-                                    right: 0,
-                                    left: 0,
-                                }}
-                            >{this.state.progressBar.toFixed(2) + '%'}</span>
-
-                        </div>
-                    </div>
+                    <ProgressBar sdata={this.state}></ProgressBar> 
                     {fileList}
                     {startButton}
                     {pauseButton}
