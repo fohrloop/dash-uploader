@@ -6,9 +6,8 @@
 // v.0.0.4 from https://github.com/westonkjones/dash-uploader
 
 import React, { Component } from 'react';
-import CreateStartButton from './CreateStartButton.react';
-import CreateCancelButton from './CreateCancelButton.react';
-import CreatePauseButton from './CreatePauseButton.react';
+
+import Button from './Button.react.js';
 import ProgressBar from './ProgressBar.react.js'
 import PropTypes from 'prop-types';
 import Resumablejs from 'resumablejs';
@@ -37,6 +36,7 @@ export default class Upload_ReactComponent extends Component {
         this.cancelUpload = this.cancelUpload.bind(this)
         this.pauseUpload = this.pauseUpload.bind(this)
         this.startUpload = this.startUpload.bind(this)
+        this.createButton = this.createButton.bind(this)
         this.resumable = null;
     }
 
@@ -181,6 +181,7 @@ export default class Upload_ReactComponent extends Component {
         this.resetBuilder();
     }
 
+
     pauseUpload() {
         if (!this.state.isPaused) {
             this.resumable.pause();
@@ -209,6 +210,17 @@ export default class Upload_ReactComponent extends Component {
         })
     }
 
+    createButton(onClick, text, btnEnabledInSettings, disabled, btnClass) {
+        let btn = null;
+        if (this.state.showEnabledButtons && btnEnabledInSettings) {
+            if (typeof btnEnabledInSettings === 'string' || typeof btnEnabledInSettings === 'boolean') {
+                btn = <Button text={btnEnabledInSettings && text} btnClass={btnClass} onClick={onClick} disabled={disabled} isUploading={this.state.isUploading}></Button>
+            }
+            else { btn = btnEnabledInSettings }
+        }
+        return btn
+    }
+
     render() {
 
         const fileList = null;
@@ -218,31 +230,30 @@ export default class Upload_ReactComponent extends Component {
             textLabel = this.props.textLabel;
         }
 
-        let startButton = null;
-        if (this.props.startButton) {
-            if (typeof this.props.startButton === 'string' || typeof this.props.startButton === 'boolean') {
-                startButton = <CreateStartButton pdata={this.props} sdata={this.state} upload ={this.startUpload}> </CreateStartButton>
-            }
-            else { startButton = this.props.startButton }
-        }
+        let startButton = this.createButton(
+            this.startUpload,
+            'upload',
+            this.props.startButton,
+            this.state.isUploading,
+            "dash-uploader-btn-start"
+        );
 
-        let cancelButton = null;
-        if (this.props.cancelButton && this.state.showEnabledButtons) {
-            if (typeof this.props.cancelButton === 'string' ||
-                typeof this.props.cancelButton === 'boolean') {
-                cancelButton = <CreateCancelButton pdata={this.props} sdata={this.state} cancelUpload={this.cancelUpload}></CreateCancelButton>
-            }
-            else { cancelButton = this.props.cancelButton }
-        }
+        let cancelButton = this.createButton(
+            this.cancelUpload,
+            'cancel',
+            this.props.cancelButton,
+            !this.state.isUploading,
+            "dash-uploader-btn-cancel"
+        );
 
-        let pauseButton = null;
-        if (this.props.pauseButton && this.state.showEnabledButtons) {
-            if (typeof this.props.pauseButton === 'string'
-                || typeof this.props.pauseButton === 'boolean') {
-                pauseButton = <CreatePauseButton pdata={this.props} sdata={this.state} pauseUpload={this.pauseUpload}></CreatePauseButton>
-            }
-            else { pauseButton = this.props.pauseButton }
-        }
+        let pauseButton = this.createButton(
+            this.pauseUpload,
+            (this.state.isPaused ? 'resume' : 'pause'),
+            this.props.pauseButton,
+            !this.state.isUploading,
+            "dash-uploader-btn-pause"
+        );
+
 
         const getStyle = () => {
             if (this.state.isComplete) {

@@ -13,12 +13,12 @@ Keyword arguments:
 - chunkSize (number; default 1024 * 1024): Size of file chunks to send to server.
 - simultaneousUploads (number; optional): Number of simultaneous uploads to select
 - service (string; default '/API/dash-uploader'): The service to send the files to
-- className (string; default 'resumable-default'): Class to add to the upload component by default
-- hoveredClass (string; default 'resumable-hovered'): Class to add to the upload component when it is hovered
-- disabledClass (string; default 'resumable-disabled'): Class to add to the upload component when it is disabled
-- pausedClass (string; default 'resumable-paused'): Class to add to the upload component when it is paused
-- completeClass (string; default 'resumable-complete'): Class to add to the upload component when it is complete
-- uploadingClass (string; default 'resumable-uploading'): Class to add to the upload component when it is uploading
+- className (string; default 'dash-uploader-default'): Class to add to the upload component by default
+- hoveredClass (string; default 'dash-uploader-hovered'): Class to add to the upload component when it is hovered
+- disabledClass (string; default 'dash-uploader-disabled'): Class to add to the upload component when it is disabled
+- pausedClass (string; default 'dash-uploader-paused'): Class to add to the upload component when it is paused
+- completeClass (string; default 'dash-uploader-complete'): Class to add to the upload component when it is complete
+- uploadingClass (string; default 'dash-uploader-uploading'): Class to add to the upload component when it is uploading
 - defaultStyle (dict; optional): Style attributes to add to the upload component
 - uploadingStyle (dict; optional): Style when upload is in progress
 - completeStyle (dict; optional): Style when upload is completed (upload finished)

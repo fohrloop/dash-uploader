@@ -1,4 +1,100 @@
 {
+  "src/lib/components/Button.react.js": {
+    "description": "",
+    "displayName": "Button",
+    "methods": [],
+    "props": {
+      "text": {
+        "type": {
+          "name": "custom",
+          "raw": "PropTypes.string"
+        },
+        "required": false,
+        "description": "The text on the button",
+        "defaultValue": {
+          "value": "''",
+          "computed": false
+        }
+      },
+      "btnClass": {
+        "type": {
+          "name": "custom",
+          "raw": "PropTypes.string"
+        },
+        "required": false,
+        "description": "The CSS class for the button",
+        "defaultValue": {
+          "value": "'dash-uploader-btn'",
+          "computed": false
+        }
+      },
+      "onClick": {
+        "type": {
+          "name": "custom",
+          "raw": "PropTypes.func"
+        },
+        "required": false,
+        "description": "Function to call when clicked",
+        "defaultValue": {
+          "value": "() => { }",
+          "computed": false
+        }
+      },
+      "disabled": {
+        "type": {
+          "name": "custom",
+          "raw": "PropTypes.bool"
+        },
+        "required": false,
+        "description": "Is disabled, the component\r\nis not shown.",
+        "defaultValue": {
+          "value": "false",
+          "computed": false
+        }
+      },
+      "isUploading": {
+        "type": {
+          "name": "custom",
+          "raw": "PropTypes.bool"
+        },
+        "required": false,
+        "description": "Is true, the parent component\r\n has upload in progress.",
+        "defaultValue": {
+          "value": "false",
+          "computed": false
+        }
+      }
+    }
+  },
+  "src/lib/components/ProgressBar.react.js": {
+    "description": "",
+    "displayName": "ProgressBar",
+    "methods": [],
+    "props": {
+      "progressBar": {
+        "type": {
+          "name": "number"
+        },
+        "required": false,
+        "description": "The progressbar value",
+        "defaultValue": {
+          "value": "0",
+          "computed": false
+        }
+      },
+      "isUploading": {
+        "type": {
+          "name": "bool"
+        },
+        "required": false,
+        "description": "The upload status (boolean)",
+        "defaultValue": {
+          "value": "false",
+          "computed": false
+        }
+      }
+    }
+  },
   "src/lib/components/Upload_ReactComponent.react.js": {
     "description": "",
     "displayName": "Upload_ReactComponent",
@@ -36,6 +132,34 @@
         "docblock": null,
         "modifiers": [],
         "params": [],
+        "returns": null
+      },
+      {
+        "name": "createButton",
+        "docblock": null,
+        "modifiers": [],
+        "params": [
+          {
+            "name": "onClick",
+            "type": null
+          },
+          {
+            "name": "text",
+            "type": null
+          },
+          {
+            "name": "btnEnabledInSettings",
+            "type": null
+          },
+          {
+            "name": "disabled",
+            "type": null
+          },
+          {
+            "name": "btnClass",
+            "type": null
+          }
+        ],
         "returns": null
       }
     ],
@@ -98,7 +222,7 @@
         "required": false,
         "description": "Class to add to the upload component by default",
         "defaultValue": {
-          "value": "'resumable-default'",
+          "value": "'dash-uploader-default'",
           "computed": false
         }
       },
@@ -109,7 +233,7 @@
         "required": false,
         "description": "Class to add to the upload component when it is hovered",
         "defaultValue": {
-          "value": "'resumable-hovered'",
+          "value": "'dash-uploader-hovered'",
           "computed": false
         }
       },
@@ -120,7 +244,7 @@
         "required": false,
         "description": "Class to add to the upload component when it is disabled",
         "defaultValue": {
-          "value": "'resumable-disabled'",
+          "value": "'dash-uploader-disabled'",
           "computed": false
         }
       },
@@ -131,7 +255,7 @@
         "required": false,
         "description": "Class to add to the upload component when it is paused",
         "defaultValue": {
-          "value": "'resumable-paused'",
+          "value": "'dash-uploader-paused'",
           "computed": false
         }
       },
@@ -142,7 +266,7 @@
         "required": false,
         "description": "Class to add to the upload component when it is complete",
         "defaultValue": {
-          "value": "'resumable-complete'",
+          "value": "'dash-uploader-complete'",
           "computed": false
         }
       },
@@ -153,7 +277,7 @@
         "required": false,
         "description": "Class to add to the upload component when it is uploading",
         "defaultValue": {
-          "value": "'resumable-uploading'",
+          "value": "'dash-uploader-uploading'",
           "computed": false
         }
       },
