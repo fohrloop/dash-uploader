@@ -319,7 +319,7 @@ export default class Upload_ReactComponent extends Component {
                             }}
                         />
                     </label>
-                    <ProgressBar sdata={this.state}></ProgressBar> 
+                    <ProgressBar isUploading={this.state.isUploading} progressBar={this.state.progressBar}></ProgressBar>
                     {fileList}
                     {startButton}
                     {pauseButton}

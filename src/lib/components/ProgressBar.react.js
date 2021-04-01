@@ -1,45 +1,61 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 
-class ProgressBar extends Component
-{
+import PropTypes from 'prop-types';
+class ProgressBar extends Component {
 
-constructor(props)
-{
-    super(props)
-}
+    constructor(props) {
+        super(props)
+    }
 
-render()
-{
-    return (
-    <div className="progress"
-    style={{
-        display: this.props.sdata.isUploading ? 'flex' : 'none',
-        textAlign: 'center',
-        marginTop: '10px',
-        marginBottom: '10px',
-
-    }}>
-
-
-
-        <div className="progress-bar progress-bar-striped progress-bar-animated"
-            style={{
-                width: this.props.sdata.progressBar + '%',
-                height: '100%'
-            }}>
-
-            <span className="progress-value"
+    render() {
+        return (
+            <div className="progress"
                 style={{
-                    position: 'absolute',
-                    right: 0,
-                    left: 0,
-                }}
-            >{this.props.sdata.progressBar.toFixed(2) + '%'}</span>
+                    display: this.props.isUploading ? 'flex' : 'none',
+                    textAlign: 'center',
+                    marginTop: '10px',
+                    marginBottom: '10px',
 
-        </div>
-    </div>
-    )
+                }}>
+
+
+
+                <div className="progress-bar progress-bar-striped progress-bar-animated"
+                    style={{
+                        width: this.props.progressBar + '%',
+                        height: '100%'
+                    }}>
+
+                    <span className="progress-value"
+                        style={{
+                            position: 'absolute',
+                            right: 0,
+                            left: 0,
+                        }}
+                    >{this.props.progressBar.toFixed(2) + '%'}</span>
+
+                </div>
+            </div>
+        )
+    }
 }
+
+
+ProgressBar.propTypes = {
+    /**
+     *  The progressbar value 
+     */
+    progressBar: PropTypes.number,
+    /**
+     *  The upload status (boolean)
+     */
+    isUploading: PropTypes.bool,
 }
+
+ProgressBar.defaultProps = {
+    progressBar: 0,
+    isUploading: false,
+};
+
 
 export default ProgressBar
