@@ -1,5 +1,9 @@
 import React, { Component } from 'react'
 
+/**
+ *  A Button component. 
+ *  Used as a part of Upload component.
+ */
 class Button extends Component {
 
     constructor(props) {

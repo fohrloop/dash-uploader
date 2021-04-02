@@ -1,6 +1,11 @@
 import React, { Component } from 'react'
 
 import PropTypes from 'prop-types';
+
+/**
+ *  A ProgressBar component. 
+ *  Used as a part of Upload component.
+ */
 class ProgressBar extends Component {
 
     constructor(props) {

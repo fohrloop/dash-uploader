@@ -5,7 +5,7 @@ from dash.development.base_component import Component, _explicitize_args
 
 class Upload_ReactComponent(Component):
     """An Upload_ReactComponent component.
-
+The Upload component
 
 Keyword arguments:
 - maxFiles (number; default 1): Maximum number of files that can be uploaded in one session
@@ -32,14 +32,15 @@ Keyword arguments:
 - disableDragAndDrop (boolean; default False): Whether or not to allow file drag and drop
 - id (string; default 'default-dash-uploader-id'): User supplied id of this component
 - isCompleted (boolean; default False): The boolean flag telling if upload is completed.
-- upload_id (string; default ''): The ID for the upload event (for example, session ID)"""
+- upload_id (string; default ''): The ID for the upload event (for example, session ID)
+- simultaneuosUploads (number; default 1): Number of simulaneous uploads."""
     @_explicitize_args
     def __init__(self, maxFiles=Component.UNDEFINED, maxFileSize=Component.UNDEFINED, chunkSize=Component.UNDEFINED, simultaneousUploads=Component.UNDEFINED, service=Component.UNDEFINED, className=Component.UNDEFINED, hoveredClass=Component.UNDEFINED, disabledClass=Component.UNDEFINED, pausedClass=Component.UNDEFINED, completeClass=Component.UNDEFINED, uploadingClass=Component.UNDEFINED, defaultStyle=Component.UNDEFINED, uploadingStyle=Component.UNDEFINED, completeStyle=Component.UNDEFINED, textLabel=Component.UNDEFINED, completedMessage=Component.UNDEFINED, fileNames=Component.UNDEFINED, filetypes=Component.UNDEFINED, startButton=Component.UNDEFINED, pauseButton=Component.UNDEFINED, cancelButton=Component.UNDEFINED, disableDragAndDrop=Component.UNDEFINED, id=Component.UNDEFINED, isCompleted=Component.UNDEFINED, upload_id=Component.UNDEFINED, simultaneuosUploads=Component.UNDEFINED, onUploadErrorCallback=Component.UNDEFINED, **kwargs):
-        self._prop_names = ['maxFiles', 'maxFileSize', 'chunkSize', 'simultaneousUploads', 'service', 'className', 'hoveredClass', 'disabledClass', 'pausedClass', 'completeClass', 'uploadingClass', 'defaultStyle', 'uploadingStyle', 'completeStyle', 'textLabel', 'completedMessage', 'fileNames', 'filetypes', 'startButton', 'pauseButton', 'cancelButton', 'disableDragAndDrop', 'id', 'isCompleted', 'upload_id']
+        self._prop_names = ['maxFiles', 'maxFileSize', 'chunkSize', 'simultaneousUploads', 'service', 'className', 'hoveredClass', 'disabledClass', 'pausedClass', 'completeClass', 'uploadingClass', 'defaultStyle', 'uploadingStyle', 'completeStyle', 'textLabel', 'completedMessage', 'fileNames', 'filetypes', 'startButton', 'pauseButton', 'cancelButton', 'disableDragAndDrop', 'id', 'isCompleted', 'upload_id', 'simultaneuosUploads']
         self._type = 'Upload_ReactComponent'
         self._namespace = 'dash_uploader'
         self._valid_wildcard_attributes =            []
-        self.available_properties = ['maxFiles', 'maxFileSize', 'chunkSize', 'simultaneousUploads', 'service', 'className', 'hoveredClass', 'disabledClass', 'pausedClass', 'completeClass', 'uploadingClass', 'defaultStyle', 'uploadingStyle', 'completeStyle', 'textLabel', 'completedMessage', 'fileNames', 'filetypes', 'startButton', 'pauseButton', 'cancelButton', 'disableDragAndDrop', 'id', 'isCompleted', 'upload_id']
+        self.available_properties = ['maxFiles', 'maxFileSize', 'chunkSize', 'simultaneousUploads', 'service', 'className', 'hoveredClass', 'disabledClass', 'pausedClass', 'completeClass', 'uploadingClass', 'defaultStyle', 'uploadingStyle', 'completeStyle', 'textLabel', 'completedMessage', 'fileNames', 'filetypes', 'startButton', 'pauseButton', 'cancelButton', 'disableDragAndDrop', 'id', 'isCompleted', 'upload_id', 'simultaneuosUploads']
         self.available_wildcard_properties =            []
 
         _explicit_args = kwargs.pop('_explicit_args')

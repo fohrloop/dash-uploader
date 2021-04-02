@@ -1,6 +1,6 @@
 {
   "src/lib/components/Button.react.js": {
-    "description": "",
+    "description": "A Button component. \r\n Used as a part of Upload component.",
     "displayName": "Button",
     "methods": [],
     "props": {
@@ -67,7 +67,7 @@
     }
   },
   "src/lib/components/ProgressBar.react.js": {
-    "description": "",
+    "description": "A ProgressBar component. \r\n Used as a part of Upload component.",
     "displayName": "ProgressBar",
     "methods": [],
     "props": {
@@ -96,7 +96,7 @@
     }
   },
   "src/lib/components/Upload_ReactComponent.react.js": {
-    "description": "",
+    "description": "The Upload component",
     "displayName": "Upload_ReactComponent",
     "methods": [
       {
@@ -449,18 +449,26 @@
         }
       },
       "simultaneuosUploads": {
+        "type": {
+          "name": "number"
+        },
+        "required": false,
+        "description": "Number of simulaneous uploads.",
         "defaultValue": {
           "value": "1",
           "computed": false
-        },
-        "required": false
+        }
       },
       "onUploadErrorCallback": {
+        "type": {
+          "name": "func"
+        },
+        "required": false,
+        "description": "Function to call on upload error (untested)",
         "defaultValue": {
           "value": "undefined",
           "computed": true
-        },
-        "required": false
+        }
       }
     }
   }

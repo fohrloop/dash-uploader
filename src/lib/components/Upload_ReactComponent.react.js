@@ -14,7 +14,9 @@ import Resumablejs from 'resumablejs';
 import './progressbar.css';
 import './button.css';
 
-
+/**
+ *  The Upload component
+ */
 export default class Upload_ReactComponent extends Component {
 
     static initialState = {
@@ -460,6 +462,16 @@ Upload_ReactComponent.propTypes = {
      *  The ID for the upload event (for example, session ID)
      */
     upload_id: PropTypes.string,
+
+    /**
+     *  Number of simulaneous uploads.
+     */
+    simultaneuosUploads: PropTypes.number,
+
+    /**
+     *  Function to call on upload error (untested)
+     */
+    onUploadErrorCallback: PropTypes.func,
 }
 
 Upload_ReactComponent.defaultProps = {

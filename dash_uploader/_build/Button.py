@@ -5,7 +5,8 @@ from dash.development.base_component import Component, _explicitize_args
 
 class Button(Component):
     """A Button component.
-
+A Button component. 
+ Used as a part of Upload component.
 
 Keyword arguments:
 - text (default ''): The text on the button

@@ -5,7 +5,8 @@ from dash.development.base_component import Component, _explicitize_args
 
 class ProgressBar(Component):
     """A ProgressBar component.
-
+A ProgressBar component. 
+ Used as a part of Upload component.
 
 Keyword arguments:
 - progressBar (number; default 0): The progressbar value
