@@ -7,7 +7,7 @@ To use the Upload component you need to two things
 
 Typically you also would like to define [callbacks](#3-callbacks) (functions that are called automatically when upload finishes).
 
-> ⚠️**Security note**: The Upload component allows uploads of arbitrary files to the server harddisk and one should take this into account (with user token checking etc.) if used as part of a public website! Particularly, the `configure_upload` opens a route for `POST` HTTP requests.
+> ⚠️**Security note**: The Upload component allows uploads of arbitrary files to the server harddisk and one should take this into account (with user token checking etc.) if used as part of a public website! Particularly, the `configure_upload` opens a route for `POST` HTTP requests. Use the [`http_request_handler`](#http_request_handler--none-or-subclass-of--duhttprequesthandler) argument for defining your custom validation logic.
 
 
 # Table of contents
@@ -21,6 +21,9 @@ Typically you also would like to define [callbacks](#3-callbacks) (functions tha
  [3 Callbacks](#3-callbacks)
 - [`@du.callback`](#ducallback)
 - [`@app.callback`](#appcallback)
+ 
+[4 Custom handling of HTTP Requests](#4-custom-handling-of-http-requests)
+- [`du.HttpRequestHandler`](#duhttprequesthandler)
 <hr>
 
 ## 1 Configuring dash-uploader
@@ -36,7 +39,7 @@ du.configure_upload(app, r'C:\tmp\uploads')
 ### `du.configure_upload`
 
 ```python
-configure_upload(app, folder, use_upload_id=True, upload_api=None)
+configure_upload(app, folder, use_upload_id=True, upload_api=None, http_request_handler=None)
 ```
 
 #### app: dash.Dash
@@ -70,6 +73,16 @@ requests. For example, using `upload_api="/API/dash-uploader"` would create api 
 http://<myhost>[<requests_pathname_prefix>]/API/dash-uploader
 ```
 for the communication between the front-end and the server. The `requests_pathname_prefix` is added automatically, if the dash `app` instance has `requests_pathname_prefix`. (used with proxies)
+
+#### http_request_handler:  None or subclass of  du.HttpRequestHandler
+*New in version **0.5.0***
+
+Used for custom configuration on the HTTP POST and GET requests. This can be used to add validation for the HTTP requests (⚠️Important
+if your site is public!). If None, dash_uploader.HttpRequestHandler is used.
+If you provide a class, use a subclass of `du.HttpRequestHandler`.
+See the documentation of [`@du.HttpRequestHandler`](#duhttprequesthandler) for
+more details.
+
 
 ## 2 Creating Upload components
 ### `du.Upload`
@@ -137,7 +150,7 @@ More styling options through the CSS classes.
 #### upload_id: None or str
 The upload id, created with `uuid.uuid1()` or uuid.uuid4(), for example. If `None`, creates random session id with `uuid.uuid1()`.  Defines a subfolder where the files are to be uploaded.
 
-Only used, if `use_upload_id` parameter is set to `True` in `configure_upload`. 
+Only used, if `use_upload_id` parameter is set to `True` in [`du.configure_upload`](#duconfigure_upload). 
 
 #### max_files: int (default: 1)
 >⚠️ **Experimental** feature. Read below. For bulletproof
@@ -254,3 +267,60 @@ def callback_on_completion(iscompleted, filenames, upload_id):
 - `isCompleted`: boolean flag indicating if uploading has been completed. 
 - `fileNames`: List of strings of the filenames or None. This does not have the upload folder or the upload_id in it. 
 - `upload_id`: The upload id used when initiating the `du.Upload` component.
+
+## 4 Custom handling of HTTP Requests
+### `du.HttpRequestHandler`
+*New in version **0.5.0***
+
+The `HttpRequestHandler` is a class that is meant to be subclassed. It is used as an argument for [`configure_upload`](#duconfigure_upload), and it makes custom HTTP POST and GET request handling possible. For example, if you run your dash app publicly, you should use some validation logic to validate the HTTP requests from the users!
+
+
+#### Example of a subclass
+
+```python
+class HttpRequestHandler(BaseHttpRequestHandler):
+    # You may use the flask.request
+    # and flask.session inside the methods of this
+    # class when needed.
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def post_before(self):
+        pass
+
+    def post(self):
+        self.post_before()
+        returnvalue = super().post()
+        self.post_after()
+        return returnvalue
+
+    def post_after(self):
+        pass
+
+    def get_before(self):
+        pass
+
+    def get(self):
+        self.get_before()
+        returnvalue = super().get()
+        self.get_after()
+        return returnvalue
+
+    def get_after(self):
+        pass
+```
+
+#### How does this all work?
+
+- The React Component of `dash-uploader` sends HTTP POST requests. It could in the future send also HTTP GET requests, or other HTTP requests.
+- The Flask server (Dash uses Flask underneath) is configured in [`configure_upload`](#duconfigure_upload) to call the `post()` function of the `http_request_handler` on every HTTP POST request directed to the API endpoint of the dash-uploader.
+- The values in the POST request are listed in [Documentation of resumable.js](https://github.com/23/resumable.js#how-do-i-set-it-up-with-my-server). Most interesting from these is probably the filename (`resumableFilename`).  In addition to these, there is `upload_id` added by the `dash-uploader`, if `use_upload_id=True` when calling [`configure_upload`](#duconfigure_upload).
+- You can use the [flask.request](https://flask.palletsprojects.com/en/1.1.x/api/#flask.request) and [flask.session](https://flask.palletsprojects.com/en/1.1.x/api/#flask.session) proxies as you like. There you get access to all the HTTP Request parameters and Cookies, for example. As an quick example, to get the request filename, upload_id and some cookie value, you can use:
+
+```python
+from flask import request 
+
+filename = request.form.get("resumableFilename", default="error", type=str)
+upload_id = request.form.get("upload_id", default="", type=str)
+cookie_value = request.cookies.get('some_cookie')
+```

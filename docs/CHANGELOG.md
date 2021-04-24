@@ -1,5 +1,8 @@
 # Changelog
 
+## v.0.5.0 (2021-04-25)
+- Added [`du.HttpRequestHandler`](./dash-uploader.md#duhttprequesthandler) which allows for custom HTTP POST and GET request handling. For example, custom validation logic is now possible! Used through `http_request_handler` parameter of [`du.configure_upload`](./dash-uploader.md#duconfigure_upload).
+  
 ## v.0.4.2 (2021-02-20)
 
 - Fixed some width related CSS issues in mobile mode. See: [#19](https://github.com/np-8/dash-uploader/issues/19)
