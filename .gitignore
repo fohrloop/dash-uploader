@@ -277,3 +277,6 @@ GitHub.sublime-settings
 inst/
 
 .vscode
+
+# Do not track the build files
+dash_uploader/_build
