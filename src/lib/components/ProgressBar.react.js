@@ -40,7 +40,7 @@ class ProgressBar extends Component {
                     >{this.props.progressBar.toFixed(2) + '%'}</span>
 
                 </div>
-            </div>
+            </div >
         )
     }
 }
