@@ -367,7 +367,7 @@ Upload_ReactComponent.propTypes = {
     /**
      * Number of simultaneous uploads to select
      */
-    simultaneousUploads: PropTypes.number,
+    simultaneuosUploads: PropTypes.number,
 
     /**
      * The service to send the files to
@@ -463,6 +463,11 @@ Upload_ReactComponent.propTypes = {
      * Dash-supplied function for updating props
      */
     setProps: PropTypes.func,
+
+    /**
+     * Callback to call on error (untested)
+     */
+    onUploadErrorCallback: PropTypes.func,
 
     /**
      * User supplied id of this component
