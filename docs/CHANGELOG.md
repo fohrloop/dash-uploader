@@ -1,6 +1,6 @@
 # Changelog
 
-## v.0.5.0dev (2020-10-27)
+## Unpublished (2020-10-27)
 ### Fixed
 - WIP: Calling callback each time file is added 
 ### Changed
@@ -8,6 +8,13 @@
 
   
 
+## v.0.5.0 (2021-04-25)
+- Added [`du.HttpRequestHandler`](./dash-uploader.md#duhttprequesthandler) which allows for custom HTTP POST and GET request handling. For example, custom validation logic is now possible! Used through `http_request_handler` parameter of [`du.configure_upload`](./dash-uploader.md#duconfigure_upload).
+- **Backwards incompatible changes**: Changed the CSS classes of the component to be `dash-uploader-default`, `dash-uploader-uploading`, .. etc. instead of `resumable-default`, `resumable-uploading`. 
+## v.0.4.2 (2021-02-20)
+
+- Fixed some width related CSS issues in mobile mode. See: [#19](https://github.com/np-8/dash-uploader/issues/19)
+  
 ## v.0.4.1 (2020-10-27)
 ### Fixed
 - max_files parameter to du.Upload did not have effect (Related [issue](https://github.com/np-8/dash-uploader/issues/12))

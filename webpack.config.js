@@ -67,7 +67,7 @@ module.exports = (env, argv) => {
                         {
                             loader: 'style-loader',
                             options: {
-                                insertAt: 'top'
+                                insert: 'head'
                             }
                         },
                         {

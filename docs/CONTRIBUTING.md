@@ -4,7 +4,7 @@ Feel free to contribute. I have made some development related instructions below
 
 ## How to improve this package?
 
-Maybe you already have an idea. If not, there is also a list for development ideas in the [BACKLOG.md](BACKLOG.md).
+Maybe you already have an idea. If not, see if there are any open [issues](https://github.com/np-8/dash-uploader/issues) that need help. 
 ## For developers
 ### Setting up development environment
 - Clone this repository. Change current directory to project root.
