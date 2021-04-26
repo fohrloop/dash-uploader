@@ -1,9 +1,9 @@
-// v.0.1.0. https://github.com/np-8/dash-uploader 
+// v.0.5.0. https://github.com/np-8/dash-uploader 
 // 
 // Credits:
 // This file is based on following repositories
-// v.0.0.3 from https://github.com/rmarren1/dash-uploader
-// v.0.0.4 from https://github.com/westonkjones/dash-uploader
+// v.0.0.3 from https://github.com/rmarren1/dash-resumable-upload
+// v.0.0.4 from https://github.com/westonkjones/dash-resumable-upload
 
 import React, { Component } from 'react';
 
