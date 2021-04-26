@@ -49,7 +49,7 @@ pip install dash-uploader
 # Quickstart
 
 Full documentation [here](docs/dash-uploader.md) 
->⚠️**Security note**: The Upload component allows POST requests and uploads of arbitrary files to the server harddisk and one should take this into account (with user token checking etc.) if used as part of a public website! 
+>⚠️**Security note**: The Upload component allows POST requests and uploads of arbitrary files to the server harddisk and one should take this into account (with user token checking etc.) if used as part of a public website! For this you can utilize the  `http_request_handler` argument of the [du.configure_upload](https://github.com/np-8/dash-uploader/blob/master/docs/dash-uploader.md#duconfigure_upload). (New in version 0.5.0)
 
 ## Simple example
 
@@ -161,5 +161,5 @@ if __name__ == '__main__':
 - History: This package is based on the React 16 compatible version [dash-resumable-upload](https://github.com/westonkjones/dash-resumable-upload) (0.0.4) by [Weston Jones](https://github.com/westonkjones/) which in turn is based on [dash-resumable-upload](https://github.com/rmarren1/dash-resumable-upload) (0.0.3) by [Ryan Marren](https://github.com/rmarren1) 
 - The package boilerplate is taken from the [dash-component-boilerplate](https://github.com/plotly/dash-component-boilerplate).
 - The uploading JS function utilizes the [resumable.js](http://www.resumablejs.com/) (1.1.0).
-- The JS component is created using [React](https://github.com/facebook/react) (16.14.0)
+- The JS component is created using [React](https://github.com/facebook/react) (17.0.x)
 - The CSS styling is mostly from [Bootstrap](https://getbootstrap.com/) 4.
