@@ -48,24 +48,46 @@ export default class Upload_ReactComponent extends Component {
 
     componentDidMount() {
 
-        const ResumableField = new Resumablejs({
+        // Full list of options here
+        // https://github.com/flowjs/flow.js#configuration 
+        const flowComponent = new Flow({
+            //  The API endpoint
             target: this.props.service,
+            // Additional data for the requests
             query: { upload_id: this.props.upload_id },
-            fileType: this.props.filetypes,
-            maxFiles: this.props.maxFiles,
-            maxFileSize: this.props.maxFileSize,
-            fileTypeErrorCallback: () => {
-                this.setState({
-                    messageStatus: 'Invalid file type!'
-                });
-            },
-            testMethod: 'post',
-            testChunks: false,
-            headers: {},
+            // Chunk size in bytes.
             chunkSize: this.props.chunkSize,
+            // Number of simulateneous uploads
             simultaneousUploads: this.props.simultaneousUploads,
-            forceChunkSize: false
+            // Extra headers to include in the multipart POST with data. 
+            // If a function, it will be passed a FlowFile, a FlowChunk object and a isTest boolean (Default: {})
+            headers: {},
+            // Once a file is uploaded, allow reupload of the same file. By default, if a file
+            //  is already uploaded, it will be skipped unless the file is removed from the existing 
+            // Flow object. (Default: false)
+            allowDuplicateUploads: true,
+            // testChunks Make a GET request to the server for each chunks to see if it already exists. 
+            //  If implemented on the server-side, this will allow for upload resumes even after a browser
+            //  crash or even a computer restart. (Default: true) 
+            testChunks: false,
+
+            // maxFiles: this.props.maxFiles,
+            // maxFileSize: this.props.maxFileSize,
+            // fileTypeErrorCallback: () => {
+            //     this.setState({
+            //         messageStatus: 'Invalid file type!'
+            //     });
+            // },
+            // forceChunkSize: false
         });
+
+
+        flow.on('fileAdded', function (file) {
+            if (!this.props.filetypes.includes(file.getExtension())) {
+                return false;
+            };
+        });
+
 
         this.props.setProps({
             isCompleted: false,
