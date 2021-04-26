@@ -6,7 +6,7 @@
 // v.0.0.4 from https://github.com/westonkjones/dash-uploader
 
 import React, { Component } from 'react';
-
+import Flow from '@flowjs/flow.js';
 import Button from './Button.react.js';
 import ProgressBar from './ProgressBar.react.js'
 import PropTypes from 'prop-types';

@@ -24,8 +24,9 @@
   "author": "Niko Pasanen <niko@pasanen.me>",
   "license": "MIT",
   "dependencies": {
-    "resumablejs": "github:23/resumable.js#master",
-    "ramda": "^0.27.1"
+    "@flowjs/flow.js": "^2.14.1",
+    "ramda": "^0.27.1",
+    "resumablejs": "github:23/resumable.js#master"
   },
   "devDependencies": {
     "@babel/core": "^7.13.14",
