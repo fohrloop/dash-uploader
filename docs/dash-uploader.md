@@ -14,6 +14,7 @@ Typically you also would like to define [callbacks](#3-callbacks) (functions tha
 
   [1 Configuring dash-uploader](#1-configuring-dash-uploader)
 - [`du.configure_upload`](#duconfigure_upload)
+- [`du.configure_upload_flask`](#duconfigure_upload_flask)
 
 [2 Creating Upload components](#2-creating-upload-components)
 - [`du.Upload`](#duupload)
@@ -24,27 +25,46 @@ Typically you also would like to define [callbacks](#3-callbacks) (functions tha
  
 [4 Custom handling of HTTP Requests](#4-custom-handling-of-http-requests)
 - [`du.HttpRequestHandler`](#duhttprequesthandler)
+
+[5 A short example of cross-domain uploading](#5-a-short-example-of-cross-domain-uploading)
+- [`Local dashboard side`](#local-dashboard-side)
+- [`Remote flask service side`](#remote-flask-service-side)
 <hr>
 
 ## 1 Configuring dash-uploader
 
 You need to configure the dash uploader after you created your dash application instance (`app`) and before you create any Upload components
 
-**Example**
-```
+**Example 1: file server is provided by `dash`**
+```python
+import dash
 import dash_uploader as du
+
+app = dash.Dash(...)
+# Configure components and the main layout...
 
 du.configure_upload(app, r'C:\tmp\uploads')
 ```
+
+**Example 2: file server is provided by `flask`**
+```python
+import flask
+import dash_uploader as du
+
+app = flask.Flask(...)
+
+du.configure_upload_flask(app, r'C:\tmp\uploads')
+```
+
 ### `du.configure_upload`
 
 ```python
-configure_upload(app, folder, use_upload_id=True, upload_api=None, http_request_handler=None)
+configure_upload(app, folder, use_upload_id=True, upload_api=None, allowed_origins=None, http_request_handler=None)
 ```
 
 #### app: dash.Dash
 The application instance. Usually created using
-```
+```python
 app = dash.Dash(__name__)
 ```
 #### folder: str
@@ -54,7 +74,6 @@ If the folder does not exist, it will be created
 automatically.
 
 #### use_upload_id: bool (Default: True)
-
 Determines if the uploads are put into
 folders defined by a "upload id". To define an upload id, use the `upload_id` parameter of the `du.Upload` component. In typical use case, upload id's are unique for different users. In that case, you must use a callable as the `app.layout`.
 
@@ -74,6 +93,16 @@ http://<myhost>[<requests_pathname_prefix>]/API/dash-uploader
 ```
 for the communication between the front-end and the server. The `requests_pathname_prefix` is added automatically, if the dash `app` instance has `requests_pathname_prefix`. (used with proxies)
 
+#### allowed_origins: None or str or [str]
+*New in version **0.6.0***
+
+The list of allowed origin(s) for the cross-domain access. If set `'*'`, all domains would be allowed. If set `None`, would use `du.settings` to configure the origin(s).
+
+> The default configurations is
+> ```python
+> du.settings.allowed_origins = '*'
+> ```
+
 #### http_request_handler:  None or subclass of  du.HttpRequestHandler
 *New in version **0.5.0***
 
@@ -83,6 +112,33 @@ If you provide a class, use a subclass of `du.HttpRequestHandler`.
 See the documentation of [`@du.HttpRequestHandler`](#duhttprequesthandler) for
 more details.
 
+### `du.configure_upload_flask`
+*New in version **0.6.0***
+
+```python
+configure_upload_flask(app, folder, use_upload_id=True, upload_api=None, allowed_origins=None, http_request_handler=None)
+```
+
+#### app: flask.Flask
+The application instance. Usually created using
+```python
+app = flask.Flask(__name__)
+```
+
+#### folder: str
+The same as the argument of `du.configure_upload`.
+
+#### use_upload_id: bool (Default: True)
+The same as the argument of `du.configure_upload`.
+
+#### upload_api: None or str
+The same as the argument of `du.configure_upload`.
+
+#### allowed_origins: None or str or [str]
+The same as the argument of `du.configure_upload`.
+
+#### http_request_handler:  None or subclass of  du.HttpRequestHandler
+The same as the argument of `du.configure_upload`.
 
 ## 2 Creating Upload components
 ### `du.Upload`
@@ -96,8 +152,10 @@ Upload(
     pause_button=False,
     filetypes=None,
     max_file_size=1024,
+    chunk_size=1,
     default_style=None,
     upload_id=None,
+    service_addr=None,
     max_files=1,
 )
 ```
@@ -138,6 +196,11 @@ By default, all filetypes are accepted.
 
 #### max_file_size: numeric
 The maximum file size in Megabytes. Default: 1024 (=1Gb).
+
+#### chunk_size: numeric
+*New in version **0.6.0***
+The chunk size in Megabytes. Optional. Default: 1 (=1Mb).
+
 #### default_style: None or dict
 
 Inline CSS styling for the main div element. 
@@ -150,7 +213,20 @@ More styling options through the CSS classes.
 #### upload_id: None or str
 The upload id, created with `uuid.uuid1()` or uuid.uuid4(), for example. If `None`, creates random session id with `uuid.uuid1()`.  Defines a subfolder where the files are to be uploaded.
 
-Only used, if `use_upload_id` parameter is set to `True` in [`du.configure_upload`](#duconfigure_upload). 
+Only used, if `use_upload_id` parameter is set to `True` in [`du.configure_upload`](#duconfigure_upload).
+
+#### service_addr: None or str
+*New in version **0.6.0***
+
+The address of the upload target API. If given `None`, would use the default configurations. In this case, the uploader would upload files to the local service. Setting this argument would override the configurations in `du.settings`.
+
+The default service addr is generated by joining `du.settings.routes_pathname_prefix` and `du.settings.upload_api` together. This option would override the whole addr, **not only** the `upload_api`.
+
+> The default configurations is
+> ```python
+> du.settings.routes_pathname_prefix = '/'
+> du.settings.upload_api = '*'
+> ```
 
 #### max_files: int (default: 1)
 >⚠️ **Experimental** feature. Read below. For bulletproof
@@ -189,6 +265,9 @@ du.Upload(
 )
 ```
 ###  `@du.callback`
+*New in version **0.6.0***
+
+Add the option `prevent_initial_call`. This option would only work when `dash>=1.12.0`.
 
 *New in version **0.3.0***
 
@@ -198,6 +277,7 @@ Easiest way to call a simple callback after uploading would be something like:
 @du.callback(
     output=Output('callback-output', 'children'),
     id='dash-uploader',
+    prevent_initial_call=True,
 )
 def get_a_list(filenames):
     return html.Ul([html.Li(filenames)])
@@ -208,11 +288,14 @@ The syntax is
 @du.callback(
     output=<Output>,
     id=<Upload_id>,
+    prevent_initial_call=<bool>,
 )
 def call_me(filenames):
     # Do some processing
     return <Dash component>
 ```
+
+> The option `prevent_initial_call` would prevent the uploader callback to be fired when the component is initialized. This feature is supported since `dash>=1.12.0`. If your dash version is lower than `v1.12.0`, `du.callback` is still compatible, but this option would not work.
 
 #### output: dash.dependencies.Output
 
@@ -324,3 +407,76 @@ filename = request.form.get("resumableFilename", default="error", type=str)
 upload_id = request.form.get("upload_id", default="", type=str)
 cookie_value = request.cookies.get('some_cookie')
 ```
+
+## 5 A short example of cross-domain uploading
+*New in version **0.6.0***
+
+The dash-uploader support the cross-domain uploading when your file server is deployed by remote flask apps. In this section, we would introduce this feature by the following example:
+
+![](https://mermaid.ink/img/eyJjb2RlIjoiZmxvd2NoYXJ0IExSXG4gICAgc3ViZ3JhcGggbG9jYWxbTG9jYWwgRGFzaF1cbiAgICAgICAgdXAxKGR1LlVwbG9hZCAxPGJyPnNlcnZpY2VfYWRkcj1pcDE6cG9ydDEvQVBJLi4uKVxuICAgICAgICB1cDIoZHUuVXBsb2FkIDI8YnI-c2VydmljZV9hZGRyPWlwMjpwb3J0Mi9BUEkuLi4pXG4gICAgICAgIHVwbiguLi4pXG4gICAgZW5kXG5cbiAgICByZW1vdGUxW1JlbW90ZSBGbGFzayAxPGJyPmlwMTpwb3J0MS9BUEkuLi5dOjo6YXBwXG4gICAgcmVtb3RlMltSZW1vdGUgRmxhc2sgMjxicj5pcDI6cG9ydDIvQVBJLi4uXTo6OmFwcFxuICAgIHJlbW90ZW5bLi4uXTo6OmFwcFxuXG4gICAgdXAxLS0-cmVtb3RlMVxuICAgIHVwMi0tPnJlbW90ZTJcbiAgICB1cG4tLT5yZW1vdGVuXG5cbiAgICBjbGFzc0RlZiBhcHAgZmlsbDojZmZmNGRkLCBzdHJva2U6I0VFRENCQTtcbiIsIm1lcm1haWQiOnsidGhlbWUiOiJkZWZhdWx0In0sInVwZGF0ZUVkaXRvciI6ZmFsc2V9)
+
+> Currently, the cross-domain remote service supports both the `dash` app and the `flask` app. By providing the `service_addr` option for the `dash.Upload`, you could upload your files to a remote dashboard or a remote flask app from your local dashboard.
+
+### Local dashboard side
+
+We assume that our local dashboard is deployed on `localhost:8060`. The remote service is deployed on `localhost:8061`. Here we show an example of the dash component defined in the local dashboard:
+
+```python
+du.Upload(
+    id='uploader',
+    text='Drag & Drop or Select a File',
+    filetypes=None,
+    upload_id='.',
+    max_files=1,
+    chunk_size=5,
+    max_file_size=20 * 1024,
+    service_addr='http://localhost:8061/API/resumable',
+    default_style={
+        'width': '100%',
+        'paddingLeft': '.5rem',
+        'paddingRight': '.5rem',
+        'minHeight': 'min-content',
+        'lineHeight': '50px',
+        'borderWidth': '1px',
+        'borderStyle': 'dashed',
+        'borderRadius': '5px',
+        'textAlign': 'center'
+    }
+),
+```
+
+Defining more than one `du.Upload` is possible. Users could configure different `service_addr`s for different `du.Upload`s.
+
+The dash app could be deployed by
+
+```python
+import dash
+
+app = dash.Dash(__name__, ...)
+app.run_server(host='localhost', port=8060, debug=False)
+```
+
+### Remote flask service side
+
+A minimal example of the remote service deployed on `localhost:8061` is shown as follows:
+
+```python
+import os
+import flask
+
+import dash_uploader as du
+
+app = flask.Flask('test-uploader')
+
+os.makedirs('upload', exist_ok=True)
+du.configure_upload_flask(app, folder='upload', upload_api='/API/resumable', use_upload_id=False)
+
+if __name__ == '__main__':
+    import colorama
+    import termcolor
+
+    colorama.init()
+    app.run(host='localhost', port=8061, debug=False)
+```
+
+To test the performance, users could lauch both services (the dashboard and the `flask` app). The file uploaded by the dashboard would be forwarded to the flask side directly.

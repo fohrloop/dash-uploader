@@ -1,6 +1,7 @@
 # Changelog
 
 ## v.0.6.0 (2021-04-28)
+- Extend the documentation.
 - Add cross-domain supports for the `configure_upload`, `configure_upload_flask`. The cross-domain supports are provided by the `fixture` module.
 - Add two options `chunk_size` and `service_addr` to `du.Upload`.
 - Add an option `prevent_initial_call` for `du.callback` (when `dash>=1.12.0`). 
