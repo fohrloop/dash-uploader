@@ -1,4 +1,3 @@
-from __future__ import print_function as _
 import os as _os
 import sys as _sys
 import json
@@ -15,12 +14,7 @@ from ._build._imports_ import *  # noqa: F403,F401
 from ._build._imports_ import __all__ as build_all
 
 # Defines all exposed APIs of this package.
-__all__ = [
-    'configure_upload',
-    'callback',
-    'HttpRequestHandler',
-    'Upload'
-]
+__all__ = ["configure_upload", "callback", "HttpRequestHandler", "Upload"]
 
 if not hasattr(_dash, "development"):
     print(

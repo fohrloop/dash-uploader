@@ -1,17 +1,17 @@
 from pathlib import Path
 
-# import dash_html_components as html
-from dash.dependencies import Input, State  # Output
+from dash.dependencies import Input, State
 
 import dash_uploader.settings as settings
 
 
 def create_dash_callback(callback, settings):  # pylint: disable=redefined-outer-name
-    '''Wrap the dash callback with the du.settings.
+    """Wrap the dash callback with the du.settings.
     This function could be used as a wrapper. It will add the
     configurations of dash-uploader to the callback.
     This is a private method, and should not be exposed to users.
-    '''
+    """
+
     def wrapper(iscompleted, filenames, upload_id):
         if not iscompleted:
             return
@@ -34,7 +34,7 @@ def create_dash_callback(callback, settings):  # pylint: disable=redefined-outer
 
 def callback(
     output,
-    id='dash-uploader',
+    id="dash-uploader",
 ):
     """
     Add a callback to dash application.
@@ -59,6 +59,7 @@ def callback(
 
 
     """
+
     def add_callback(function):
         """
         Parameters
@@ -79,16 +80,15 @@ def callback(
             settings,
         )
 
-        if not hasattr(settings, 'app'):
+        if not hasattr(settings, "app"):
             raise Exception(
-                'The du.configure_upload must be called before the @du.callback can be used! Please, configure the dash-uploader.'
+                "The du.configure_upload must be called before the @du.callback can be used! Please, configure the dash-uploader."
             )
 
         dash_callback = settings.app.callback(
             output,
-            [Input(id, 'isCompleted')],
-            [State(id, 'fileNames'),
-             State(id, 'upload_id')],
+            [Input(id, "isCompleted")],
+            [State(id, "fileNames"), State(id, "upload_id")],
         )(dash_callback)
         return function
 
