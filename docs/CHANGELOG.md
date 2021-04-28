@@ -1,5 +1,9 @@
 # Changelog
 
+## v.0.6.0 (2021-04-28)
+- Add an option `prevent_initial_call` for `du.callback` (when `dash>=1.12.0`). 
+- Fix some typos and warnings, and make all codes pass the `flake8`, `pylint` check.
+
 ## v.0.5.0 (2021-04-25)
 - Added [`du.HttpRequestHandler`](./dash-uploader.md#duhttprequesthandler) which allows for custom HTTP POST and GET request handling. For example, custom validation logic is now possible! Used through `http_request_handler` parameter of [`du.configure_upload`](./dash-uploader.md#duconfigure_upload).
 - **Backwards incompatible changes**: Changed the CSS classes of the component to be `dash-uploader-default`, `dash-uploader-uploading`, .. etc. instead of `resumable-default`, `resumable-uploading`. 
