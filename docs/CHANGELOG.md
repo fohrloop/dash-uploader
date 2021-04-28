@@ -1,6 +1,7 @@
 # Changelog
 
 ## v.0.6.0 (2021-04-28)
+- Add two options `chunk_size` and `service_addr` to `du.Upload`.
 - Add an option `prevent_initial_call` for `du.callback` (when `dash>=1.12.0`). 
 - Fix some typos and warnings, and make all codes pass the `flake8`, `pylint` check.
 

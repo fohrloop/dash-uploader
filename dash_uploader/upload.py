@@ -48,8 +48,10 @@ def Upload(
     pause_button=False,
     filetypes=None,
     max_file_size=1024,
+    chunk_size=1,
     default_style=None,
     upload_id=None,
+    service_addr=None,
     max_files=1,
 ):
     """
@@ -80,6 +82,8 @@ def Upload(
         By default, all filetypes are accepted.
     max_file_size: numeric
         The maximum file size in Megabytes. Optional.
+    chunk_size: numeric
+        The chunk size in Megabytes. Optional.
     default_style: None or dict
         Inline CSS styling for the main div element.
         If None, use the default style of the component.
@@ -91,6 +95,12 @@ def Upload(
         The upload id, created with uuid.uuid1() or uuid.uuid4(),
         for example. If none, creates random session id with
         uuid.uuid1().
+    service_addr: None or str
+        The address of the upload target API. If given None,
+        would use the default configurations. In this case,
+        the uploader would upload files to the local service.
+        Setting this argument would override the configurations
+        in du.settings.
     max_files: int (default: 1)
         EXPERIMENTAL feature. Read below. For bulletproof
         implementation, force usage of zip files and keep
@@ -125,8 +135,11 @@ def Upload(
     if upload_id is None:
         upload_id = uuid.uuid1()
 
-    service = update_upload_api(settings.requests_pathname_prefix,
-                                settings.upload_api)
+    if (not isinstance(service_addr, str)) or service_addr == '':
+        service = update_upload_api(settings.requests_pathname_prefix,
+                                    settings.upload_api)
+    else:
+        service = service_addr
 
     arguments = dict(
         id=id,
@@ -134,6 +147,7 @@ def Upload(
         # is reliable -> Do not allow
         maxFiles=max_files,
         maxFileSize=max_file_size * 1024 * 1024,
+        chunkSize=chunk_size * 1024 * 1024,
         textLabel=text,
         service=service,
         startButton=False,
