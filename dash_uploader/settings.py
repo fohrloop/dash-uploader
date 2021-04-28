@@ -18,3 +18,10 @@ requests_pathname_prefix = '/'
 # `requests_pathname_prefix` and `routes_pathname_prefix`,
 # not `url_base_pathname`.
 routes_pathname_prefix = '/'
+
+# Needed for cross-domain deployment
+# The argument `allowed_origins` could be a string or a sequence. It defines
+# a list of allowed origins for the cross-domain access. The configurations
+# in the du.settings could be overrided by passing options of
+# du.configure_upload_flask.
+allowed_origins = '*'
