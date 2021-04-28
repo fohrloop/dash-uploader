@@ -1,18 +1,23 @@
 from pathlib import Path
 
-import dash_html_components as html
-from dash.dependencies import Input, Output, State
+# import dash_html_components as html
+from dash.dependencies import Input, State  # Output
 
 import dash_uploader.settings as settings
 
 
-def create_dash_callback(callback, settings):
+def create_dash_callback(callback, settings):  # pylint: disable=redefined-outer-name
+    '''Wrap the dash callback with the du.settings.
+    This function could be used as a wrapper. It will add the
+    configurations of dash-uploader to the callback.
+    This is a private method, and should not be exposed to users.
+    '''
     def wrapper(iscompleted, filenames, upload_id):
         if not iscompleted:
             return
 
         out = []
-        if not filenames is None:
+        if filenames is not None:
             if upload_id:
                 root_folder = Path(settings.UPLOAD_FOLDER_ROOT) / upload_id
             else:
@@ -40,7 +45,7 @@ def callback(
     ----------
     output: dash Ouput
         The output dash component
-    id: str 
+    id: str
         The id of the du.Upload component.
 
     Example
@@ -62,7 +67,7 @@ def callback(
             Function that receivers one argument,
             filenames and returns one argument,
             a dash component. The filenames is either
-            None or list of str containing the uploaded 
+            None or list of str containing the uploaded
             file(s).
         output: dash.dependencies.Output
             The dash output. For example:

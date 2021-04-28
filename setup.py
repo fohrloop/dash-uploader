@@ -1,5 +1,5 @@
 import json
-import os
+# import os
 from setuptools import setup
 
 with open('package.json') as f:
@@ -30,7 +30,7 @@ setup(
     ],
     extras_require={
         'dev': [
-            'pyyaml~=5.3.1',  #building with dash-generate-components
+            'pyyaml~=5.3.1',  # building with dash-generate-components
         ]
     },
     classifiers=[

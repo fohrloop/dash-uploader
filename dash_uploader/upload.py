@@ -17,6 +17,9 @@ DEFAULT_STYLE = {
 
 
 def update_upload_api(requests_pathname_prefix, upload_api):
+    '''Path join for the API path name.
+    This is a private method, and should not be exposed to users.
+    '''
     if requests_pathname_prefix == '/':
         return upload_api
     return '/'.join([
@@ -26,6 +29,9 @@ def update_upload_api(requests_pathname_prefix, upload_api):
 
 
 def combine(overiding_dict, base_dict):
+    '''Combining two dictionaries without modifying them.
+    This is a private method, and should not be exposed to users.
+    '''
     if overiding_dict is None:
         return dict(base_dict)
     return {**base_dict, **overiding_dict}
@@ -47,56 +53,58 @@ def Upload(
     max_files=1,
 ):
     """
+    du.Upload component
+
     Parameters
     ----------
     text: str
         The text to show in the upload "Drag
         and Drop" area. Optional.
     text_completed: str
-        The text to show in the upload area 
-        after upload has completed succesfully before
+        The text to show in the upload area
+        after upload has completed successfully before
         the name of the uploaded file. For example, if user
-        uploaded "data.zip" and `text_completed` is 
-        "Ready! ", then user would see text "Ready! 
+        uploaded "data.zip" and `text_completed` is
+        "Ready! ", then user would see text "Ready!
         data.zip".
     cancel_button: bool
         If True, shows a cancel button.
     pause_button: bool
         If True, shows a pause button.
     filetypes: list of str or None
-        The filetypes that can be uploaded. 
+        The filetypes that can be uploaded.
         For example ['zip', 'rar'].
-        Note that this just checks the extension of the 
-        filename, and user might still upload any kind 
+        Note that this just checks the extension of the
+        filename, and user might still upload any kind
         of file (by renaming)!
         By default, all filetypes are accepted.
     max_file_size: numeric
         The maximum file size in Megabytes. Optional.
     default_style: None or dict
-        Inline CSS styling for the main div element. 
+        Inline CSS styling for the main div element.
         If None, use the default style of the component.
         If dict, will use the union on the given dict
         and the default style. (you may override
         part of the style by giving a dictionary)
         More styling options through the CSS classes.
     upload_id: None or str
-        The upload id, created with uuid.uuid1() or uuid.uuid4(), 
+        The upload id, created with uuid.uuid1() or uuid.uuid4(),
         for example. If none, creates random session id with
         uuid.uuid1().
     max_files: int (default: 1)
         EXPERIMENTAL feature. Read below. For bulletproof
         implementation, force usage of zip files and keep
         max_files = 1.
-        
-        The number of files that can be added to 
+
+        The number of files that can be added to
         the upload field simultaneously.
 
-        Notes: 
+        Notes:
         (1) If even a single file which is not supported file
          type, is added to the upload queue, upload process of
-         all files will be permanently interrupted. 
-        (2) Use reasonably small amount in "max_files". 
-        (3) When uploading two folders with Chrome, there is 
+         all files will be permanently interrupted.
+        (2) Use reasonably small amount in "max_files".
+        (3) When uploading two folders with Chrome, there is
          a bug in resumable.js which makes only one of the
          folders to be uploaded. See:
          https://github.com/23/resumable.js/issues/416

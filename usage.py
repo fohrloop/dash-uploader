@@ -1,10 +1,10 @@
-from pathlib import Path
+# from pathlib import Path
 import uuid
 
 import dash_uploader as du
 import dash
 import dash_html_components as html
-from dash.dependencies import Input, Output, State
+from dash.dependencies import Output  # Input, State
 
 app = dash.Dash(__name__)
 

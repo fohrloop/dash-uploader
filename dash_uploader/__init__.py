@@ -11,8 +11,16 @@ from dash_uploader.httprequesthandler import HttpRequestHandler
 from dash_uploader.upload import Upload
 
 # noinspection PyUnresolvedReferences
-from ._build._imports_ import *
-from ._build._imports_ import __all__
+from ._build._imports_ import *  # noqa: F403,F401
+from ._build._imports_ import __all__ as build_all
+
+# Defines all exposed APIs of this package.
+__all__ = [
+    'configure_upload',
+    'callback',
+    'HttpRequestHandler',
+    'Upload'
+]
 
 if not hasattr(_dash, "development"):
     print(
@@ -45,6 +53,6 @@ _js_dist = [
 
 _css_dist = []
 
-for _component in __all__:
+for _component in build_all:
     setattr(locals()[_component], "_js_dist", _js_dist)
     setattr(locals()[_component], "_css_dist", _css_dist)

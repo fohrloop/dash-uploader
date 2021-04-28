@@ -1,8 +1,8 @@
 import logging
-import os
+# import os
 
-from dash import __version__ as dashversion
-import dash_html_components as html
+# from dash import __version__ as dashversion
+# import dash_html_components as html
 
 import dash_uploader.settings as settings
 from dash_uploader.upload import update_upload_api
@@ -16,6 +16,9 @@ def configure_upload(
     app, folder, use_upload_id=True, upload_api=None, http_request_handler=None
 ):
     """
+    Configure the upload APIs for dash app.
+    This function is required to be called before using du.callback.
+
     Parameters
     ---------
     app: dash.Dash
@@ -23,7 +26,7 @@ def configure_upload(
     folder: str
         The folder where to upload files.
         Can be relative ("uploads") or
-        absolute (r"C:\tmp\my_uploads").
+        absolute (r"C:\\tmp\\my_uploads").
         If the folder does not exist, it will
         be created automatically.
     use_upload_id: bool
