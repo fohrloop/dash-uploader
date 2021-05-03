@@ -6,7 +6,7 @@ upload_api = "/API/resumable"
 # with a `requests_pathname_prefix`.
 # The front-end will prefix this string to the requests
 # that are made to the proxy server
-requests_pathname_prefix = '/'
+requests_pathname_prefix = "/"
 
 # From dash source code:
 # Note that `requests_pathname_prefix` is the prefix for the AJAX calls that
@@ -17,7 +17,7 @@ requests_pathname_prefix = '/'
 # If you need these to be different values then you should set
 # `requests_pathname_prefix` and `routes_pathname_prefix`,
 # not `url_base_pathname`.
-routes_pathname_prefix = '/'
+routes_pathname_prefix = "/"
 
 # User configurations:
 # The configuration dict is used for storing user-defined configurations.
