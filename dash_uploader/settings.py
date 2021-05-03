@@ -18,3 +18,33 @@ requests_pathname_prefix = '/'
 # `requests_pathname_prefix` and `routes_pathname_prefix`,
 # not `url_base_pathname`.
 routes_pathname_prefix = '/'
+
+# User configurations:
+# The configuration dict is used for storing user-defined configurations.
+# Each item is set by an independent du.configure_upload. The dict is
+# formatted as
+# user_configs = {
+#     'name1': {
+#         'app': dash.Dash() or flask.Flask(),
+#         'service': str,
+#         'upload_folder_root': str,
+#         'is_dash': bool
+#         'upload_component_ids': [str]
+#     },
+#     'name2': ...
+# }
+# It is not recommended to change this dict manually. It should be
+# automatically set by du.configure_upload.
+user_configs = {}
+
+# Backward query dict:
+# This dictionary is used for fast querying the items in user_configs. It
+# is formatted as
+# user_configs_query = {
+#     'upload_id_1': 'name1',
+#     'upload_id_2': 'name2',
+#     ...
+# }
+# It is not recommended to change this dict manually. It should be
+# automatically set by du.configure_upload.
+user_configs_query = {}
