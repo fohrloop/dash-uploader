@@ -1,8 +1,22 @@
+from packaging import version
 from pathlib import Path
 
+from dash import __version__ as dashversion
 from dash.dependencies import Input, State
 
 import dash_uploader.settings as settings
+
+
+def compare_dash_version(req_version="1.12"):
+    """Compare the version of dash.
+    Will return True if current dash version is greater than
+    the argument "req_version".
+    This is a private method, and should not be exposed to users.
+    """
+    cur_version = version.parse(dashversion)
+    if isinstance(cur_version, version.LegacyVersion):
+        return False
+    return cur_version >= version.parse(req_version)
 
 
 def create_dash_callback(callback, settings):  # pylint: disable=redefined-outer-name
@@ -35,6 +49,7 @@ def create_dash_callback(callback, settings):  # pylint: disable=redefined-outer
 def callback(
     output,
     id="dash-uploader",
+    prevent_initial_call=False,
 ):
     """
     Add a callback to dash application.
@@ -47,6 +62,18 @@ def callback(
         The output dash component
     id: str
         The id of the du.Upload component.
+    prevent_initial_call: bool
+        The optional argument `prevent_initial_call`
+        is supported since dash v1.12.0. When set
+        True, it will cause the callback not to fire
+        when its outputs are first added to the page.
+        Defaults to `False` unless
+        `prevent_initial_callbacks = True` at the
+        app level.
+        Compatibility:
+        Only works for dash>=1.12.0. If the current
+        dash is a pre-release version or an earlier
+        version, this option would be ignored.
 
     Example
     -------
@@ -85,10 +112,14 @@ def callback(
                 "The du.configure_upload must be called before the @du.callback can be used! Please, configure the dash-uploader."
             )
 
+        kwargs = dict()
+        if compare_dash_version("1.12"):
+            kwargs["prevent_initial_call"] = prevent_initial_call
         dash_callback = settings.app.callback(
             output,
             [Input(id, "isCompleted")],
             [State(id, "fileNames"), State(id, "upload_id")],
+            **kwargs
         )(dash_callback)
         return function
 
