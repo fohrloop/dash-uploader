@@ -48,6 +48,7 @@ def Upload(
     pause_button=False,
     filetypes=None,
     max_file_size=1024,
+    chunk_size=1,
     default_style=None,
     upload_id=None,
     max_files=1,
@@ -80,6 +81,8 @@ def Upload(
         By default, all filetypes are accepted.
     max_file_size: numeric
         The maximum file size in Megabytes. Optional.
+    chunk_size: numeric
+        The chunk size in Megabytes. Optional.
     default_style: None or dict
         Inline CSS styling for the main div element.
         If None, use the default style of the component.
@@ -134,6 +137,7 @@ def Upload(
         # is reliable -> Do not allow
         maxFiles=max_files,
         maxFileSize=max_file_size * 1024 * 1024,
+        chunkSize=chunk_size * 1024 * 1024,
         textLabel=text,
         service=service,
         startButton=False,
