@@ -131,6 +131,7 @@ def Upload(
 
     arguments = dict(
         id=id,
+        isCompleted=False,
         # Have not tested if using many files
         # is reliable -> Do not allow
         maxFiles=max_files,
