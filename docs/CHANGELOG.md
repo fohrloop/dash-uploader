@@ -1,6 +1,6 @@
 # Changelog
 
-## v.0.6.0 (2021-05-04)
+## TBD (2021-05-04)
 ### Added 
 - New `chunk_size` parameter for `du.Upload`.
 
