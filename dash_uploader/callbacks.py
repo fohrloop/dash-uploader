@@ -49,7 +49,6 @@ def create_dash_callback(callback, settings):  # pylint: disable=redefined-outer
 def callback(
     output,
     id="dash-uploader",
-    prevent_initial_call=False,
 ):
     """
     Add a callback to dash application.
@@ -62,18 +61,6 @@ def callback(
         The output dash component
     id: str
         The id of the du.Upload component.
-    prevent_initial_call: bool
-        The optional argument `prevent_initial_call`
-        is supported since dash v1.12.0. When set
-        True, it will cause the callback not to fire
-        when its outputs are first added to the page.
-        Defaults to `False` unless
-        `prevent_initial_callbacks = True` at the
-        app level.
-        Compatibility:
-        Only works for dash>=1.12.0. If the current
-        dash is a pre-release version or an earlier
-        version, this option would be ignored.
 
     Example
     -------
@@ -114,7 +101,7 @@ def callback(
 
         kwargs = dict()
         if compare_dash_version("1.12"):
-            kwargs["prevent_initial_call"] = prevent_initial_call
+            kwargs["prevent_initial_call"] = True
         dash_callback = settings.app.callback(
             output,
             [Input(id, "isCompleted")],
