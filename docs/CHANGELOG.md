@@ -1,10 +1,14 @@
 # Changelog
 
+## v.0.6.0 (2021-05-04)
+### Added 
+- New `chunk_size` parameter for `du.Upload`.
+
 ## v.0.5.0 (2021-04-25)
 - Added [`du.HttpRequestHandler`](./dash-uploader.md#duhttprequesthandler) which allows for custom HTTP POST and GET request handling. For example, custom validation logic is now possible! Used through `http_request_handler` parameter of [`du.configure_upload`](./dash-uploader.md#duconfigure_upload).
 - **Backwards incompatible changes**: Changed the CSS classes of the component to be `dash-uploader-default`, `dash-uploader-uploading`, .. etc. instead of `resumable-default`, `resumable-uploading`. 
-## v.0.4.2 (2021-02-20)
 
+## v.0.4.2 (2021-02-20)
 - Fixed some width related CSS issues in mobile mode. See: [#19](https://github.com/np-8/dash-uploader/issues/19)
   
 ## v.0.4.1 (2020-10-27)

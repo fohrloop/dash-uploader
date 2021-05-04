@@ -12,30 +12,32 @@ Typically you also would like to define [callbacks](#3-callbacks) (functions tha
 
 # Table of contents
 
-  [1 Configuring dash-uploader](#1-configuring-dash-uploader)
+[1 Configuring dash-uploader](#1-configuring-dash-uploader)
 - [`du.configure_upload`](#duconfigure_upload)
 
 [2 Creating Upload components](#2-creating-upload-components)
 - [`du.Upload`](#duupload)
 
- [3 Callbacks](#3-callbacks)
+[3 Callbacks](#3-callbacks)
 - [`@du.callback`](#ducallback)
 - [`@app.callback`](#appcallback)
  
 [4 Custom handling of HTTP Requests](#4-custom-handling-of-http-requests)
 - [`du.HttpRequestHandler`](#duhttprequesthandler)
-<hr>
+
+-----
 
 ## 1 Configuring dash-uploader
 
 You need to configure the dash uploader after you created your dash application instance (`app`) and before you create any Upload components
 
 **Example**
-```
+```python
 import dash_uploader as du
 
 du.configure_upload(app, r'C:\tmp\uploads')
 ```
+
 ### `du.configure_upload`
 
 ```python
@@ -44,9 +46,10 @@ configure_upload(app, folder, use_upload_id=True, upload_api=None, http_request_
 
 #### app: dash.Dash
 The application instance. Usually created using
-```
+```python
 app = dash.Dash(__name__)
 ```
+
 #### folder: str
 The folder where to upload files.  Can be relative 
 (`"uploads"`) or absolute (`r"C:\tmp\my_uploads"`).
@@ -54,7 +57,6 @@ If the folder does not exist, it will be created
 automatically.
 
 #### use_upload_id: bool (Default: True)
-
 Determines if the uploads are put into
 folders defined by a "upload id". To define an upload id, use the `upload_id` parameter of the `du.Upload` component. In typical use case, upload id's are unique for different users. In that case, you must use a callable as the `app.layout`.
 
@@ -74,7 +76,7 @@ http://<myhost>[<requests_pathname_prefix>]/API/dash-uploader
 ```
 for the communication between the front-end and the server. The `requests_pathname_prefix` is added automatically, if the dash `app` instance has `requests_pathname_prefix`. (used with proxies)
 
-#### http_request_handler:  None or subclass of  du.HttpRequestHandler
+#### http_request_handler:  None or subclass of du.HttpRequestHandler
 *New in version **0.5.0***
 
 Used for custom configuration on the HTTP POST and GET requests. This can be used to add validation for the HTTP requests (⚠️Important
@@ -96,6 +98,7 @@ Upload(
     pause_button=False,
     filetypes=None,
     max_file_size=1024,
+    chunk_size=1,
     default_style=None,
     upload_id=None,
     max_files=1,
@@ -105,14 +108,11 @@ Upload(
 #### id: str (default: 'dash-uploader')
 The html id for the component. This is needed when defining callbacks. Note that ids must be unique in a dash application.
 
-
 #### text: str (Default: ''Drag and Drop Here to upload!')
-
 The text to be shown in the upload "Drag
 and Drop" area. Optional.
 
 #### text_completed: str
-
 The text to show in the upload area 
 after upload has completed succesfully before
 the name of the uploaded file. 
@@ -126,7 +126,7 @@ data.zip".
 If True, shows a cancel button.
 
 #### pause_button: bool
-    If True, shows a pause button.
+If True, shows a pause button.
 
 #### filetypes: list of str or None
 The filetypes that can be uploaded. 
@@ -138,8 +138,12 @@ By default, all filetypes are accepted.
 
 #### max_file_size: numeric
 The maximum file size in Megabytes. Default: 1024 (=1Gb).
-#### default_style: None or dict
 
+#### chunk_size: numeric
+*New in version **0.6.0***
+The chunk size in Megabytes. Optional. Default: 1 (=1Mb).
+
+#### default_style: None or dict
 Inline CSS styling for the main div element. 
 If None, use the default style of the component.
 If dict, will use the union on the given dict
@@ -188,6 +192,7 @@ du.Upload(
     id='dash-uploader',
 )
 ```
+
 ###  `@du.callback`
 
 *New in version **0.3.0***
@@ -215,10 +220,9 @@ def call_me(filenames):
 ```
 
 #### output: dash.dependencies.Output
-
 This is the Output object, just as in regular [dash callbacks](https://dash.plotly.com/basic-callbacks).
 
-#### output: str
+#### id: str
 This must be the same `id` as used when initiating your `du.Upload` component.
 
 #### call_me: function
@@ -231,8 +235,8 @@ A list of strings. These will be the uploaded files. For example:
 #### Dash component
 The return value of the `call_me` should be a dash component, as in the regular [dash callbacks].
 
-### `@app.callback`
 
+### `@app.callback`
 
 This method needs more verbose code and it is the conventional "[dash way]((https://dash.plotly.com/basic-callbacks))" to create a callback.  Use this if `@du.callback` does not give you enough control.
 
@@ -267,6 +271,7 @@ def callback_on_completion(iscompleted, filenames, upload_id):
 - `isCompleted`: boolean flag indicating if uploading has been completed. 
 - `fileNames`: List of strings of the filenames or None. This does not have the upload folder or the upload_id in it. 
 - `upload_id`: The upload id used when initiating the `du.Upload` component.
+
 
 ## 4 Custom handling of HTTP Requests
 ### `du.HttpRequestHandler`
