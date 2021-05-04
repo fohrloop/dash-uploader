@@ -4,34 +4,36 @@ from dash_uploader._build.Upload_ReactComponent import Upload_ReactComponent
 import dash_uploader.settings as settings
 
 DEFAULT_STYLE = {
-    'width': '100%',
+    "width": "100%",
     # min-height and line-height should be the same to make
     # the centering work.
-    'minHeight': '100px',
-    'lineHeight': '100px',
-    'textAlign': 'center',
-    'borderWidth': '1px',
-    'borderStyle': 'dashed',
-    'borderRadius': '7px',
+    "minHeight": "100px",
+    "lineHeight": "100px",
+    "textAlign": "center",
+    "borderWidth": "1px",
+    "borderStyle": "dashed",
+    "borderRadius": "7px",
 }
 
 
 def update_upload_api(requests_pathname_prefix, upload_api):
-    '''Path join for the API path name.
+    """Path join for the API path name.
     This is a private method, and should not be exposed to users.
-    '''
-    if requests_pathname_prefix == '/':
+    """
+    if requests_pathname_prefix == "/":
         return upload_api
-    return '/'.join([
-        requests_pathname_prefix.rstrip('/'),
-        upload_api.lstrip('/'),
-    ])
+    return "/".join(
+        [
+            requests_pathname_prefix.rstrip("/"),
+            upload_api.lstrip("/"),
+        ]
+    )
 
 
 def combine(overiding_dict, base_dict):
-    '''Combining two dictionaries without modifying them.
+    """Combining two dictionaries without modifying them.
     This is a private method, and should not be exposed to users.
-    '''
+    """
     if overiding_dict is None:
         return dict(base_dict)
     return {**base_dict, **overiding_dict}
@@ -41,9 +43,9 @@ def combine(overiding_dict, base_dict):
 # This is because subclassing the Dash-auto-generated
 # "Upload from Upload.py" will give some errors
 def Upload(
-    id='dash-uploader',
-    text='Drag and Drop Here to upload!',
-    text_completed='Uploaded: ',
+    id="dash-uploader",
+    text="Drag and Drop Here to upload!",
+    text_completed="Uploaded: ",
     cancel_button=True,
     pause_button=False,
     filetypes=None,
@@ -120,13 +122,12 @@ def Upload(
 
     # Handle styling
     default_style = combine(default_style, DEFAULT_STYLE)
-    upload_style = combine({'lineHeight': '0px'}, default_style)
+    upload_style = combine({"lineHeight": "0px"}, default_style)
 
     if upload_id is None:
         upload_id = uuid.uuid1()
 
-    service = update_upload_api(settings.requests_pathname_prefix,
-                                settings.upload_api)
+    service = update_upload_api(settings.requests_pathname_prefix, settings.upload_api)
 
     arguments = dict(
         id=id,
@@ -150,6 +151,6 @@ def Upload(
     )
 
     if filetypes:
-        arguments['filetypes'] = filetypes
+        arguments["filetypes"] = filetypes
 
     return Upload_ReactComponent(**arguments)
