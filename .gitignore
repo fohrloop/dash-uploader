@@ -280,3 +280,6 @@ inst/
 
 # Do not track the build files
 dash_uploader/_build
+
+# Do not track local /tmp 
+tmp/
