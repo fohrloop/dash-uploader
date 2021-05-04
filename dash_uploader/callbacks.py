@@ -5,8 +5,23 @@ from dash.dependencies import Input, State
 import dash_uploader.settings as settings
 
 
-def create_dash_callback(callback, settings):  # pylint: disable=redefined-outer-name
-    """Wrap the dash callback with the du.settings.
+def query_app_and_root(component_id):
+    """Query the app and the root folder by the given component id.
+    This is a private method, and should not be exposed to users.
+    """
+    app_idx = settings.user_configs_query.get(component_id, None)
+    if app_idx is None:
+        app_idx = settings.user_configs_default
+    app_item = settings.user_configs[app_idx]
+    if not app_item["is_dash"]:
+        raise TypeError("The du.configure_upload must be called with a dash.Dash instance before the @du.callback can be used! Please, configure the dash-uploader.")
+    app = app_item["app"]
+    upload_folder_root = app_item["upload_folder_root"]
+    return app, upload_folder_root
+
+
+def create_dash_callback(callback, app_root_folder):  # pylint: disable=redefined-outer-name
+    """Wrap the dash callback with the upload_folder_root.
     This function could be used as a wrapper. It will add the
     configurations of dash-uploader to the callback.
     This is a private method, and should not be exposed to users.
@@ -19,9 +34,9 @@ def create_dash_callback(callback, settings):  # pylint: disable=redefined-outer
         out = []
         if filenames is not None:
             if upload_id:
-                root_folder = Path(settings.UPLOAD_FOLDER_ROOT) / upload_id
+                root_folder = Path(app_root_folder) / upload_id
             else:
-                root_folder = Path(settings.UPLOAD_FOLDER_ROOT)
+                root_folder = Path(app_root_folder)
 
             for filename in filenames:
                 file = root_folder / filename
@@ -56,9 +71,8 @@ def callback(
     )
     def get_a_list(filenames):
         return html.Ul([html.Li(filenames)])
-
-
     """
+    app, upload_folder_root = query_app_and_root(id)
 
     def add_callback(function):
         """
@@ -77,15 +91,10 @@ def callback(
         """
         dash_callback = create_dash_callback(
             function,
-            settings,
+            upload_folder_root,
         )
 
-        if not hasattr(settings, "app"):
-            raise Exception(
-                "The du.configure_upload must be called before the @du.callback can be used! Please, configure the dash-uploader."
-            )
-
-        dash_callback = settings.app.callback(
+        dash_callback = app.callback(
             output,
             [Input(id, "isCompleted")],
             [State(id, "fileNames"), State(id, "upload_id")],

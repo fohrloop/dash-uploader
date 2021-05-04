@@ -16,16 +16,15 @@ DEFAULT_STYLE = {
 }
 
 
-def update_upload_api(requests_pathname_prefix, upload_api):
-    '''Path join for the API path name.
+def query_service_addr(component_id):
+    """Query the service address by the given component id.
     This is a private method, and should not be exposed to users.
-    '''
-    if requests_pathname_prefix == '/':
-        return upload_api
-    return '/'.join([
-        requests_pathname_prefix.rstrip('/'),
-        upload_api.lstrip('/'),
-    ])
+    """
+    app_idx = settings.user_configs_query.get(component_id, None)
+    if app_idx is None:
+        app_idx = settings.user_configs_default
+    service_addr = settings.user_configs[app_idx]["service"]
+    return service_addr
 
 
 def combine(overiding_dict, base_dict):
@@ -125,8 +124,7 @@ def Upload(
     if upload_id is None:
         upload_id = uuid.uuid1()
 
-    service = update_upload_api(settings.requests_pathname_prefix,
-                                settings.upload_api)
+    service = query_service_addr(id)
 
     arguments = dict(
         id=id,
