@@ -24,6 +24,7 @@
   "author": "Niko Pasanen <niko@pasanen.me>",
   "license": "MIT",
   "dependencies": {
+    "lodash": ">=4.17.21",
     "ramda": "^0.27.1",
     "resumablejs": "^1.1.0"
   },
