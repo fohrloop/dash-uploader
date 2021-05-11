@@ -13,6 +13,8 @@ import PropTypes from 'prop-types';
 import Resumablejs from 'resumablejs';
 import './progressbar.css';
 import './button.css';
+import { none } from 'ramda';
+import { isNull } from 'lodash';
 
 /**
  *  The Upload component
@@ -74,7 +76,7 @@ export default class Upload_ReactComponent extends Component {
         ResumableField.assignBrowse(this.uploader);
 
         // Enable or Disable DragAnd Drop
-        if (this.props.disableDragAndDrop === false) {
+        if (this.props.disableDragAndDrop === false && this.props.disabled === false) {
             ResumableField.assignDrop(this.dropZone);
         }
 
@@ -177,7 +179,6 @@ export default class Upload_ReactComponent extends Component {
         this.resumable = ResumableField;
     }
 
-
     cancelUpload() {
         this.resumable.cancel();
         this.resetBuilder();
@@ -227,11 +228,6 @@ export default class Upload_ReactComponent extends Component {
 
         const fileList = null;
 
-        let textLabel = null;
-        if (this.props.textLabel) {
-            textLabel = this.props.textLabel;
-        }
-
         let startButton = this.createButton(
             this.startUpload,
             'upload',
@@ -258,7 +254,9 @@ export default class Upload_ReactComponent extends Component {
 
 
         const getStyle = () => {
-            if (this.state.isComplete) {
+            if (this.props.disabled) {
+                return this.props.disabledStyle;
+            } else if (this.state.isComplete) {
                 return this.props.completeStyle;
             } else if (this.state.isUploading) {
                 return this.props.uploadingStyle;
@@ -268,7 +266,7 @@ export default class Upload_ReactComponent extends Component {
         }
 
         const getClass = () => {
-            if (this.props.disabledInput) {
+            if (this.props.disabled) {
                 return this.props.disabledClass;
             } else if (this.state.isHovered) {
                 return this.props.hoveredClass;
@@ -279,15 +277,30 @@ export default class Upload_ReactComponent extends Component {
             } else if (this.state.isPaused) {
                 return this.props.pausedClass;
             }
-            return this.props.className
+            return this.props.className;
 
+        }
+
+        const getMessage = () => {
+            if (this.props.disabled === true && this.props.disabledMessage) {
+                return this.props.disabledMessage;
+            }
+            else if (this.state.messageStatus === '') {
+                if (this.props.textLabel) {
+                    return this.props.textLabel;
+                }
+                return null;
+            } else {
+                return this.state.messageStatus;
+            }
+            
         }
 
         return (
             <div style={getStyle()} id={this.props.id} className={getClass()} ref={node => this.dropZone = node} >
                 <div id={this.props.id + '-padding'}
                     style={{
-                        padding: '10px',
+                        padding: '10px'
                     }}>
                     <label
                         style={{
@@ -296,21 +309,21 @@ export default class Upload_ReactComponent extends Component {
                             width: this.state.isUploading ? 'auto' : '100%',
                             paddingRight: this.state.isUploading ? '10px' : '0',
                             textAlign: 'center', wordWrap: 'break-word',
-                            cursor: this.state.isUploading ? 'default' : 'pointer',
+                            cursor: this.state.isUploading || this.props.disabled ? 'default' : 'pointer',
                             fontSize: this.state.isUploading ? '10px' : 'inherit',
                         }}
                         onMouseEnter={this.toggleHovered}
                         onMouseLeave={this.toggleHovered}
                     >
 
-                        {(this.state.messageStatus === '') ? textLabel : this.state.messageStatus}
+                        {getMessage()}
                         <input
                             ref={node => this.uploader = node}
                             type="file"
                             className='btn'
                             name={this.props.id + '-upload'}
                             accept={this.props.fileAccept || '*'}
-                            disabled={this.state.isUploading || false}
+                            disabled={this.state.isUploading || this.props.disabled}
                             style={{
                                 'opacity': '0',
                                 'width': '0',
@@ -394,6 +407,11 @@ Upload_ReactComponent.propTypes = {
     defaultStyle: PropTypes.object,
 
     /**
+     * Style when upload is disabled
+     */
+    disabledStyle: PropTypes.object,
+
+    /**
      * Style when upload is in progress
      */
     uploadingStyle: PropTypes.object,
@@ -407,6 +425,11 @@ Upload_ReactComponent.propTypes = {
      * The string to display in the upload component
      */
     textLabel: PropTypes.string,
+
+    /**
+     * Message to display when upload disabled
+     */
+    disabledMessage: PropTypes.string,
 
     /**
      * Message to display when upload completed
@@ -437,6 +460,11 @@ Upload_ReactComponent.propTypes = {
      * Whether or not to have a cancel button
      */
     cancelButton: PropTypes.bool,
+
+    /**
+     * Whether or not to allow file uploading
+     */
+    disabled: PropTypes.bool,
 
     /**
      * Whether or not to allow file drag and drop
@@ -487,15 +515,18 @@ Upload_ReactComponent.defaultProps = {
     pausedClass: 'dash-uploader-paused',
     uploadingClass: 'dash-uploader-uploading',
     defaultStyle: {},
+    disabledStyle: {},
     uploadingStyle: {},
     completeStyle: {},
     textLabel: 'Click Here to Select a File',
+    disabledMessage: 'The uploader is disabled.',
     completedMessage: 'Complete! ',
     fileNames: [],
     filetypes: undefined,
     startButton: true,
     pauseButton: true,
     cancelButton: true,
+    disabled: false,
     disableDragAndDrop: false,
     id: 'default-dash-uploader-id',
     onUploadErrorCallback: undefined,

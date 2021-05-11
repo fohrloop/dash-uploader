@@ -125,6 +125,7 @@ def Upload(
 
     # Handle styling
     default_style = combine(default_style, DEFAULT_STYLE)
+    disabled_style = combine({"opacity": "0.5"}, default_style)
     upload_style = combine({"lineHeight": "0px"}, default_style)
 
     if upload_id is None:
@@ -149,6 +150,7 @@ def Upload(
         cancelButton=cancel_button,
         pauseButton=pause_button,
         defaultStyle=default_style,
+        disabledStyle=disabled_style,
         uploadingStyle=upload_style,
         completeStyle=default_style,
         upload_id=str(upload_id),
