@@ -262,24 +262,24 @@ export default class Upload_ReactComponent extends Component {
 
 
         const getStyle = () => {
-            if (this.props.disabled) {
+            if (this.state.isUploading) {
+                return this.props.uploadingStyle;
+            } else if (this.props.disabled) {
                 return this.props.disabledStyle;
             } else if (this.state.isComplete) {
                 return this.props.completeStyle;
-            } else if (this.state.isUploading) {
-                return this.props.uploadingStyle;
             }
             return this.props.defaultStyle;
 
         }
 
         const getClass = () => {
-            if (this.props.disabled) {
+            if (this.state.isUploading) {
+                return this.props.uploadingClass;
+            } else if (this.props.disabled) {
                 return this.props.disabledClass;
             } else if (this.state.isHovered) {
                 return this.props.hoveredClass;
-            } else if (this.state.isUploading) {
-                return this.props.uploadingClass;
             } else if (this.state.isComplete) {
                 return this.props.completeClass;
             } else if (this.state.isPaused) {
@@ -290,7 +290,7 @@ export default class Upload_ReactComponent extends Component {
         }
 
         const getMessage = () => {
-            if (this.props.disabled === true && this.props.disabledMessage) {
+            if (this.state.isUploading === false && this.props.disabled === true && this.props.disabledMessage) {
                 return this.props.disabledMessage;
             }
             else if (this.state.messageStatus === '') {
