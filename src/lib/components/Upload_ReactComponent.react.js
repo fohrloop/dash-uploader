@@ -13,8 +13,6 @@ import PropTypes from 'prop-types';
 import Resumablejs from 'resumablejs';
 import './progressbar.css';
 import './button.css';
-import { none } from 'ramda';
-import { isNull } from 'lodash';
 
 /**
  *  The Upload component
