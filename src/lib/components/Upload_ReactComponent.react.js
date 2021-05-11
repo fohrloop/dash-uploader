@@ -276,14 +276,14 @@ export default class Upload_ReactComponent extends Component {
         const getClass = () => {
             if (this.state.isUploading) {
                 return this.props.uploadingClass;
+            } else if (this.state.isPaused) {
+                return this.props.pausedClass;
             } else if (this.props.disabled) {
                 return this.props.disabledClass;
             } else if (this.state.isHovered) {
                 return this.props.hoveredClass;
             } else if (this.state.isComplete) {
                 return this.props.completeClass;
-            } else if (this.state.isPaused) {
-                return this.props.pausedClass;
             }
             return this.props.className;
 
