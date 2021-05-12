@@ -177,11 +177,15 @@ export default class Upload_ReactComponent extends Component {
         this.resumable = ResumableField;
     }
 
-    componentDidUpdate() {
-        if (this.props.disableDragAndDrop === false && this.props.disabled === false) {
-            this.resumable.assignDrop(this.dropZone);
-        } else {
-            this.resumable.unAssignDrop(this.dropZone);
+    componentDidUpdate(prevProps) {
+        const prevEnableDrop = (prevProps.disableDragAndDrop === false && prevProps.disabled === false);
+        const curEnableDrop = (this.props.disableDragAndDrop === false && this.props.disabled === false);
+        if (curEnableDrop !== prevEnableDrop) {
+            if (curEnableDrop) {
+                this.resumable.assignDrop(this.dropZone);
+            } else {
+                this.resumable.unAssignDrop(this.dropZone);
+            }
         }
     }
 
