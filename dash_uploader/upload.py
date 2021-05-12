@@ -46,8 +46,10 @@ def Upload(
     id="dash-uploader",
     text="Drag and Drop Here to upload!",
     text_completed="Uploaded: ",
+    text_disabled="The uploader is disabled.",
     cancel_button=True,
     pause_button=False,
+    disabled=False,
     filetypes=None,
     max_file_size=1024,
     chunk_size=1,
@@ -70,10 +72,15 @@ def Upload(
         uploaded "data.zip" and `text_completed` is
         "Ready! ", then user would see text "Ready!
         data.zip".
+    text_disabled: str
+        The text to show in the upload area when the
+        the component is disabled.
     cancel_button: bool
         If True, shows a cancel button.
     pause_button: bool
         If True, shows a pause button.
+    disabled: bool
+        If True, the file is not allowed to be uploaded.
     filetypes: list of str or None
         The filetypes that can be uploaded.
         For example ['zip', 'rar'].
@@ -144,9 +151,11 @@ def Upload(
         textLabel=text,
         service=service,
         startButton=False,
+        disabled=disabled,
         # Not tested so default to one.
         simultaneousUploads=1,
         completedMessage=text_completed,
+        disabledMessage=text_disabled,
         cancelButton=cancel_button,
         pauseButton=pause_button,
         defaultStyle=default_style,
