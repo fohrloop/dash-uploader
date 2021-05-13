@@ -42,7 +42,7 @@ def test_render01_render_component(dash_duo):
 
 
 # Run with pytest -k upload01
-def test_upload01_render_component(dash_duo, testfile10Mb_csv):
+def test_upload01_upload_a_file(dash_duo, testfile10Mb_csv):
     app = import_app("usage")
     dash_duo.start_server(app)
 
