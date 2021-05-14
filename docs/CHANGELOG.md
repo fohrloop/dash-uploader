@@ -2,10 +2,14 @@
 
 ## [Unreleased]
 ### Added 
-- New `chunk_size` parameter for `du.Upload`.
+- New `chunk_size`, `disabled` and `text_disabled` parameters for `du.Upload`. 
 
 ### Changed 
 - Added the `prevent_initial_call=True` for all `du.callback`s. For [Dash >= 1.12.0](https://community.plotly.com/t/dash-v1-12-0-release-pattern-matching-callbacks-fixes-shape-drawing-new-datatable-conditional-formatting-options-prevent-initial-call-and-more/38867).
+
+### Fixed
+- Changing the parameter `disableDragAndDrop` by callbacks does not take effects.
+
 ## v.0.5.0 (2021-04-25)
 ### Added 
 - [`du.HttpRequestHandler`](./dash-uploader.md#duhttprequesthandler) which allows for custom HTTP POST and GET request handling. For example, custom validation logic is now possible! Used through `http_request_handler` parameter of [`du.configure_upload`](./dash-uploader.md#duconfigure_upload).
