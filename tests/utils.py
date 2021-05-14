@@ -12,3 +12,16 @@ def create_file(filename, filesize_mb=1):
     with open(filename, "wb") as f:
         f.seek(1024 * 1024 * filesize_mb)
         f.write(b"0")
+
+
+def load_text_file(file_path):
+    """
+    Load text file from the path
+
+    Parameters
+    ----------
+    file_path: str
+        The path of the file.
+    """
+    with open(file_path, "r") as f:
+        return f.read()
