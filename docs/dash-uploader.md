@@ -94,8 +94,10 @@ Upload(
     id='dash-uploader',
     text='Drag and Drop Here to upload!',
     text_completed='Uploaded: ',
+    text_disabled='The uploader is disabled.',
     cancel_button=True,
     pause_button=False,
+    disabled=False,
     filetypes=None,
     max_file_size=1024,
     chunk_size=1,
@@ -122,11 +124,20 @@ uploaded "data.zip" and `text_completed` is
 "Ready! ", then user would see text "Ready! 
 data.zip".
 
+#### text_disabled: str
+*New in version **[Unreleased]***
+The text to show in the upload area when the
+the component is disabled.
+
 #### cancel_button: bool
 If True, shows a cancel button.
 
 #### pause_button: bool
 If True, shows a pause button.
+
+#### disabled: bool
+*New in version **[Unreleased]***
+If True, the file is not allowed to be uploaded.
 
 #### filetypes: list of str or None
 The filetypes that can be uploaded. 
@@ -140,7 +151,7 @@ By default, all filetypes are accepted.
 The maximum file size in Megabytes. Default: 1024 (=1Gb).
 
 #### chunk_size: numeric
-*New in version **0.6.0***
+*New in version **[Unreleased]***
 The chunk size in Megabytes. Optional. Default: 1 (=1Mb).
 
 #### default_style: None or dict
