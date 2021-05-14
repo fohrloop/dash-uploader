@@ -45,7 +45,7 @@ def testfileWrongType():
 
 @pytest.fixture
 def js_drag_and_drop():
-    '''Provide file drag and drop simulation.
+    """Provide file drag and drop simulation.
     selenium only supports drag and drop elements.
     The javascript used for triggering a drag and drop file operation.
     Thanks for the work:
@@ -62,8 +62,10 @@ def js_drag_and_drop():
     Returns:
     -------
     A file <input> element used for simulating drag and drop.
-    '''
-    return load_text_file(file_path=Path(__file__).resolve().parent / "js" / "drag_and_drop_simulation.js")
+    """
+    return load_text_file(
+        file_path=Path(__file__).resolve().parent / "js" / "drag_and_drop_simulation.js"
+    )
 
 
 # Basic test for the "disabled" property.
@@ -94,7 +96,7 @@ def test_disabled01_check_disabled_property_update(dash_duo):
     # Wait for "configs-output" updated, with 10 second timeout.
     wait.until(
         EC.text_to_be_present_in_element(
-            (By.XPATH, "//span[@id='configs-output']"), json.dumps([0, ])
+            (By.XPATH, "//span[@id='configs-output']"), json.dumps([0,])
         )
     )
 
@@ -119,7 +121,9 @@ def test_disabled01_check_disabled_property_update(dash_duo):
     ), 'The current uploader class should be "dash-uploader-default".'
 
 
-def test_disabled02_check_disabled_effect(dash_duo, testfile10Mb_csv, testfileWrongType, js_drag_and_drop):
+def test_disabled02_check_disabled_effect(
+    dash_duo, testfile10Mb_csv, testfileWrongType, js_drag_and_drop
+):
     """Check the effectiveness of the disabled and disableDragAndDrop property.
     The upload component with "disabled" triggered would not accept any files.
     The upload component with "disableDragAndDrop" would not accept files uploaded by drag and drop region.
@@ -137,7 +141,9 @@ def test_disabled02_check_disabled_effect(dash_duo, testfile10Mb_csv, testfileWr
     assert len(check_boxes) == 2, "The provided configs for this app should be 2."
 
     # Define the upload check function.
-    def upload_test_file_and_validate(upload_component, is_disabled=False, by_dragndrop=False, expect_success=True):
+    def upload_test_file_and_validate(
+        upload_component, is_disabled=False, by_dragndrop=False, expect_success=True
+    ):
         """Upload a file and check the results.
         If "expect_success" is True, the file is expected to be uploaded;
         If not, the uploading is expected to fail.
@@ -148,7 +154,9 @@ def test_disabled02_check_disabled_effect(dash_duo, testfile10Mb_csv, testfileWr
         # First, upload a wrong file. This would reset the message of upload component.
         upload_input.send_keys(str(testfileWrongType))
 
-        if not is_disabled:  # Skip this step if the component is disabled, because the message would no be changed now.
+        if (
+            not is_disabled
+        ):  # Skip this step if the component is disabled, because the message would no be changed now.
             # Wait until the text is reset.
             wait.until(
                 EC.text_to_be_present_in_element(
@@ -159,16 +167,22 @@ def test_disabled02_check_disabled_effect(dash_duo, testfile10Mb_csv, testfileWr
         if by_dragndrop:
             # Create a file_input, which simulates the drag and drop behavior.
             # This <input> element is different from the input element created by dash uploader.
-            drag_and_drag_input = driver.execute_script(js_drag_and_drop, upload, 20, 20)
+            drag_and_drag_input = driver.execute_script(
+                js_drag_and_drop, upload, 20, 20
+            )
             drag_and_drag_input.send_keys(str(testfile10Mb_csv))
         else:
             # Ensure the uploading button is clickable.
             if expect_success:
-                assert upload_input.is_enabled(), "The uploading button is expected to be enabled."
+                assert (
+                    upload_input.is_enabled()
+                ), "The uploading button is expected to be enabled."
             else:  # This step is expected to fail when "expect_success=False"
                 # The err_info is used for showing the message.
                 with pytest.raises(AssertionError) as err_info:  # noqa: F841
-                    assert upload_input.is_enabled(), "The uploading button is expected to be enabled."
+                    assert (
+                        upload_input.is_enabled()
+                    ), "The uploading button is expected to be enabled."
                 return
 
             # Wait until file is uploaded
@@ -208,12 +222,17 @@ def test_disabled02_check_disabled_effect(dash_duo, testfile10Mb_csv, testfileWr
     # Check the upload state, should be default or complelte now.
     uploader_class = upload.get_attribute("class")
     assert (
-        uploader_class == "dash-uploader-default" or uploader_class == "dash-uploader-complete"
+        uploader_class == "dash-uploader-default"
+        or uploader_class == "dash-uploader-complete"
     ), 'The current uploader class should be "dash-uploader-default" or "dash-uploader-complete".'
 
     # Upload the file, both tests are expected to sucess.
-    upload_test_file_and_validate(upload, by_dragndrop=False, expect_success=True)  # By sending the file.
-    upload_test_file_and_validate(upload, by_dragndrop=True, expect_success=True)  # By drag and drop.
+    upload_test_file_and_validate(
+        upload, by_dragndrop=False, expect_success=True
+    )  # By sending the file.
+    upload_test_file_and_validate(
+        upload, by_dragndrop=True, expect_success=True
+    )  # By drag and drop.
 
     # Check the performance of the disabled case.
     check_boxes[0].click()
@@ -221,7 +240,7 @@ def test_disabled02_check_disabled_effect(dash_duo, testfile10Mb_csv, testfileWr
     # Wait for the component update getting confirmed.
     wait.until(
         EC.text_to_be_present_in_element(
-            (By.XPATH, "//span[@id='configs-output']"), json.dumps([0, ])
+            (By.XPATH, "//span[@id='configs-output']"), json.dumps([0,])
         )
     )
 
@@ -231,8 +250,12 @@ def test_disabled02_check_disabled_effect(dash_duo, testfile10Mb_csv, testfileWr
     ), 'The current uploader class should be "dash-uploader-disabled".'
 
     # Upload the file, both tests are expected to fail.
-    upload_test_file_and_validate(upload, is_disabled=True, by_dragndrop=False, expect_success=False)  # By sending the file.
-    upload_test_file_and_validate(upload, is_disabled=True, by_dragndrop=True, expect_success=False)  # By drag and drop.
+    upload_test_file_and_validate(
+        upload, is_disabled=True, by_dragndrop=False, expect_success=False
+    )  # By sending the file.
+    upload_test_file_and_validate(
+        upload, is_disabled=True, by_dragndrop=True, expect_success=False
+    )  # By drag and drop.
 
     # Check the performance of the disableDragAndDrop case.
     check_boxes[0].click()
@@ -241,16 +264,21 @@ def test_disabled02_check_disabled_effect(dash_duo, testfile10Mb_csv, testfileWr
     # Wait for the component update getting confirmed.
     wait.until(
         EC.text_to_be_present_in_element(
-            (By.XPATH, "//span[@id='configs-output']"), json.dumps([1, ])
+            (By.XPATH, "//span[@id='configs-output']"), json.dumps([1,])
         )
     )
 
     # Check the upload state, should be default or complelte now.
     uploader_class = upload.get_attribute("class")
     assert (
-        uploader_class == "dash-uploader-default" or uploader_class == "dash-uploader-complete"
+        uploader_class == "dash-uploader-default"
+        or uploader_class == "dash-uploader-complete"
     ), 'The current uploader class should be "dash-uploader-default" or "dash-uploader-complete".'
 
     # Upload the file, the normal test is expected to success, while the drag and drop test is expected to fail.
-    upload_test_file_and_validate(upload, by_dragndrop=False, expect_success=True)  # By sending the file.
-    upload_test_file_and_validate(upload, by_dragndrop=True, expect_success=False)  # By drag and drop.
+    upload_test_file_and_validate(
+        upload, by_dragndrop=False, expect_success=True
+    )  # By sending the file.
+    upload_test_file_and_validate(
+        upload, by_dragndrop=True, expect_success=False
+    )  # By drag and drop.
