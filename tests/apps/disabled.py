@@ -1,6 +1,6 @@
-'''
+"""
 Test app used by test_disabled.
-'''
+"""
 import uuid
 import json
 
@@ -12,7 +12,7 @@ from dash.dependencies import Output, Input
 
 app = dash.Dash(__name__)
 
-UPLOAD_FOLDER_ROOT = R"C:\tmp\Uploads"
+UPLOAD_FOLDER_ROOT = r"C:\tmp\Uploads"
 du.configure_upload(app, UPLOAD_FOLDER_ROOT)
 
 
@@ -40,10 +40,10 @@ def get_app_layout():
                         id="uploader-configs",
                         options=[
                             {"label": "Disabled", "value": 0},
-                            {"label": "Disable Drag & Drop", "value": 1}
+                            {"label": "Disable Drag & Drop", "value": 1},
                         ],
                         value=[],
-                        labelStyle={'display': 'inline-block'}
+                        labelStyle={"display": "inline-block"},
                     ),
                     get_upload_component(id="dash-uploader"),
                     html.Div(id="callback-output"),
@@ -58,16 +58,14 @@ def get_app_layout():
             html.Div(
                 children=[
                     "Triggered configs:",
-                    html.Span(id="configs-output", children=json.dumps([])),  # This element needs to be visible, otherwise, selenium could not find its content.
+                    html.Span(
+                        id="configs-output", children=json.dumps([])
+                    ),  # This element needs to be visible, otherwise, selenium could not find its content.
                 ],
-                style={  # wrapper div style
-                    "textAlign": "left",
-                }
-            )
+                style={"textAlign": "left",},  # wrapper div style
+            ),
         ],
-        style={
-            "textAlign": "center",
-        },
+        style={"textAlign": "center",},
     )
 
 
@@ -78,17 +76,13 @@ app.layout = get_app_layout
 
 # 3) Create a callback
 @du.callback(
-    output=Output("callback-output", "children"),
-    id="dash-uploader",
+    output=Output("callback-output", "children"), id="dash-uploader",
 )
 def get_a_list(filenames):
     return html.Ul([html.Li(filenames)])
 
 
-@app.callback(
-    Output("dash-uploader", "disabled"),
-    [Input("uploader-configs", "value")]
-)
+@app.callback(Output("dash-uploader", "disabled"), [Input("uploader-configs", "value")])
 def check_disabled(val_configs):
     if 0 in val_configs:  # Disabled
         return True
@@ -97,8 +91,7 @@ def check_disabled(val_configs):
 
 
 @app.callback(
-    Output("dash-uploader", "disableDragAndDrop"),
-    [Input("uploader-configs", "value")]
+    Output("dash-uploader", "disableDragAndDrop"), [Input("uploader-configs", "value")]
 )
 def check_disableDragAndDrop(val_configs):
     if 1 in val_configs:  # Disabled
@@ -109,10 +102,7 @@ def check_disableDragAndDrop(val_configs):
 
 @app.callback(
     Output("configs-output", "children"),
-    [
-        Input("dash-uploader", "disabled"),
-        Input("dash-uploader", "disableDragAndDrop")
-    ]
+    [Input("dash-uploader", "disabled"), Input("dash-uploader", "disableDragAndDrop")],
 )
 def update_config_states(is_disabled, is_disableDragAndDrop):
     """This callback is used for confirming that the states of the element have been changed."""
