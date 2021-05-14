@@ -126,6 +126,7 @@ data.zip".
 
 #### text_disabled: str
 *New in version **[Unreleased]***
+
 The text to show in the upload area when the
 the component is disabled.
 
@@ -137,6 +138,7 @@ If True, shows a pause button.
 
 #### disabled: bool
 *New in version **[Unreleased]***
+
 If True, the file is not allowed to be uploaded.
 
 #### filetypes: list of str or None
@@ -152,6 +154,7 @@ The maximum file size in Megabytes. Default: 1024 (=1Gb).
 
 #### chunk_size: numeric
 *New in version **[Unreleased]***
+
 The chunk size in Megabytes. Optional. Default: 1 (=1Mb).
 
 #### default_style: None or dict
