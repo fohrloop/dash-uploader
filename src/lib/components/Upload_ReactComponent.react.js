@@ -10,7 +10,6 @@ import Flow from '@flowjs/flow.js';
 import Button from './Button.react.js';
 import ProgressBar from './ProgressBar.react.js'
 import PropTypes from 'prop-types';
-import Resumablejs from 'resumablejs';
 import './progressbar.css';
 import './button.css';
 
@@ -28,7 +27,7 @@ export default class Upload_ReactComponent extends Component {
         isHovered: false,
         isComplete: false,
         showEnabledButtons: false,
-        currentFile: ''
+        currentFile: '',
     }
 
     constructor(props) {
@@ -50,7 +49,7 @@ export default class Upload_ReactComponent extends Component {
 
         // Full list of options here
         // https://github.com/flowjs/flow.js#configuration 
-        const flowComponent = new Flow({
+        const flow = new Flow({
             //  The API endpoint
             target: this.props.service,
             // Additional data for the requests
@@ -58,7 +57,7 @@ export default class Upload_ReactComponent extends Component {
             // Chunk size in bytes.
             chunkSize: this.props.chunkSize,
             // Number of simulateneous uploads
-            simultaneousUploads: this.props.simultaneousUploads,
+            simultaneuosUploads: this.props.simultaneuosUploads,
             // Extra headers to include in the multipart POST with data. 
             // If a function, it will be passed a FlowFile, a FlowChunk object and a isTest boolean (Default: {})
             headers: {},
@@ -81,13 +80,15 @@ export default class Upload_ReactComponent extends Component {
             // forceChunkSize: false
         });
 
+        //
+        //flow.on('fileAdded', function (file) {
+        //    if (!this.props.fileTypes.includes(file.getExtension())) {
+        //        console.log('fileAdded not in extension list.')
+        //        return false;
+        //    };
+        //});
 
-        flow.on('fileAdded', function (file) {
-            if (!this.props.filetypes.includes(file.getExtension())) {
-                return false;
-            };
-        });
-
+        console.log(this.props)
 
         this.props.setProps({
             isCompleted: false,
@@ -95,14 +96,15 @@ export default class Upload_ReactComponent extends Component {
             uploadedFiles: 0,
         });
         // Clicking the component will open upload dialog 
-        ResumableField.assignBrowse(this.uploader);
+        flow.assignBrowse(this.uploader);
 
         // Enable or Disable DragAnd Drop
         if (this.props.disableDragAndDrop === false) {
-            ResumableField.assignDrop(this.dropZone);
+            flow.assignDrop(this.dropZone);
         }
 
-        ResumableField.on('fileAdded', (file) => {
+        flow.on('fileAdded', (file) => {
+            console.log(f'fileAdded ({file})')
             this.props.setProps({
                 // Currently supports uploading only one file at a time.
                 isCompleted: false,
@@ -120,7 +122,7 @@ export default class Upload_ReactComponent extends Component {
             if (typeof this.props.onFileAdded === 'function') {
                 this.props.onFileAdded(file, this.resumable);
             } else {
-                ResumableField.upload();
+                flow.upload();
             }
         });
 
@@ -128,7 +130,7 @@ export default class Upload_ReactComponent extends Component {
         // The "fileNames" is a list, even though currently uploading
         // only one file at a time is supported.
         // When uploading multiple files, this will be called every time a file upload completes.
-        ResumableField.on('fileSuccess', (file, fileServer) => {
+        flow.on('fileSuccess', (file, fileServer) => {
 
             if (this.props.fileNameServer) {
                 const objectServer = JSON.parse(fileServer);
@@ -160,22 +162,21 @@ export default class Upload_ReactComponent extends Component {
             });
 
             // Make re-upload of a file with same filename possible.
-            ResumableField.removeFile(file);
+            flow.removeFile(file);
         });
 
 
 
-        ResumableField.on('progress', () => {
-
+        flow.on('progress', () => {
 
             this.setState({
-                isUploading: ResumableField.isUploading()
+                isUploading: flow.isUploading()
             });
 
-            if ((ResumableField.progress() * 100) < 100) {
+            if ((flow.progress() * 100) < 100) {
                 this.setState({
                     messageStatus: 'Uploading "' + this.state.currentFile + '"',
-                    progressBar: ResumableField.progress() * 100
+                    progressBar: flow.progress() * 100
                 });
             } else {
                 setTimeout(() => {
@@ -188,7 +189,7 @@ export default class Upload_ReactComponent extends Component {
         });
 
 
-        ResumableField.on('fileSuccess', (file, fileServer) => {
+        flow.on('fileSuccess', (file, fileServer) => {
 
             if (this.props.setProps) {
                 this.props.setProps({
@@ -202,7 +203,7 @@ export default class Upload_ReactComponent extends Component {
             });
         })
 
-        ResumableField.on('fileError', (file, errorCount) => {
+        flow.on('fileError', (file, errorCount) => {
 
             if (typeof (this.props.onUploadErrorCallback) !== 'undefined') {
                 this.props.onUploadErrorCallback(file, errorCount);
@@ -212,7 +213,7 @@ export default class Upload_ReactComponent extends Component {
 
         });
 
-        this.resumable = ResumableField;
+        this.resumable = flow;
     }
 
 
@@ -459,7 +460,7 @@ Upload_ReactComponent.propTypes = {
     /**
      * List of allowed file types, e.g. ['jpg', 'png']
      */
-    filetypes: PropTypes.arrayOf(PropTypes.string),
+    fileTypes: PropTypes.arrayOf(PropTypes.string),
 
     /**
      * Whether or not to have a start button
@@ -539,7 +540,7 @@ Upload_ReactComponent.defaultProps = {
     fileNames: [],
     newestUploadedFileName: '',
     uploadedFiles: 0,
-    filetypes: undefined,
+    fileTypes: undefined,
     startButton: true,
     pauseButton: true,
     cancelButton: true,

@@ -2,7 +2,7 @@ import logging
 import os
 
 from dash import __version__ as dashversion
-import dash_html_components as html
+from dash import html
 
 import dash_uploader.settings as settings
 from dash_uploader.upload import update_upload_api

@@ -130,7 +130,7 @@ def Upload(
         service=service,
         startButton=False,
         # Not tested so default to one.
-        simultaneousUploads=1,
+        simultaneuosUploads=1,
         completedMessage=text_completed,
         cancelButton=cancel_button,
         pauseButton=pause_button,
@@ -143,6 +143,6 @@ def Upload(
     )
 
     if filetypes:
-        arguments['filetypes'] = filetypes
+        arguments['fileTypes'] = filetypes
 
     return Upload_ReactComponent(**arguments)
