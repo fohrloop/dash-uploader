@@ -279,4 +279,7 @@ inst/
 .vscode
 
 # Do not track the build files
-dash_uploader/_build
+dash_uploader/_build.localhistory
+package-lock.json
+_build
+.localhistory
