@@ -88,6 +88,7 @@ export default class Upload_ReactComponent extends Component {
         //    };
         //});
 
+        console.log('##########################################################3')
         console.log(this.props)
 
         this.props.setProps({
@@ -104,12 +105,14 @@ export default class Upload_ReactComponent extends Component {
         }
 
         flow.on('fileAdded', (file) => {
-            console.log(f'fileAdded ({file})')
+            console.log('fileAdded')
+            console.log(file)
             this.props.setProps({
                 // Currently supports uploading only one file at a time.
                 isCompleted: false,
                 fileNames: [],
             });
+
             this.setState({
                 messageStatus: this.props.fileAddedMessage || ' Starting upload! of ' + file.fileName,
                 showEnabledButtons: true,
@@ -130,8 +133,9 @@ export default class Upload_ReactComponent extends Component {
         // The "fileNames" is a list, even though currently uploading
         // only one file at a time is supported.
         // When uploading multiple files, this will be called every time a file upload completes.
-        flow.on('fileSuccess', (file, fileServer) => {
 
+        flow.on('fileSuccess', (file, fileServer) => {
+            console.warn('fileSuccess');
             if (this.props.fileNameServer) {
                 const objectServer = JSON.parse(fileServer);
                 file.fileName = objectServer[this.props.fileNameServer];
@@ -163,6 +167,7 @@ export default class Upload_ReactComponent extends Component {
 
             // Make re-upload of a file with same filename possible.
             flow.removeFile(file);
+
         });
 
 
@@ -199,7 +204,6 @@ export default class Upload_ReactComponent extends Component {
             this.setState({
                 isComplete: true,
                 showEnabledButtons: false,
-
             });
         })
 
