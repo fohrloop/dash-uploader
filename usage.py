@@ -8,7 +8,7 @@ from dash.dependencies import Input, Output, State
 
 app = dash.Dash(__name__)
 
-UPLOAD_FOLDER_ROOT = r"C:\tmp\Uploads"
+UPLOAD_FOLDER_ROOT = "/tmp/Uploads"
 du.configure_upload(app, UPLOAD_FOLDER_ROOT)
 
 
@@ -90,6 +90,7 @@ def callback_on_completion(n_files, filenames, upload_id, iscompleted, latest_fi
         for filename in filenames:
             file = root_folder / filename
             out.append(file)
+
         return html.Ul([html.Li(str(x)) for x in out])
 
     return html.Div("No Files Uploaded Yet!")

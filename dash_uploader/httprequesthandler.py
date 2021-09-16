@@ -44,15 +44,17 @@ class BaseHttpRequestHandler:
             logger.error(traceback.format_exc())
 
     def _post(self):
-        resumableTotalChunks = request.form.get("resumableTotalChunks", type=int)
-        resumableChunkNumber = request.form.get(
-            "resumableChunkNumber", default=1, type=int
+
+        flowTotalChunks = request.form.get("flowTotalChunks", type=int)
+
+        flowChunkNumber = request.form.get(
+            "flowChunkNumber", default=1, type=int
         )
-        resumableFilename = request.form.get(
-            "resumableFilename", default="error", type=str
+        flowFilename = request.form.get(
+            "flowFilename", default="error", type=str
         )
-        resumableIdentifier = request.form.get(
-            "resumableIdentifier", default="error", type=str
+        flowIdentifier = request.form.get(
+            "flowIdentifier", default="error", type=str
         )
         upload_id = request.form.get("upload_id", default="", type=str)
 
@@ -61,17 +63,17 @@ class BaseHttpRequestHandler:
 
         # make our temp directory
         temp_root = self.get_temp_root(upload_id)
-        temp_dir = os.path.join(temp_root, resumableIdentifier)
+        temp_dir = os.path.join(temp_root, flowIdentifier)
         if not os.path.isdir(temp_dir):
             os.makedirs(temp_dir)
 
         # save the chunk data
-        chunk_name = get_chunk_name(resumableFilename, resumableChunkNumber)
+        chunk_name = get_chunk_name(flowFilename, flowChunkNumber)
         chunk_file = os.path.join(temp_dir, chunk_name)
 
         # make a lock file
         lock_file_path = os.path.join(
-            temp_dir, ".lock_{:d}".format(resumableChunkNumber)
+            temp_dir, ".lock_{:d}".format(flowChunkNumber)
         )
 
         with open(lock_file_path, "a"):
@@ -81,8 +83,8 @@ class BaseHttpRequestHandler:
 
         # check if the upload is complete
         chunk_paths = [
-            os.path.join(temp_dir, get_chunk_name(resumableFilename, x))
-            for x in range(1, resumableTotalChunks + 1)
+            os.path.join(temp_dir, get_chunk_name(flowFilename, x))
+            for x in range(1, flowTotalChunks + 1)
         ]
         upload_complete = all([os.path.exists(p) for p in chunk_paths])
 
@@ -95,7 +97,7 @@ class BaseHttpRequestHandler:
             while any(
                 [
                     os.path.isfile(os.path.join(temp_dir, ".lock_{:d}".format(chunk)))
-                    for chunk in range(1, resumableTotalChunks + 1)
+                    for chunk in range(1, flowTotalChunks + 1)
                 ]
             ):
                 tried += 1
@@ -105,7 +107,7 @@ class BaseHttpRequestHandler:
                 time.sleep(1)
 
             # Make sure some other chunk didn't trigger file reconstruction
-            target_file_name = os.path.join(temp_root, resumableFilename)
+            target_file_name = os.path.join(temp_root, flowFilename)
             if os.path.exists(target_file_name):
                 logger.info("File %s exists already. Overwriting..", target_file_name)
                 os.unlink(target_file_name)
@@ -117,7 +119,7 @@ class BaseHttpRequestHandler:
             self.server.logger.debug("File saved to: %s", target_file_name)
             shutil.rmtree(temp_dir)
 
-        return resumableFilename
+        return flowFilename
 
     def get(self):
         try:
@@ -126,35 +128,35 @@ class BaseHttpRequestHandler:
             logger.error(traceback.format_exc())
 
     def _get(self):
-        # resumable.js uses a GET request to check if it uploaded the file already.
-        # https://github.com/23/resumable.js#handling-get-or-test-requests
+        # flow.js uses a GET request to check if it uploaded the file already.
+        # https://github.com/23/flow.js#handling-get-or-test-requests
         # TODO: Since testChunks is set to false, this seems to be permanently disabled.
         #       Should this be removed altogether?
 
-        resumableIdentifier = request.args.get("resumableIdentifier", type=str)
-        resumableFilename = request.args.get("resumableFilename", type=str)
-        resumableChunkNumber = request.args.get("resumableChunkNumber", type=int)
+        flowIdentifier = request.args.get("flowIdentifier", type=str)
+        flowFilename = request.args.get("flowFilename", type=str)
+        flowChunkNumber = request.args.get("flowChunkNumber", type=int)
 
         upload_id = request.args.get("upload_id", default="", type=str)
 
-        if not (resumableIdentifier and resumableFilename and resumableChunkNumber):
+        if not (flowIdentifier and flowFilename and flowChunkNumber):
             # Parameters are missing or invalid
             abort(500, "Parameter error")
 
         # chunk folder path based on the parameters
-        temp_dir = os.path.join(self.get_temp_root(upload_id), resumableIdentifier)
+        temp_dir = os.path.join(self.get_temp_root(upload_id), flowIdentifier)
 
         # chunk path based on the parameters
         chunk_file = os.path.join(
-            temp_dir, get_chunk_name(resumableFilename, resumableChunkNumber)
+            temp_dir, get_chunk_name(flowFilename, flowChunkNumber)
         )
         self.server.logger.debug("Getting chunk: %s", chunk_file)
 
         if os.path.isfile(chunk_file):
-            # Let resumable.js know this chunk already exists
+            # Let flow.js know this chunk already exists
             return "OK"
         else:
-            # Let resumable.js know this chunk does not exists
+            # Let flow.js know this chunk does not exists
             # and needs to be uploaded
             abort(404, "Not found")
 

@@ -80,15 +80,9 @@ export default class Upload_ReactComponent extends Component {
             // forceChunkSize: false
         });
 
-        //
-        //flow.on('fileAdded', function (file) {
-        //    if (!this.props.fileTypes.includes(file.getExtension())) {
-        //        console.log('fileAdded not in extension list.')
-        //        return false;
-        //    };
-        //});
+ 
 
-        console.log('##########################################################3')
+        console.log('##########################################################')
         console.log(this.props)
 
         this.props.setProps({
@@ -105,46 +99,52 @@ export default class Upload_ReactComponent extends Component {
         }
 
         flow.on('fileAdded', (file) => {
-            console.log('fileAdded')
-            console.log(file)
-            this.props.setProps({
-                // Currently supports uploading only one file at a time.
-                isCompleted: false,
-                fileNames: [],
-            });
+            console.log('fileAdded');
+            console.log('Filename: ' + file.name);
+            console.log('Extension: '+ file.getExtension() )
+            console.log(this.props.fileTypes);
 
-            this.setState({
-                messageStatus: this.props.fileAddedMessage || ' Starting upload! of ' + file.fileName,
-                showEnabledButtons: true,
-                // Currently supports uploading only one file at a time.
-                isComplete: false,
-                fileList: { files: [] },
-                currentFile: file.fileName,
-            });
+            if (!this.props.fileTypes.includes(file.getExtension())) {
+                console.log('fileAdded not in extension list.')
+                return false;
+            };
+        })
 
-            if (typeof this.props.onFileAdded === 'function') {
-                this.props.onFileAdded(file, this.resumable);
-            } else {
-                flow.upload();
-            }
-        });
+        flow.on('filesAdded', (files) => {
+            console.log('filesAdded');
+            console.log(files);
+        })
 
-        // Uploading a file is completed
-        // The "fileNames" is a list, even though currently uploading
-        // only one file at a time is supported.
-        // When uploading multiple files, this will be called every time a file upload completes.
+        flow.on('filesSubmitted', (files) => {
+            console.log('filesSubmitted') ;
+            console.log(files);
+            this.setState({nTotalFilesUploaded: 0})
+            this.setState({nTotalFiles: files.length})
+
+            flow.upload()
+        })
+
+        flow.on('uploadStart', () => {
+            console.log('uploadStart');
+        })
 
         flow.on('fileSuccess', (file, fileServer) => {
-            console.warn('fileSuccess');
+            console.log('fileSuccess');
+            console.log(file)
+            
+            const nTotalFilesUploaded = this.state.nTotalFilesUploaded;
+            this.setState({nTotalFilesUploaded: nTotalFilesUploaded + 1})
+
             if (this.props.fileNameServer) {
                 const objectServer = JSON.parse(fileServer);
                 file.fileName = objectServer[this.props.fileNameServer];
             } else {
                 file.fileName = fileServer;
             }
+
             const currentFiles = this.state.fileList.files;
             currentFiles.push(file);
-
+            
             const fileNames = this.props.fileNames
             fileNames.push(file.fileName);
 
@@ -170,18 +170,24 @@ export default class Upload_ReactComponent extends Component {
 
         });
 
-
+        flow.on('fileProgress', (file, chunk) => {
+            console.log('fileProgress')
+            console.log(file)
+            this.setState({'currentFile': file.name})
+        })
 
         flow.on('progress', () => {
-
+            console.log(this.state);
             this.setState({
                 isUploading: flow.isUploading()
             });
 
+            const nTotalFiles =  this.state.nTotalFiles
+
             if ((flow.progress() * 100) < 100) {
                 this.setState({
                     messageStatus: 'Uploading "' + this.state.currentFile + '"',
-                    progressBar: flow.progress() * 100
+                    progressBar: ((this.state.nTotalFilesUploaded + flow.progress()) * 100) / nTotalFiles,
                 });
             } else {
                 setTimeout(() => {
@@ -190,11 +196,26 @@ export default class Upload_ReactComponent extends Component {
                     })
                 }, 1000);
             }
+        });
 
+        flow.on('complete', () => {
+            console.log('complete')
+        })     
+
+        flow.on('fileError', (file, errorCount) => {
+            console.log('fileError');
+            console.log(errorCount);
+            if (typeof (this.props.onUploadErrorCallback) !== 'undefined') {
+                this.props.onUploadErrorCallback(file, errorCount);
+            } else {
+                console.log('fileError with resumable.js! (file, errorCount)', file, errorCount)
+            }
         });
 
 
-        flow.on('fileSuccess', (file, fileServer) => {
+        flow.on('filesSuccess', (file, fileServer) => {
+            console.log('filesSuccess')
+            console.log(file.name)
 
             if (this.props.setProps) {
                 this.props.setProps({
@@ -206,16 +227,6 @@ export default class Upload_ReactComponent extends Component {
                 showEnabledButtons: false,
             });
         })
-
-        flow.on('fileError', (file, errorCount) => {
-
-            if (typeof (this.props.onUploadErrorCallback) !== 'undefined') {
-                this.props.onUploadErrorCallback(file, errorCount);
-            } else {
-                console.log('fileError with resumable.js! (file, errorCount)', file, errorCount)
-            }
-
-        });
 
         this.resumable = flow;
     }
