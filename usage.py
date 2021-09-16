@@ -1,5 +1,7 @@
 from pathlib import Path
+
 import uuid
+import tempfile
 
 import dash_uploader as du
 import dash
@@ -8,7 +10,9 @@ from dash.dependencies import Input, Output, State
 
 app = dash.Dash(__name__)
 
-UPLOAD_FOLDER_ROOT = "/tmp/Uploads"
+UPLOAD_FOLDER_ROOT = str( Path( tempfile.gettempdir() )/"Uploads" )
+
+
 du.configure_upload(app, UPLOAD_FOLDER_ROOT)
 
 
@@ -19,7 +23,7 @@ def get_upload_component(id):
         text_completed="Completed: ",
         cancel_button=True,
         max_file_size=1800,  # 1800 Mb
-        # filetypes=['csv', 'zip'],
+        filetypes=['csv', 'zip', 'mzxml'],
         upload_id=uuid.uuid1(),  # Unique session id
         max_files=10,
     )
