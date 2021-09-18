@@ -12,6 +12,7 @@ app = dash.Dash(__name__)
 
 UPLOAD_FOLDER_ROOT = str( Path( tempfile.gettempdir() )/"Uploads" )
 
+print('Upload folder:', UPLOAD_FOLDER_ROOT)
 
 du.configure_upload(app, UPLOAD_FOLDER_ROOT)
 
