@@ -1,6 +1,6 @@
 {
   "name": "dash_uploader",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Upload large files using resumable.js",
   "repository": {
     "type": "git",
