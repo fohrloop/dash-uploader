@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [0.6.0]
 ### Added 
 - New `chunk_size`, `disabled` and `text_disabled` parameters for `du.Upload`. 
 
@@ -8,7 +8,7 @@
 - Added the `prevent_initial_call=True` for all `du.callback`s. For [Dash >= 1.12.0](https://community.plotly.com/t/dash-v1-12-0-release-pattern-matching-callbacks-fixes-shape-drawing-new-datatable-conditional-formatting-options-prevent-initial-call-and-more/38867).
 
 ### Fixed
-- Changing the parameter `disableDragAndDrop` by callbacks does not take effects.
+- Changing the parameter `disableDragAndDrop` by callbacks does not take effects. [PR 42](https://github.com/np-8/dash-uploader/pull/42)
 
 ## v.0.5.0 (2021-04-25)
 ### Added 
