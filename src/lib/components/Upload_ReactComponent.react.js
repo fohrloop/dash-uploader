@@ -248,7 +248,7 @@ export default class Upload_ReactComponent extends Component {
                 isUploading: true
             });
         } else {
-            this.resumable.upload();
+            this.resumable.resume();
             this.setState({
                 isPaused: false,
                 isUploading: true
@@ -298,7 +298,7 @@ export default class Upload_ReactComponent extends Component {
 
         let cancelButton = this.createButton(
             this.cancelUpload,
-            'cancel',
+            'Cancel',
             this.props.cancelButton,
             !this.state.isUploading,
             "dash-uploader-btn-cancel"
@@ -306,7 +306,7 @@ export default class Upload_ReactComponent extends Component {
 
         let pauseButton = this.createButton(
             this.pauseUpload,
-            (this.state.isPaused ? 'resume' : 'pause'),
+            (this.state.isPaused ? 'Resume' : 'Pause'),
             this.props.pauseButton,
             !this.state.isUploading,
             "dash-uploader-btn-pause"
