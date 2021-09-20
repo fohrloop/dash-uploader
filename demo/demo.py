@@ -17,6 +17,7 @@ app.layout = html.Div([
             id='upload', 
             filetypes=['tar', 'zip', 'mzxml', 'mzml'], 
             max_files=10,
+            pause_button=False,
             text='Click here for file upload or drag and drop.'),
     ),
     html.Div(id="callback-output"),

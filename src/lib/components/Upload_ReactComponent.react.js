@@ -104,6 +104,8 @@ export default class Upload_ReactComponent extends Component {
             console.log('Extension: '+ file.getExtension() )
             console.log(this.props.fileTypes);
 
+            this.setState({showEnabledButtons: true});
+
             if (!this.props.fileTypes.includes(file.getExtension())) {
                 console.log('fileAdded not in extension list.')
                 return false;
@@ -126,6 +128,7 @@ export default class Upload_ReactComponent extends Component {
 
         flow.on('uploadStart', () => {
             console.log('uploadStart');
+            this.setState({isUploading: true});
         })
 
         flow.on('fileSuccess', (file, fileServer) => {
@@ -171,10 +174,9 @@ export default class Upload_ReactComponent extends Component {
         });
 
         flow.on('fileProgress', (file, chunk) => {
-            console.log('fileProgress')
-            console.log(file)
-            this.setState({'currentFile': file.name})
-        })
+            this.setState({'currentFile': file.name});
+            console.log(this.state)
+        })  
 
         flow.on('progress', () => {
             console.log(this.state);
