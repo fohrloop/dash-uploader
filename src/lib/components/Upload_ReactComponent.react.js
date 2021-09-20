@@ -80,10 +80,6 @@ export default class Upload_ReactComponent extends Component {
             // forceChunkSize: false
         });
 
- 
-
-        console.log('##########################################################')
-        console.log(this.props)
 
         this.props.setProps({
             isCompleted: false,
@@ -99,27 +95,14 @@ export default class Upload_ReactComponent extends Component {
         }
 
         flow.on('fileAdded', (file) => {
-            console.log('fileAdded');
-            console.log('Filename: ' + file.name);
-            console.log('Extension: '+ file.getExtension() )
-            console.log(this.props.fileTypes);
-
             this.setState({showEnabledButtons: true});
 
             if (!this.props.fileTypes.includes(file.getExtension())) {
-                console.log('fileAdded not in extension list.')
                 return false;
             };
         })
 
-        flow.on('filesAdded', (files) => {
-            console.log('filesAdded');
-            console.log(files);
-        })
-
         flow.on('filesSubmitted', (files) => {
-            console.log('filesSubmitted') ;
-            console.log(files);
             this.setState({nTotalFilesUploaded: 0})
             this.setState({nTotalFiles: files.length})
 
@@ -127,14 +110,10 @@ export default class Upload_ReactComponent extends Component {
         })
 
         flow.on('uploadStart', () => {
-            console.log('uploadStart');
             this.setState({isUploading: true});
         })
 
         flow.on('fileSuccess', (file, fileServer) => {
-            console.log('fileSuccess');
-            console.log(file)
-            
             const nTotalFilesUploaded = this.state.nTotalFilesUploaded;
             this.setState({nTotalFilesUploaded: nTotalFilesUploaded + 1})
 
@@ -175,11 +154,9 @@ export default class Upload_ReactComponent extends Component {
 
         flow.on('fileProgress', (file, chunk) => {
             this.setState({'currentFile': file.name});
-            console.log(this.state)
         })  
 
         flow.on('progress', () => {
-            console.log(this.state);
             this.setState({
                 isUploading: flow.isUploading()
             });
@@ -201,12 +178,10 @@ export default class Upload_ReactComponent extends Component {
         });
 
         flow.on('complete', () => {
-            console.log('complete')
+            console.log('Upload complete')
         })     
 
         flow.on('fileError', (file, errorCount) => {
-            console.log('fileError');
-            console.log(errorCount);
             if (typeof (this.props.onUploadErrorCallback) !== 'undefined') {
                 this.props.onUploadErrorCallback(file, errorCount);
             } else {
@@ -216,9 +191,6 @@ export default class Upload_ReactComponent extends Component {
 
 
         flow.on('filesSuccess', (file, fileServer) => {
-            console.log('filesSuccess')
-            console.log(file.name)
-
             if (this.props.setProps) {
                 this.props.setProps({
                     isCompleted: true,
