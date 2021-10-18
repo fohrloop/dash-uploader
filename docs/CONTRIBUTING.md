@@ -23,6 +23,10 @@ Maybe you already have an idea. If not, see if there are any open [issues](https
 - Clone this repository. Change current directory to project root.
 - Install [npm and Node.js](https://nodejs.org) for building JS.
 - Install the JS dependencies by running `npm install` on the project root. This will create `node_modules` directory.
+- Build the NPM modules
+```
+ npm run build
+```
 - Create python virtual environment and activate it
 - `pip install` this package in editable state with the `[dev]` flag.
 ```
