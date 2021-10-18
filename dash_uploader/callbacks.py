@@ -2,6 +2,7 @@ from packaging import version
 from pathlib import Path
 
 from dash import __version__ as dashversion
+from dash.exceptions import PreventUpdate
 from dash.dependencies import Input, State
 
 import dash_uploader.settings as settings
@@ -28,7 +29,7 @@ def create_dash_callback(callback, settings):  # pylint: disable=redefined-outer
 
     def wrapper(iscompleted, filenames, upload_id):
         if not iscompleted:
-            return
+            raise PreventUpdate()
 
         out = []
         if filenames is not None:
