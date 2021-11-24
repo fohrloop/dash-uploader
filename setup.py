@@ -26,6 +26,7 @@ setup(
     long_description_content_type="text/markdown",
     install_requires=[
         "dash>=1.1.0",
+        "packaging>= 21.0"
     ],
     extras_require={
         "dev": [
