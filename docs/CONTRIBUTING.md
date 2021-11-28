@@ -32,7 +32,7 @@ Maybe you already have an idea. If not, see if there are any open [issues](https
 ```
 python -m pip install -e <path_to_this_folder>[dev]
 ```
-
+- **Note**: If you are using older `pip` version (< 20.3), you will have to use the `--use-feature 2020-resolver` option with the `pip install` command! (See: [Extras not getting installed when the package that includes the extras has already been installed](https://github.com/pypa/pip/issues/4957)). You can also just update your `pip` with `python -m pip install --upgrade pip`.  
 
 ## 3. Package structure
 
@@ -117,18 +117,19 @@ You can test the code manually by running the demo page
 
 ### 5.2 With pytest (automatic tests)
 
-*If testing for the first time, install the testing requirements with*
-```
-python -m pip install -r tests/requirements.txt
-```
+#### 5.2.1 Before trying to run pytest
 
-You can test the code automatically by running 
+
+- Make sure you have built the JS first with `npm run build`. 
+- If you face any problems with running the tests, redo the steps described in *2. Setting up development environment* and make sure you have the correct virtual environment activated. 
+
+#### 5.2.2 Running pytest
+- You can test the code automatically by running 
 
 ```
 python -m pytest
 ```
 
-- Make sure you have built the JS first with `npm run build` 
 - The `app`  defined in the `usage.py` will be available to the tests. See the tests in the `tests/test_usage.py` to get a grasp on how it works. You could also add other `app`s available to the tests in similar manner.
 - More about testing Dash components [here](https://dash.plotly.com/testing).
 - If you get an error similar to 
