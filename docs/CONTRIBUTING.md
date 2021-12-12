@@ -21,7 +21,7 @@
 Maybe you already have an idea. If not, see if there are any open [issues](https://github.com/np-8/dash-uploader/issues) that need help. 
 ## 2. Setting up development environment
 - Clone this repository. Change current directory to project root.
-- Install [npm and Node.js](https://nodejs.org) for building JS.
+- Install [npm and Node.js (16.x)](https://nodejs.org) for building JS.
 - Install the JS dependencies by running `npm install` on the project root. This will create `node_modules` directory.
 - Build the NPM modules
 ```
@@ -55,9 +55,6 @@ devscripts/
   * used during "npm run build"
   
 src/
-  demo/
-    * Example JS demo. Just for testing React code
-      with "npm start"
   lib/
     * React components (The JS/React source code)
 
@@ -104,9 +101,34 @@ Run in the project root
 npm run build
 ```
 This will create all the auto-generated (JS, json, python) files into the `dash_uploader/_build` folder.
+#### 4.2.2 Building: Updating the JS
 
+Javascript libraries tend to get security fixes quite often. To fix the security issues, use 
 
+```
+npm install -g npm
+npm audit fix
+```
 
+You also might find useful:
+
+```
+npm outdated
+```
+
+which lists the outdated packages and the latest versions. To update all packages to the "Wanted" version, use
+
+```
+npm update
+```
+
+To install a specific version of a package, use:
+
+```
+npm install <package>@<version>
+```
+
+This will also add the package (and version) in the `package.json`
 ## 5. Testing
 
 ### 5.1 Manually
@@ -143,17 +165,6 @@ then, run
 python -m pip install --upgrade --force-reinstall chromedriver-binary-auto
 ```
 
-### 5.3  Testing React components without python
-*This is WIP; probably needs some fixing*<br>
-- Before creating the "python/Dash" versions, it is possible to test the component(s) by
-- Editing the content of `src/demo/index.js`, if you wish.
-- Then, running
-```
-npm start
-```
-- Then, go to url `http://127.0.0.1:55555`. 
-- The url can be changed in the package.json -> scripts -> start, by changing the `host` argument to the [`webpack-serve`](https://www.npmjs.com/package/webpack-serve).
-- **Note**: There is not handler for POST requests in the demo! (the Upload component will not work without a POST handler)
 
 ## 6. Creating new version to pip
 
