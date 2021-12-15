@@ -140,7 +140,113 @@ if __name__ == '__main__':
     app.run_server(debug=True)
 
 ```
+  
+## Example Showing Multiple Uploads (NEW!)
+```python
+from pathlib import Path
+import uuid
 
+import dash
+from dash import html
+from dash.dependencies import Input, Output, State
+
+import dash_uploader as du
+
+app = dash.Dash(__name__)
+
+UPLOAD_FOLDER_ROOT = r"C:\tmp\Uploads"
+du.configure_upload(app, UPLOAD_FOLDER_ROOT)
+
+uploads = []
+
+def get_upload_component(id):
+    return du.Upload(
+        id=id,
+        max_file_size=1024**2,  # 1 Tb
+        filetypes=['raw', 'zip', 'csv'],
+        upload_id=uuid.uuid1(),  # Unique session id
+        cancel_button=True,
+        pause_button=True,
+        max_files=10,
+    )
+
+
+def get_app_layout():
+
+    return html.Div(
+        [
+            html.H1('Demo'),
+            html.Div(
+                [
+                    get_upload_component(id='dash-uploader'),
+                    html.Div(id='currently-uploading'),
+                    html.H3(html.U('Uploads (Newest first)')),
+                    html.Div(id='callback-output'),
+                ],
+                style={  # wrapper div style
+                    'textAlign': 'center',
+                    'width': '600px',
+                    'padding': '10px',
+                    'display': 'inline-block'
+                }),
+        ],
+        style={
+            'textAlign': 'center',
+        },
+    )
+
+
+# get_app_layout is a function
+# This way we can use unique session id's as upload_id's
+app.layout = get_app_layout
+
+
+@app.callback(
+    Output('callback-output', 'children'),
+    [Input('dash-uploader', 'newestUploadedFileName')],
+    [State('dash-uploader', 'upload_id'),
+     State('callback-output', 'children'),],
+)
+
+def callback_on_newest_upload(newest_filename: str, upload_id, current_output):
+    """Callback for when a new file is uploaded
+
+    Add the new file to the uploads list.
+    """
+    if newest_filename:
+        print(f'Received newest upload: {newest_filename}')
+        if upload_id:
+            root_folder = Path(UPLOAD_FOLDER_ROOT) / upload_id
+        else:
+            root_folder = Path(UPLOAD_FOLDER_ROOT)
+
+        filename = root_folder / newest_filename
+        uploads.append(filename)
+
+    if uploads:
+        return html.Ul([html.Li(str(x)) for x in uploads[::-1]])
+    else:
+        return html.Div("No files uploaded.")
+
+@app.callback(
+    Output('currently-uploading', 'children'),
+    [Input('dash-uploader', 'currentlyUploadingFiles')],
+)
+def callback_currently_uploading_files(files):
+    """Callback for the 'currentlyUploadingFiles' property.
+
+    This lists all the files queued for upload.
+    """
+    if not files:
+        return html.Div()
+    return html.Div([html.H3('Currently uploading:'), html.Ul([html.Li(f) for f in files])])
+
+
+if __name__ == '__main__':
+    app.run_server(debug=True)
+
+
+```
 
 ## Contributing
 
