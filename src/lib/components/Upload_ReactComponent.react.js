@@ -22,13 +22,12 @@ export default class Upload_ReactComponent extends Component {
     static initialState = {
         progressBar: 0,
         messageStatus: '',
-        fileList: { files: [] },
+        fileList: [] ,
         isPaused: false,
         isUploading: false,
         isHovered: false,
-        isComplete: false,
+        isCompleted: false,
         showEnabledButtons: false,
-        currentFile: ''
     }
 
     constructor(props) {
@@ -43,7 +42,7 @@ export default class Upload_ReactComponent extends Component {
     }
 
     resetBuilder() {
-        this.setState(Upload_ReactComponent.initialState)
+        this.setState(Upload_ReactComponent.initialState);
     }
 
     componentDidMount() {
@@ -68,29 +67,33 @@ export default class Upload_ReactComponent extends Component {
         });
 
         this.props.setProps({
-            isCompleted: false
+            isCompleted: false,
+            newestUploadedFileName: '',
+            numberUploaded: 0,
         });
         // Clicking the component will open upload dialog 
         ResumableField.assignBrowse(this.uploader);
 
-        // Enable or Disable DragAnd Drop
+        // Enable or disable drag and drop
         if (this.props.disableDragAndDrop === false && this.props.disabled === false) {
             ResumableField.assignDrop(this.dropZone);
         }
 
         ResumableField.on('fileAdded', (file) => {
+            let currentlyUploadingFiles = [];
+            ResumableField.files.forEach((value, index, array) => {
+                currentlyUploadingFiles.push(value.fileName); 
+            })
             this.props.setProps({
-                // Currently supports uploading only one file at a time.
                 isCompleted: false,
                 fileNames: [],
+                currentlyUploadingFiles: currentlyUploadingFiles,
             });
             this.setState({
-                messageStatus: this.props.fileAddedMessage || ' Starting upload! of ' + file.fileName,
+                messageStatus: this.props.fileAddedMessage || ' Added file to upload queue: ' + file.fileName,
                 showEnabledButtons: true,
-                // Currently supports uploading only one file at a time.
-                isComplete: false,
-                fileList: { files: [] },
-                currentFile: file.fileName,
+                isCompleted: false,
+                fileList: [],
             });
 
             if (typeof this.props.onFileAdded === 'function') {
@@ -101,8 +104,6 @@ export default class Upload_ReactComponent extends Component {
         });
 
         // Uploading a file is completed
-        // The "fileNames" is a list, even though currently uploading
-        // only one file at a time is supported.
         ResumableField.on('fileSuccess', (file, fileServer) => {
 
             if (this.props.fileNameServer) {
@@ -111,22 +112,25 @@ export default class Upload_ReactComponent extends Component {
             } else {
                 file.fileName = fileServer;
             }
-            const currentFiles = this.state.fileList.files;
+            const currentFiles = this.state.fileList;
             currentFiles.push(file);
+
 
             const fileNames = this.props.fileNames
             fileNames.push(file.fileName);
-
+            
             if (this.props.setProps) {
                 this.props.setProps({
                     fileNames: fileNames,
-                    isCompleted: true
+                    // isCompleted: true,
+                    newestUploadedFileName: file.fileName,
+                    numberUploaded: this.props.numberUploaded + 1,
                 });
             }
             this.setState({
-                fileList: { files: currentFiles },
-                isComplete: true,
-                showEnabledButtons: false,
+                fileList: currentFiles,
+                // isCompleted: true,
+                // showEnabledButtons: false,
                 messageStatus: this.props.completedMessage + file.fileName || fileServer
             }, () => {
                 if (typeof this.props.onFileSuccess === 'function') {
@@ -139,8 +143,23 @@ export default class Upload_ReactComponent extends Component {
         });
 
 
+        // Uploading all files is complete
+        ResumableField.on('complete', () => {
+            if (this.props.setProps) {
+                this.props.setProps({
+                    isCompleted: true,
+                    currentlyUploadingFiles: [],
+                });
+            }
+            this.setState({
+                isCompleted: true,
+                showEnabledButtons: false,
+            });
+        });
 
-        ResumableField.on('progress', () => {
+
+
+        ResumableField.on('fileProgress', (file, msg) => {
 
 
             this.setState({
@@ -149,7 +168,7 @@ export default class Upload_ReactComponent extends Component {
 
             if ((ResumableField.progress() * 100) < 100) {
                 this.setState({
-                    messageStatus: 'Uploading "' + this.state.currentFile + '"',
+                    messageStatus: 'Uploading: "' + file.fileName + '"',
                     progressBar: ResumableField.progress() * 100
                 });
             } else {
@@ -192,6 +211,9 @@ export default class Upload_ReactComponent extends Component {
     cancelUpload() {
         this.resumable.cancel();
         this.resetBuilder();
+        this.props.setProps({
+            currentlyUploadingFiles: [],
+        });
     }
 
 
@@ -268,7 +290,7 @@ export default class Upload_ReactComponent extends Component {
                 return this.props.uploadingStyle;
             } else if (this.props.disabled) {
                 return this.props.disabledStyle;
-            } else if (this.state.isComplete) {
+            } else if (this.state.isCompleted) {
                 return this.props.completeStyle;
             }
             return this.props.defaultStyle;
@@ -284,7 +306,7 @@ export default class Upload_ReactComponent extends Component {
                 return this.props.disabledClass;
             } else if (this.state.isHovered) {
                 return this.props.hoveredClass;
-            } else if (this.state.isComplete) {
+            } else if (this.state.isCompleted) {
                 return this.props.completeClass;
             }
             return this.props.className;
@@ -502,9 +524,24 @@ Upload_ReactComponent.propTypes = {
     upload_id: PropTypes.string,
 
     /**
+     *  The name of the newest uploaded file.
+     */
+    newestUploadedFileName: PropTypes.string,
+    
+    /**
+     *  The names of all the files currently uploading.
+     */
+    currentlyUploadingFiles: PropTypes.arrayOf(PropTypes.string),
+
+    /**
+     *  The number of uploaded files (integer)
+     */
+    numberUploaded: PropTypes.number,
+
+    /**
      *  Number of simulaneous uploads.
      */
-    simultaneuosUploads: PropTypes.number,
+    simultaneousUploads: PropTypes.number,
 
     /**
      *  Function to call on upload error (untested)
@@ -516,7 +553,7 @@ Upload_ReactComponent.defaultProps = {
     maxFiles: 1,
     maxFileSize: 1024 * 1024 * 10,
     chunkSize: 1024 * 1024,
-    simultaneuosUploads: 1,
+    simultaneousUploads: 1,
     service: '/API/dash-uploader',
     className: 'dash-uploader-default',
     hoveredClass: 'dash-uploader-hovered',
@@ -532,6 +569,9 @@ Upload_ReactComponent.defaultProps = {
     disabledMessage: 'The uploader is disabled.',
     completedMessage: 'Complete! ',
     fileNames: [],
+    newestUploadedFileName: '',
+    currentlyUploadingFiles: [],
+    numberUploaded: 0,
     filetypes: undefined,
     startButton: true,
     pauseButton: true,
