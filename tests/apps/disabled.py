@@ -6,8 +6,9 @@ import json
 
 import dash_uploader as du
 import dash
-import dash_html_components as html
-import dash_core_components as dcc
+
+# if dash <= 2.0.0, use: import dash_core_components as dcc and import dash_html_components as html
+from dash import html, dcc
 from dash.dependencies import Output, Input
 
 app = dash.Dash(__name__)
@@ -62,10 +63,14 @@ def get_app_layout():
                         id="configs-output", children=json.dumps([])
                     ),  # This element needs to be visible, otherwise, selenium could not find its content.
                 ],
-                style={"textAlign": "left",},  # wrapper div style
+                style={
+                    "textAlign": "left",
+                },  # wrapper div style
             ),
         ],
-        style={"textAlign": "center",},
+        style={
+            "textAlign": "center",
+        },
     )
 
 
@@ -76,7 +81,8 @@ app.layout = get_app_layout
 
 # 3) Create a callback
 @du.callback(
-    output=Output("callback-output", "children"), id="dash-uploader",
+    output=Output("callback-output", "children"),
+    id="dash-uploader",
 )
 def get_a_list(filenames):
     return html.Ul([html.Li(filenames)])
