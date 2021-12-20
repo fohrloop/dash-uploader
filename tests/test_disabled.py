@@ -82,7 +82,7 @@ def test_disabled01_check_disabled_property_update(dash_duo):
     # Find the required components
     upload = dash_duo.find_element("#dash-uploader")
     configs = dash_duo.find_element("#uploader-configs")
-    check_boxes = configs.find_elements_by_xpath(".//input[@type='checkbox']")
+    check_boxes = configs.find_elements(By.XPATH, ".//input[@type='checkbox']")
     assert len(check_boxes) == 2, "The provided configs for this app should be 2."
 
     # Check the upload state, should be default now.
@@ -96,7 +96,12 @@ def test_disabled01_check_disabled_property_update(dash_duo):
     # Wait for "configs-output" updated, with 10 second timeout.
     wait.until(
         EC.text_to_be_present_in_element(
-            (By.XPATH, "//span[@id='configs-output']"), json.dumps([0,])
+            (By.XPATH, "//span[@id='configs-output']"),
+            json.dumps(
+                [
+                    0,
+                ]
+            ),
         )
     )
 
@@ -137,7 +142,7 @@ def test_disabled02_check_disabled_effect(
     # Find the required components
     upload = dash_duo.find_element("#dash-uploader")
     configs = dash_duo.find_element("#uploader-configs")
-    check_boxes = configs.find_elements_by_xpath(".//input[@type='checkbox']")
+    check_boxes = configs.find_elements(By.XPATH, ".//input[@type='checkbox']")
     assert len(check_boxes) == 2, "The provided configs for this app should be 2."
 
     # Define the upload check function.
@@ -148,8 +153,8 @@ def test_disabled02_check_disabled_effect(
         If "expect_success" is True, the file is expected to be uploaded;
         If not, the uploading is expected to fail.
         """
-        upload_input = upload_component.find_element_by_xpath(
-            ".//input[@name='dash-uploader-upload']"
+        upload_input = upload_component.find_element(
+            By.XPATH, ".//input[@name='dash-uploader-upload']"
         )
         # First, upload a wrong file. This would reset the message of upload component.
         upload_input.send_keys(str(testfileWrongType))
@@ -209,7 +214,7 @@ def test_disabled02_check_disabled_effect(
         callback_output = dash_duo.find_element("#callback-output")
 
         # Get the name of the uploaded file
-        uploaded_file = callback_output.find_element_by_xpath("//ul").text
+        uploaded_file = callback_output.find_element(By.XPATH, "//ul").text
         uploaded_file = Path(uploaded_file)
 
         assert uploaded_file.name == testfile10Mb_csv.name
@@ -240,7 +245,12 @@ def test_disabled02_check_disabled_effect(
     # Wait for the component update getting confirmed.
     wait.until(
         EC.text_to_be_present_in_element(
-            (By.XPATH, "//span[@id='configs-output']"), json.dumps([0,])
+            (By.XPATH, "//span[@id='configs-output']"),
+            json.dumps(
+                [
+                    0,
+                ]
+            ),
         )
     )
 
@@ -264,7 +274,12 @@ def test_disabled02_check_disabled_effect(
     # Wait for the component update getting confirmed.
     wait.until(
         EC.text_to_be_present_in_element(
-            (By.XPATH, "//span[@id='configs-output']"), json.dumps([1,])
+            (By.XPATH, "//span[@id='configs-output']"),
+            json.dumps(
+                [
+                    1,
+                ]
+            ),
         )
     )
 

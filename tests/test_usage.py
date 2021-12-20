@@ -54,11 +54,13 @@ def test_upload01_upload_a_file(dash_duo, testfile10Mb_csv):
     # this would require the tests to use OS specific GUI tools
     # to select the file. This could be added in the future but it's
     # probably very this would be broken
-    upload_input = upload.find_element_by_xpath("//input[@name='dash-uploader-upload']")
+    upload_input = upload.find_element(
+        By.XPATH, "//input[@name='dash-uploader-upload']"
+    )
     upload_input.send_keys(str(testfile10Mb_csv))
     # Wait until file is uploaded
 
-    upload_label = upload.find_element_by_xpath("//label")
+    upload_label = upload.find_element(By.XPATH, "//label")
 
     # Wait for "Completed" text, with 10 second timeout
     wait = WebDriverWait(dash_duo._driver, 10)
@@ -72,7 +74,7 @@ def test_upload01_upload_a_file(dash_duo, testfile10Mb_csv):
     callback_output = dash_duo.find_element("#callback-output")
 
     # Get the name of the uploaded file
-    uploaded_file = callback_output.find_element_by_xpath("//ul").text
+    uploaded_file = callback_output.find_element(By.XPATH, "//ul").text
     uploaded_file = Path(uploaded_file)
 
     assert uploaded_file.name == testfile10Mb_csv.name
