@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+- Instead of returing `None`, raise `dash.exceptions.PreventUpdate`. This should reduce errors seen in the browser console. [PR 54](https://github.com/np-8/dash-uploader/pull/54)
+- Fixed  `ImportError` which was raised when trying to import `dash_uploader` when `packaging` was not installed. [PR 54](https://github.com/np-8/dash-uploader/pull/54)
 ## v.0.6.0 (2021-09-19)
 ### Added 
 - New `chunk_size`, `disabled` and `text_disabled` parameters for `du.Upload`. [Issue 41](https://github.com/np-8/dash-uploader/issues/41)
