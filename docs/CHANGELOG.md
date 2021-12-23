@@ -1,18 +1,30 @@
 # Changelog
 
-## Unpublished (2020-10-27)
+## Unreleased
+
 ### Fixed
 - WIP: Calling callback each time file is added 
-### Changed
-- Updated resumable.js (1.1.0 -> 1.1.2)
+- Instead of returing `None`, raise `dash.exceptions.PreventUpdate`. This should reduce errors seen in the browser console. [PR 54](https://github.com/np-8/dash-uploader/pull/54)
+- Fixed  `ImportError` which was raised when trying to import `dash_uploader` when `packaging` was not installed. [PR 54](https://github.com/np-8/dash-uploader/pull/54)
+### Changed 
+- WIP: resumable.js -> flowjs [[Issue 21](https://github.com/np-8/dash-uploader/issues/21)]
+## v.0.6.0 (2021-09-19)
+### Added 
+- New `chunk_size`, `disabled` and `text_disabled` parameters for `du.Upload`. [Issue 41](https://github.com/np-8/dash-uploader/issues/41)
 
-  
+### Changed 
+- Added the `prevent_initial_call=True` for all `du.callback`s. For [Dash >= 1.12.0](https://community.plotly.com/t/dash-v1-12-0-release-pattern-matching-callbacks-fixes-shape-drawing-new-datatable-conditional-formatting-options-prevent-initial-call-and-more/38867).
+
+### Fixed
+- Changing the parameter `disableDragAndDrop` by callbacks does not take effects. [PR 42](https://github.com/np-8/dash-uploader/pull/42)
 
 ## v.0.5.0 (2021-04-25)
-- Added [`du.HttpRequestHandler`](./dash-uploader.md#duhttprequesthandler) which allows for custom HTTP POST and GET request handling. For example, custom validation logic is now possible! Used through `http_request_handler` parameter of [`du.configure_upload`](./dash-uploader.md#duconfigure_upload).
+### Added 
+- [`du.HttpRequestHandler`](./dash-uploader.md#duhttprequesthandler) which allows for custom HTTP POST and GET request handling. For example, custom validation logic is now possible! Used through `http_request_handler` parameter of [`du.configure_upload`](./dash-uploader.md#duconfigure_upload).
+### Changed 
 - **Backwards incompatible changes**: Changed the CSS classes of the component to be `dash-uploader-default`, `dash-uploader-uploading`, .. etc. instead of `resumable-default`, `resumable-uploading`. 
-## v.0.4.2 (2021-02-20)
 
+## v.0.4.2 (2021-02-20)
 - Fixed some width related CSS issues in mobile mode. See: [#19](https://github.com/np-8/dash-uploader/issues/19)
   
 ## v.0.4.1 (2020-10-27)

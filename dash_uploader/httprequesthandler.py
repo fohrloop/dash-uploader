@@ -40,7 +40,7 @@ class BaseHttpRequestHandler:
     def post(self):
         try:
             return self._post()
-        except:
+        except Exception:
             logger.error(traceback.format_exc())
 
     def _post(self):
@@ -122,7 +122,7 @@ class BaseHttpRequestHandler:
     def get(self):
         try:
             return self._get()
-        except:
+        except Exception:
             logger.error(traceback.format_exc())
 
     def _get(self):
@@ -170,7 +170,7 @@ class HttpRequestHandler(BaseHttpRequestHandler):
     # You may use the flask.request
     # and flask.session inside the methods of this
     # class when needed.
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):  # pylint: disable=useless-super-delegation
         super().__init__(*args, **kwargs)
 
     def post_before(self):
