@@ -1,4 +1,4 @@
-// v.0.5.0. https://github.com/np-8/dash-uploader 
+//  https://github.com/np-8/dash-uploader 
 // 
 // Credits:
 // This file is based on following repositories
@@ -6,11 +6,10 @@
 // v.0.0.4 from https://github.com/westonkjones/dash-resumable-upload
 
 import React, { Component } from 'react';
-
+import Flow from '@flowjs/flow.js';
 import Button from './Button.react.js';
 import ProgressBar from './ProgressBar.react.js'
 import PropTypes from 'prop-types';
-import Resumablejs from 'resumablejs';
 import './progressbar.css';
 import './button.css';
 
@@ -48,27 +47,52 @@ export default class Upload_ReactComponent extends Component {
 
     componentDidMount() {
 
-        const ResumableField = new Resumablejs({
+        // Full list of options here
+        // https://github.com/flowjs/flow.js#configuration 
+        const flowComponent = new Flow({
+            //  The API endpoint
             target: this.props.service,
+            // Additional data for the requests
             query: { upload_id: this.props.upload_id },
-            fileType: this.props.filetypes,
-            maxFiles: this.props.maxFiles,
-            maxFileSize: this.props.maxFileSize,
-            fileTypeErrorCallback: () => {
-                this.setState({
-                    messageStatus: 'Invalid file type!'
-                });
-            },
-            testMethod: 'post',
-            testChunks: false,
-            headers: {},
+            // Chunk size in bytes.
             chunkSize: this.props.chunkSize,
+            // Number of simulateneous uploads
             simultaneousUploads: this.props.simultaneousUploads,
-            forceChunkSize: false
+            // Extra headers to include in the multipart POST with data. 
+            // If a function, it will be passed a FlowFile, a FlowChunk object and a isTest boolean (Default: {})
+            headers: {},
+            // Once a file is uploaded, allow reupload of the same file. By default, if a file
+            //  is already uploaded, it will be skipped unless the file is removed from the existing 
+            // Flow object. (Default: false)
+            allowDuplicateUploads: true,
+            // testChunks Make a GET request to the server for each chunks to see if it already exists. 
+            //  If implemented on the server-side, this will allow for upload resumes even after a browser
+            //  crash or even a computer restart. (Default: true) 
+            testChunks: false,
+
+            // fileType: this.props.filetypes,
+            // maxFiles: this.props.maxFiles,
+            // maxFileSize: this.props.maxFileSize,
+            // fileTypeErrorCallback: () => {
+            //     this.setState({
+            //         messageStatus: 'Invalid file type!'
+            //     });
+            // },
+            // forceChunkSize: false
         });
 
+
+        flow.on('fileAdded', function (file) {
+            if (!this.props.filetypes.includes(file.getExtension())) {
+                return false;
+            };
+        });
+
+
         this.props.setProps({
-            isCompleted: false
+            isCompleted: false,
+            newestUploadedFileName: '',
+            uploadedFiles: 0,
         });
         // Clicking the component will open upload dialog 
         ResumableField.assignBrowse(this.uploader);
@@ -103,6 +127,7 @@ export default class Upload_ReactComponent extends Component {
         // Uploading a file is completed
         // The "fileNames" is a list, even though currently uploading
         // only one file at a time is supported.
+        // When uploading multiple files, this will be called every time a file upload completes.
         ResumableField.on('fileSuccess', (file, fileServer) => {
 
             if (this.props.fileNameServer) {
@@ -120,12 +145,12 @@ export default class Upload_ReactComponent extends Component {
             if (this.props.setProps) {
                 this.props.setProps({
                     fileNames: fileNames,
-                    isCompleted: true
+                    newestUploadedFileName: file.fileName,
+                    uploadedFiles: this.props.uploadedFiles + 1,
                 });
             }
             this.setState({
                 fileList: { files: currentFiles },
-                isComplete: true,
                 showEnabledButtons: false,
                 messageStatus: this.props.completedMessage + file.fileName || fileServer
             }, () => {
@@ -238,6 +263,11 @@ export default class Upload_ReactComponent extends Component {
 
         const fileList = null;
 
+        let textLabel = null;
+        if (this.props.textLabel) {
+            textLabel = this.props.textLabel;
+        }
+
         let startButton = this.createButton(
             this.startUpload,
             'upload',
@@ -264,53 +294,36 @@ export default class Upload_ReactComponent extends Component {
 
 
         const getStyle = () => {
-            if (this.state.isUploading) {
-                return this.props.uploadingStyle;
-            } else if (this.props.disabled) {
-                return this.props.disabledStyle;
-            } else if (this.state.isComplete) {
+            if (this.state.isComplete) {
                 return this.props.completeStyle;
+            } else if (this.state.isUploading) {
+                return this.props.uploadingStyle;
             }
             return this.props.defaultStyle;
 
         }
 
         const getClass = () => {
-            if (this.state.isUploading) {
-                return this.props.uploadingClass;
-            } else if (this.state.isPaused) {
-                return this.props.pausedClass;
-            } else if (this.props.disabled) {
-                return this.props.disabledClass;
+            if (this.props.disabledInput) {
+                return this.props.disableClass;
             } else if (this.state.isHovered) {
                 return this.props.hoveredClass;
+            } else if (this.state.isUploading) {
+                return this.props.uploadingClass;
             } else if (this.state.isComplete) {
                 return this.props.completeClass;
+            } else if (this.state.isPaused) {
+                return this.props.completeClass;
             }
-            return this.props.className;
+            return this.props.className
 
-        }
-
-        const getMessage = () => {
-            if (this.state.isUploading === false && this.props.disabled === true && this.props.disabledMessage) {
-                return this.props.disabledMessage;
-            }
-            else if (this.state.messageStatus === '') {
-                if (this.props.textLabel) {
-                    return this.props.textLabel;
-                }
-                return null;
-            } else {
-                return this.state.messageStatus;
-            }
-            
         }
 
         return (
             <div style={getStyle()} id={this.props.id} className={getClass()} ref={node => this.dropZone = node} >
                 <div id={this.props.id + '-padding'}
                     style={{
-                        padding: '10px'
+                        padding: '10px',
                     }}>
                     <label
                         style={{
@@ -319,21 +332,21 @@ export default class Upload_ReactComponent extends Component {
                             width: this.state.isUploading ? 'auto' : '100%',
                             paddingRight: this.state.isUploading ? '10px' : '0',
                             textAlign: 'center', wordWrap: 'break-word',
-                            cursor: this.state.isUploading || this.props.disabled ? 'default' : 'pointer',
+                            cursor: this.state.isUploading ? 'default' : 'pointer',
                             fontSize: this.state.isUploading ? '10px' : 'inherit',
                         }}
                         onMouseEnter={this.toggleHovered}
                         onMouseLeave={this.toggleHovered}
                     >
 
-                        {getMessage()}
+                        {(this.state.messageStatus === '') ? textLabel : this.state.messageStatus}
                         <input
                             ref={node => this.uploader = node}
                             type="file"
                             className='btn'
                             name={this.props.id + '-upload'}
                             accept={this.props.fileAccept || '*'}
-                            disabled={this.state.isUploading || this.props.disabled}
+                            disabled={this.state.isUploading || false}
                             style={{
                                 'opacity': '0',
                                 'width': '0',
@@ -374,7 +387,7 @@ Upload_ReactComponent.propTypes = {
     /**
      * Number of simultaneous uploads to select
      */
-    simultaneousUploads: PropTypes.number,
+    simultaneuosUploads: PropTypes.number,
 
     /**
      * The service to send the files to
@@ -487,6 +500,11 @@ Upload_ReactComponent.propTypes = {
     setProps: PropTypes.func,
 
     /**
+     * Callback to call on error (untested)
+     */
+    onUploadErrorCallback: PropTypes.func,
+
+    /**
      * User supplied id of this component
      */
     id: PropTypes.string,
@@ -525,18 +543,17 @@ Upload_ReactComponent.defaultProps = {
     pausedClass: 'dash-uploader-paused',
     uploadingClass: 'dash-uploader-uploading',
     defaultStyle: {},
-    disabledStyle: {},
     uploadingStyle: {},
     completeStyle: {},
     textLabel: 'Click Here to Select a File',
-    disabledMessage: 'The uploader is disabled.',
     completedMessage: 'Complete! ',
     fileNames: [],
+    newestUploadedFileName: '',
+    uploadedFiles: 0,
     filetypes: undefined,
     startButton: true,
     pauseButton: true,
     cancelButton: true,
-    disabled: false,
     disableDragAndDrop: false,
     id: 'default-dash-uploader-id',
     onUploadErrorCallback: undefined,
