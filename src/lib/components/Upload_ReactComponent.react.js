@@ -525,6 +525,17 @@ Upload_ReactComponent.propTypes = {
     simultaneuosUploads: PropTypes.number,
 
     /**
+     *  Number of uploaded files.
+     */
+    uploadedFiles: PropTypes.number,
+
+
+    /**
+     *  Name of the newest uploaded file
+     */
+    newestUploadedFileName: PropTypes.string,
+
+    /**
      *  Function to call on upload error (untested)
      */
     onUploadErrorCallback: PropTypes.func,
