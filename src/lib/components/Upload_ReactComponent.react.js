@@ -387,7 +387,7 @@ Upload_ReactComponent.propTypes = {
     /**
      * Number of simultaneous uploads to select
      */
-    simultaneuosUploads: PropTypes.number,
+    simultaneousUploads: PropTypes.number,
 
     /**
      * The service to send the files to
@@ -520,11 +520,6 @@ Upload_ReactComponent.propTypes = {
     upload_id: PropTypes.string,
 
     /**
-     *  Number of simulaneous uploads.
-     */
-    simultaneuosUploads: PropTypes.number,
-
-    /**
      *  Number of uploaded files.
      */
     uploadedFiles: PropTypes.number,
@@ -545,7 +540,7 @@ Upload_ReactComponent.defaultProps = {
     maxFiles: 1,
     maxFileSize: 1024 * 1024 * 10,
     chunkSize: 1024 * 1024,
-    simultaneuosUploads: 1,
+    simultaneousUploads: 1,
     service: '/API/dash-uploader',
     className: 'dash-uploader-default',
     hoveredClass: 'dash-uploader-hovered',
