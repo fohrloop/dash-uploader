@@ -82,7 +82,7 @@ export default class Upload_ReactComponent extends Component {
         });
 
 
-        flow.on('fileAdded', function (file) {
+        flowComponent.on('fileAdded', function (file) {
             if (!this.props.filetypes.includes(file.getExtension())) {
                 return false;
             };
