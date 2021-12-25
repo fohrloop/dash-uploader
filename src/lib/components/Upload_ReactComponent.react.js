@@ -38,7 +38,7 @@ export default class Upload_ReactComponent extends Component {
         this.pauseUpload = this.pauseUpload.bind(this)
         this.startUpload = this.startUpload.bind(this)
         this.createButton = this.createButton.bind(this)
-        this.resumable = null;
+        this.flow = null;
     }
 
     resetBuilder() {
@@ -94,15 +94,15 @@ export default class Upload_ReactComponent extends Component {
             newestUploadedFileName: '',
             uploadedFiles: 0,
         });
-        // Clicking the component will open upload dialog 
-        ResumableField.assignBrowse(this.uploader);
+        // Clicking the "this.uploader" component will open the browse files/folders dialog
+        flowComponent.assignBrowse(this.uploader);
 
         // Enable or Disable DragAnd Drop
         if (this.props.disableDragAndDrop === false && this.props.disabled === false) {
-            ResumableField.assignDrop(this.dropZone);
+            flowComponent.assignDrop(this.dropZone);
         }
 
-        ResumableField.on('fileAdded', (file) => {
+        flowComponent.on('fileAdded', (file) => {
             this.props.setProps({
                 // Currently supports uploading only one file at a time.
                 isCompleted: false,
@@ -118,9 +118,9 @@ export default class Upload_ReactComponent extends Component {
             });
 
             if (typeof this.props.onFileAdded === 'function') {
-                this.props.onFileAdded(file, this.resumable);
+                this.props.onFileAdded(file, this.flow);
             } else {
-                ResumableField.upload();
+                flowComponent.upload();
             }
         });
 
@@ -128,7 +128,7 @@ export default class Upload_ReactComponent extends Component {
         // The "fileNames" is a list, even though currently uploading
         // only one file at a time is supported.
         // When uploading multiple files, this will be called every time a file upload completes.
-        ResumableField.on('fileSuccess', (file, fileServer) => {
+        flowComponent.on('fileSuccess', (file, fileServer) => {
 
             if (this.props.fileNameServer) {
                 const objectServer = JSON.parse(fileServer);
@@ -160,22 +160,22 @@ export default class Upload_ReactComponent extends Component {
             });
 
             // Make re-upload of a file with same filename possible.
-            ResumableField.removeFile(file);
+            flowComponent.removeFile(file);
         });
 
 
 
-        ResumableField.on('progress', () => {
+        flowComponent.on('progress', () => {
 
 
             this.setState({
-                isUploading: ResumableField.isUploading()
+                isUploading: flowComponent.isUploading()
             });
 
-            if ((ResumableField.progress() * 100) < 100) {
+            if ((flowComponent.progress() * 100) < 100) {
                 this.setState({
                     messageStatus: 'Uploading "' + this.state.currentFile + '"',
-                    progressBar: ResumableField.progress() * 100
+                    progressBar: flowComponent.progress() * 100
                 });
             } else {
                 setTimeout(() => {
@@ -189,7 +189,7 @@ export default class Upload_ReactComponent extends Component {
 
 
 
-        ResumableField.on('fileError', (file, errorCount) => {
+        flowComponent.on('fileError', (file, errorCount) => {
 
             if (typeof (this.props.onUploadErrorCallback) !== 'undefined') {
                 this.props.onUploadErrorCallback(file, errorCount);
@@ -199,7 +199,7 @@ export default class Upload_ReactComponent extends Component {
 
         });
 
-        this.resumable = ResumableField;
+        this.flow = flowComponent;
     }
 
     componentDidUpdate(prevProps) {
@@ -207,28 +207,28 @@ export default class Upload_ReactComponent extends Component {
         const curEnableDrop = (this.props.disableDragAndDrop === false && this.props.disabled === false);
         if (curEnableDrop !== prevEnableDrop) {
             if (curEnableDrop) {
-                this.resumable.assignDrop(this.dropZone);
+                this.flow.assignDrop(this.dropZone);
             } else {
-                this.resumable.unAssignDrop(this.dropZone);
+                this.flow.unAssignDrop(this.dropZone);
             }
         }
     }
 
     cancelUpload() {
-        this.resumable.cancel();
+        this.flow.cancel();
         this.resetBuilder();
     }
 
 
     pauseUpload() {
         if (!this.state.isPaused) {
-            this.resumable.pause();
+            this.flow.pause();
             this.setState({
                 isPaused: true,
                 isUploading: true
             });
         } else {
-            this.resumable.upload();
+            this.flow.upload();
             this.setState({
                 isPaused: false,
                 isUploading: true
