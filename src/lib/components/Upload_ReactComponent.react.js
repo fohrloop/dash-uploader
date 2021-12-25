@@ -194,7 +194,7 @@ export default class Upload_ReactComponent extends Component {
             if (typeof (this.props.onUploadErrorCallback) !== 'undefined') {
                 this.props.onUploadErrorCallback(file, errorCount);
             } else {
-                console.log('fileError with resumable.js! (file, errorCount)', file, errorCount)
+                console.log('fileError with flow.js! (file, errorCount)', file, errorCount)
             }
 
         });
