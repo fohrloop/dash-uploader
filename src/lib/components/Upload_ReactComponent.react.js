@@ -56,7 +56,7 @@ export default class Upload_ReactComponent extends Component {
             query: { upload_id: this.props.upload_id },
             // Chunk size in bytes.
             chunkSize: this.props.chunkSize,
-            // Number of simulateneous uploads
+            // Number of simultaneous uploads
             simultaneousUploads: this.props.simultaneousUploads,
             // Extra headers to include in the multipart POST with data. 
             // If a function, it will be passed a FlowFile, a FlowChunk object and a isTest boolean (Default: {})
