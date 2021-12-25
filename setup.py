@@ -15,7 +15,10 @@ setup(
     author=package["author"],
     author_email="niko@pasanen.me",
     url=package["homepage"],
-    packages=[package_name, package_name + "._build",],
+    packages=[
+        package_name,
+        package_name + "._build",
+    ],
     include_package_data=True,
     license=package["license"],
     description=package.get("description", package_name),
@@ -39,5 +42,7 @@ setup(
             "chromedriver-binary-auto",
         ]
     },
-    classifiers=["Framework :: Dash",],
+    classifiers=[
+        "Framework :: Dash",
+    ],
 )
