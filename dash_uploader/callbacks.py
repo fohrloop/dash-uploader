@@ -103,6 +103,16 @@ def callback(
         kwargs = dict()
         if compare_dash_version("1.12"):
             kwargs["prevent_initial_call"] = True
+
+        # Input: Change in the props will trigger callback.
+        #     Whenever 'this.props.setProps' is called on the JS side,
+        #     (dash specific special prop that is passed to every
+        #     component of the dash app), a HTTP request is used to
+        #     trigger a change in the property/attribute of a dash
+        #     python component.
+        # State: Pass along extra values without firing the callbacks.
+        #
+        # See also: https://dash.plotly.com/basic-callbacks
         dash_callback = settings.app.callback(
             output,
             [Input(id, "isCompleted")],
