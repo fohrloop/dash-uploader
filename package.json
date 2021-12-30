@@ -1,7 +1,7 @@
 {
   "name": "dash_uploader",
   "version": "0.6.0",
-  "description": "Upload large files using resumable.js",
+  "description": "Upload component for Dash",
   "repository": {
     "type": "git",
     "url": "git://github.com/np-8/dash-uploader.git"
