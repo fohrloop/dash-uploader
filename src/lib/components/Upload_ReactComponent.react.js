@@ -380,6 +380,14 @@ export default class Upload_ReactComponent extends Component {
 
 Upload_ReactComponent.propTypes = {
     /**
+     * Dash-supplied function for updating props
+     * This is something special to Dash, and is needed
+     * If values are needed to be passed to the python dash backend.
+     */
+    setProps: PropTypes.func,
+
+
+    /**
      * Maximum number of files that can be uploaded in one session
      */
     maxFiles: PropTypes.number,
@@ -504,10 +512,6 @@ Upload_ReactComponent.propTypes = {
      */
     disableDragAndDrop: PropTypes.bool,
 
-    /**
-     * Dash-supplied function for updating props
-     */
-    setProps: PropTypes.func,
 
     /**
      * Callback to call on error (untested)
