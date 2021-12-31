@@ -186,6 +186,10 @@ export default class Upload_ReactComponent extends Component {
 
         });
 
+
+
+        flowComponent.on('filesSubmitted', this.onFilesSubmitted)
+
         this.flow = flowComponent;
     }
 
@@ -222,6 +226,12 @@ export default class Upload_ReactComponent extends Component {
             var lessThanMaxFiles = filearray.length < this.maxFiles
         }
         return lessThanMaxFiles
+    }
+
+
+    onFilesSubmitted = (files) => {
+        console.log('onFilesSubmitted', files.length, files)
+        this.flow.upload()
     }
 
     cancelUpload() {
