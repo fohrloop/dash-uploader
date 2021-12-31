@@ -82,18 +82,12 @@ export default class Upload_ReactComponent extends Component {
         });
 
 
-        flowComponent.on('fileAdded', function (file) {
-            if (!this.props.filetypes.includes(file.getExtension())) {
-                return false;
-            };
-        });
-
-
         this.props.setProps({
             isCompleted: false,
             newestUploadedFileName: '',
             uploadedFiles: 0,
         });
+
         // Clicking the "this.uploader" component will open the browse files/folders dialog
         flowComponent.assignBrowse(this.uploader);
 
@@ -102,27 +96,20 @@ export default class Upload_ReactComponent extends Component {
             flowComponent.assignDrop(this.dropZone);
         }
 
-        flowComponent.on('fileAdded', (file) => {
-            this.props.setProps({
-                // Currently supports uploading only one file at a time.
-                isCompleted: false,
-                fileNames: [],
-            });
-            this.setState({
-                messageStatus: this.props.fileAddedMessage || ' Starting upload! of ' + file.fileName,
-                showEnabledButtons: true,
-                // Currently supports uploading only one file at a time.
-                isComplete: false,
-                fileList: { files: [] },
-                currentFile: file.fileName,
-            });
+        // fileAdded and filesAdded events are both triggered whenever
+        // any (one or multiple) files are to be added (through dialog or drag&drop)
+        // to the upload component's upload queue.
+        // 
+        // fileAdded must return true for files that should be uploaded
+        // - Use this to check the extension
+        // - Use this to check if the file size is in acceptable limits
+        // - Use this to check if the file already exists on the server
+        flowComponent.on('fileAdded', this.checkFileIsOkayToBeUploaded);
 
-            if (typeof this.props.onFileAdded === 'function') {
-                this.props.onFileAdded(file, this.flow);
-            } else {
-                flowComponent.upload();
-            }
-        });
+        // filesAdded must also return true for file(s) that should be uploaded
+        // - Use this to check if there are too many files or the 
+        //   overall upload size is too large.
+        flowComponent.on('filesAdded', this.checkFilesAreOkayToBeUploaded);
 
         // Uploading a file is completed
         // The "fileNames" is a list, even though currently uploading
@@ -212,6 +199,29 @@ export default class Upload_ReactComponent extends Component {
                 this.flow.unAssignDrop(this.dropZone);
             }
         }
+    }
+
+    checkFileExtensionIsOk = (file) => {
+        var extension = file.name.split('.').pop()
+        if (this.props.filetypes === undefined) {
+            // All filetypes are accepted
+            return true;
+        }
+        return this.props.filetypes.includes(extension)
+    }
+
+    checkFileIsOkayToBeUploaded = (e) => {
+        var retval = this.checkFileExtensionIsOk(e.file);
+        return retval
+    }
+
+    checkFilesAreOkayToBeUploaded = (filearray) => {
+        if (this.maxFiles === undefined) {
+            var lessThanMaxFiles = true
+        } else {
+            var lessThanMaxFiles = filearray.length < this.maxFiles
+        }
+        return lessThanMaxFiles
     }
 
     cancelUpload() {
