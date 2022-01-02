@@ -324,7 +324,7 @@ export default class Upload_ReactComponent extends Component {
         }
 
         const getClass = () => {
-            if (this.props.disabledInput) {
+            if (this.props.disabled) {
                 return this.props.disabledClass;
             } else if (this.state.isHovered) {
                 return this.props.hoveredClass;
