@@ -103,7 +103,10 @@ def callback(
             )
 
         kwargs = dict()
-        if compare_dash_version("1.12"):
+        if dash_version_is_at_least("1.12"):
+            # See: https://github.com/plotly/dash/blob/dev/CHANGELOG.md  and
+            #      https://community.plotly.com/t/dash-v1-12-0-release-pattern-matching-callbacks-fixes-shape-drawing-new-datatable-conditional-formatting-options-prevent-initial-call-and-more/38867
+            # the `prevent_initial_call` option was added in Dash v.1.12
             kwargs["prevent_initial_call"] = True
 
         # Input: Change in the props will trigger callback.
