@@ -314,28 +314,31 @@ export default class Upload_ReactComponent extends Component {
 
 
         const getStyle = () => {
-            if (this.state.isComplete) {
-                return this.props.completeStyle;
-            } else if (this.state.isUploading) {
+            if (this.state.isUploading) {
                 return this.props.uploadingStyle;
+            } else if (this.props.disabled) {
+                return this.props.disabledStyle;
+            } else if (this.state.isComplete) {
+                return this.props.completeStyle;
             }
             return this.props.defaultStyle;
 
         }
 
         const getClass = () => {
-            if (this.props.disabled) {
-                return this.props.disabledClass;
-            } else if (this.state.isHovered) {
-                return this.props.hoveredClass;
-            } else if (this.state.isUploading) {
-                return this.props.uploadingClass;
-            } else if (this.state.isComplete) {
-                return this.props.completedClass;
+            let classList = [this.props.className];
+            if (this.state.isUploading) {
+                classList.push(this.props.uploadingClass);
             } else if (this.state.isPaused) {
-                return this.props.pausedClass;
+                classList.push(this.props.pausedClass);
+            } else if (this.props.disabled) {
+                classList.push(this.props.disabledClass);
+            } else if (this.state.isHovered) {
+                classList.push(this.props.hoveredClass);
+            } else if (this.state.isComplete) {
+                classList.push(this.props.completeClass);
             }
-            return this.props.className
+            return classList.join(" ");
 
         }
 
