@@ -228,8 +228,8 @@ def test_disabled02_check_disabled_effect(
     uploader_class = upload.get_attribute("class")
     assert (
         uploader_class == "dash-uploader-default"
-        or uploader_class == "dash-uploader-complete"
-    ), 'The current uploader class should be "dash-uploader-default" or "dash-uploader-complete".'
+        or uploader_class == "dash-uploader-completed"
+    ), 'The current uploader class should be "dash-uploader-default" or "dash-uploader-completed".'
 
     # Upload the file, both tests are expected to sucess.
     upload_test_file_and_validate(
@@ -287,8 +287,8 @@ def test_disabled02_check_disabled_effect(
     uploader_class = upload.get_attribute("class")
     assert (
         uploader_class == "dash-uploader-default"
-        or uploader_class == "dash-uploader-complete"
-    ), 'The current uploader class should be "dash-uploader-default" or "dash-uploader-complete".'
+        or uploader_class == "dash-uploader-completed"
+    ), 'The current uploader class should be "dash-uploader-default" or "dash-uploader-completed".'
 
     # Upload the file, the normal test is expected to success, while the drag and drop test is expected to fail.
     upload_test_file_and_validate(

@@ -331,7 +331,7 @@ export default class Upload_ReactComponent extends Component {
             } else if (this.state.isUploading) {
                 return this.props.uploadingClass;
             } else if (this.state.isComplete) {
-                return this.props.completeClass;
+                return this.props.completedClass;
             } else if (this.state.isPaused) {
                 return this.props.pausedClass;
             }
@@ -445,7 +445,7 @@ Upload_ReactComponent.propTypes = {
     /**
      * Class to add to the upload component when it is complete
      */
-    completeClass: PropTypes.string,
+    completedClass: PropTypes.string,
 
     /**
      * Class to add to the upload component when it is uploading
@@ -568,7 +568,7 @@ Upload_ReactComponent.defaultProps = {
     service: '/API/dash-uploader',
     className: 'dash-uploader-default',
     hoveredClass: 'dash-uploader-hovered',
-    completeClass: 'dash-uploader-complete',
+    completedClass: 'dash-uploader-completed',
     disabledClass: 'dash-uploader-disabled',
     pausedClass: 'dash-uploader-paused',
     uploadingClass: 'dash-uploader-uploading',
