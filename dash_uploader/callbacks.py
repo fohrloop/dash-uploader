@@ -8,8 +8,10 @@ from dash.dependencies import Input, State
 import dash_uploader.settings as settings
 
 
-def compare_dash_version(req_version="1.12"):
-    """Compare the version of dash.
+def dash_version_is_at_least(req_version="1.12"):
+    """Check that the used version of dash is greater or equal
+    to some version `req_version`.
+
     Will return True if current dash version is greater than
     the argument "req_version".
     This is a private method, and should not be exposed to users.
