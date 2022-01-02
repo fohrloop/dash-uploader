@@ -333,7 +333,7 @@ export default class Upload_ReactComponent extends Component {
             } else if (this.state.isComplete) {
                 return this.props.completeClass;
             } else if (this.state.isPaused) {
-                return this.props.completeClass;
+                return this.props.pausedClass;
             }
             return this.props.className
 
