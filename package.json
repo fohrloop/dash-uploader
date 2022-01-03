@@ -18,7 +18,8 @@
     "build:py": "dash-generate-components ./src/lib/components dash_uploader -p package-info.json ",
     "build:py-activated": "(. venv/bin/activate || venv\\scripts\\activate && npm run build:py)",
     "build": "npm run build:js && npm run build:py && python ./devscripts/post_build.py",
-    "build:activated": "npm run build:js && npm run build:py-activated"
+    "build:activated": "npm run build:js && npm run build:py-activated",
+    "test:react": "react-scripts test"
   },
   "author": "Niko Pasanen <niko@pasanen.me>",
   "license": "MIT",
@@ -34,6 +35,7 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.16.0",
     "@babel/preset-env": "^7.16.4",
     "@babel/preset-react": "^7.16.0",
+    "@testing-library/react": "^12.1.2",
     "babel-loader": "^8.2.3",
     "copyfiles": "^2.4.1",
     "css-loader": "^6.5.1",
@@ -46,6 +48,7 @@
     "react": "^17.0.2",
     "react-docgen": "^5.4.0",
     "react-dom": "^17.0.2",
+    "react-scripts": "^5.0.0",
     "style-loader": "^3.3.1",
     "styled-jsx": "^4.0.1",
     "webpack": "^5.65.0",

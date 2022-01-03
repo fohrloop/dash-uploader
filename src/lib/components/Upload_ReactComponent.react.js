@@ -327,17 +327,19 @@ export default class Upload_ReactComponent extends Component {
 
         const getClass = () => {
             let classList = [this.props.className];
-            if (this.state.isUploading) {
-                classList.push(this.props.uploadingClass);
-            } else if (this.state.isPaused) {
-                classList.push(this.props.pausedClass);
-            } else if (this.props.disabled) {
-                classList.push(this.props.disabledClass);
-            } else if (this.state.isHovered) {
-                classList.push(this.props.hoveredClass);
-            } else if (this.state.isComplete) {
-                classList.push(this.props.completeClass);
+            const classes = {
+                isUploading: this.props.uploadingClass,
+                isPaused: this.props.pausedClass,
+                isHovered: this.props.hoveredClass,
+                isComplete: this.props.completeClass,
             }
+
+            Object.entries(classes).forEach(([stateProperty, className]) => {
+                this.state[stateProperty] && classList.push(className);
+            });
+
+            this.props.disabled && classList.push(this.props.disabledClass);
+
             return classList.join(" ");
 
         }
@@ -593,3 +595,4 @@ Upload_ReactComponent.defaultProps = {
     isCompleted: false,
     upload_id: ''
 };
+
