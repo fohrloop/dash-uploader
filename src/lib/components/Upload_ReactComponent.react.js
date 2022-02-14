@@ -145,7 +145,7 @@ export default class Upload_ReactComponent extends Component {
                 // hide buttons when all files are uploaded
                 // counter starts with 0
                 showEnabledButtons: (nTotalFiles > nTotalFilesUploaded + 1),
-                messageStatus: this.props.completedMessage + file.fileName || fileServer
+                messageStatus: `${this.props.completedMessage} ${nTotalFiles} files` || fileServer
             }, () => {
                 if (typeof this.props.onFileSuccess === 'function') {
                     this.props.onFileSuccess(file, fileServer);
