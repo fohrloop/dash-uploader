@@ -115,6 +115,8 @@ export default class Upload_ReactComponent extends Component {
 
         flow.on('fileSuccess', (file, fileServer) => {
             const nTotalFilesUploaded = this.state.nTotalFilesUploaded;
+            const nTotalFiles = this.state.nTotalFiles;
+
             this.setState({nTotalFilesUploaded: nTotalFilesUploaded + 1})
 
             if (this.props.fileNameServer) {
@@ -136,10 +138,13 @@ export default class Upload_ReactComponent extends Component {
                     newestUploadedFileName: file.fileName,
                     uploadedFiles: this.props.uploadedFiles + 1,
                 });
-            }
+            };
+            
             this.setState({
                 fileList: { files: currentFiles },
-                showEnabledButtons: false,
+                // hide buttons when all files are uploaded
+                // counter starts with 0
+                showEnabledButtons: (nTotalFiles > nTotalFilesUploaded + 1),
                 messageStatus: this.props.completedMessage + file.fileName || fileServer
             }, () => {
                 if (typeof this.props.onFileSuccess === 'function') {
