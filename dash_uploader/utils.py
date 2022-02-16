@@ -1,19 +1,19 @@
-import packaging
+from packaging import version
 import pkg_resources
 
 ## Dash version
 dash_version_str = pkg_resources.get_distribution("dash").version
-dash_version = packaging.version.parse(dash_version_str)
+dash_version = version.parse(dash_version_str)
 
 
-def dash_version_is_greater_or_equal_to(version):
+def dash_version_is_at_least(req_version="1.12"):
+    """Check that the used version of dash is greater or equal
+    to some version `req_version`.
+
+    Will return True if current dash version is greater than
+    the argument "req_version".
+    This is a private method, and should not be exposed to users.
     """
-    Check if the installed version of Dash is
-    greater or equal than some version.
-
-    Parameters
-    ----------
-    version: str
-        The version string. E.g. '1.14.0'
-    """
-    return dash_version >= packaging.version.parse(version)
+    if isinstance(dash_version, version.LegacyVersion):
+        return False
+    return dash_version >= version.parse(req_version)

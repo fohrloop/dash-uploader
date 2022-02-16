@@ -1,25 +1,10 @@
-from packaging import version
 from pathlib import Path
 
-from dash import __version__ as dashversion
 from dash.exceptions import PreventUpdate
 from dash.dependencies import Input, State
 
 import dash_uploader.settings as settings
-
-
-def dash_version_is_at_least(req_version="1.12"):
-    """Check that the used version of dash is greater or equal
-    to some version `req_version`.
-
-    Will return True if current dash version is greater than
-    the argument "req_version".
-    This is a private method, and should not be exposed to users.
-    """
-    cur_version = version.parse(dashversion)
-    if isinstance(cur_version, version.LegacyVersion):
-        return False
-    return cur_version >= version.parse(req_version)
+from dash_uploader.utils import dash_version_is_at_least
 
 
 def create_dash_callback(callback, settings):  # pylint: disable=redefined-outer-name
