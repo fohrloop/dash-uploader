@@ -7,8 +7,12 @@ import json
 import dash_uploader as du
 import dash
 
-# if dash <= 2.0.0, use: import dash_core_components as dcc and import dash_html_components as html
-from dash import html, dcc
+if du.utils.dash_version_is_at_least("2.0.0"):
+    from dash import html, dcc
+else:
+    import dash_html_components as html
+    import dash_core_components as dcc
+
 from dash.dependencies import Output, Input
 
 app = dash.Dash(__name__)

@@ -3,7 +3,12 @@ import uuid
 
 import dash_uploader as du
 import dash
-from dash import html  # if dash <= 2.0.0, use: import dash_html_components as html
+
+if du.utils.dash_version_is_at_least("2.0.0"):
+    from dash import html  # if dash <= 2.0.0, use: import dash_html_components as html
+else:
+    import dash_html_components as html
+
 from dash.dependencies import Output
 
 app = dash.Dash(__name__)
