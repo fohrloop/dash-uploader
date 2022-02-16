@@ -35,11 +35,12 @@ setup(
             # Switch into a virtual environment
             # pip install -r requirements.txt
             "dash[testing]>=1.1.0",
-            # Automatically get the latest ChromeDriver. If Chrome updated, use
-            # pip install --upgrade --force-reinstall chromedriver-binary-auto
-            # to update the chromedriver binary.
+            # Automatically get the latest ChromeDriver. If Chrome is of
+            # different version, use
+            # pip install --upgrade --force-reinstall chromedriver-binary==<version>.*
+            # to update/downgrade the chromedriver binary.
             # Needs: import chromedriver_binary to the top of your test script.
-            "chromedriver-binary-auto",
+            "chromedriver-binary",
         ]
     },
     classifiers=[
