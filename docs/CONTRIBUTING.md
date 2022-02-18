@@ -13,9 +13,8 @@
   - [5.2 With pytest (automatic tests)](#52-with-pytest-automatic-tests)
   - [5.3  Testing React components without python](#53--testing-react-components-without-python)
 - [6. Creating new version to pip](#6-creating-new-version-to-pip)
+- [7.  How does dash-uploader work internally?](#7--how-does-dash-uploader-work-internally)
 - [8.  More help?](#8--more-help)
-
-
 ## 1. How to improve this package?
 
 Maybe you already have an idea. If not, see if there are any open [issues](https://github.com/np-8/dash-uploader/issues) that need help. 
