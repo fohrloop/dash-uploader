@@ -38,7 +38,10 @@ export default class Upload_ReactComponent extends Component {
         this.pauseUpload = this.pauseUpload.bind(this)
         this.startUpload = this.startUpload.bind(this)
         this.createButton = this.createButton.bind(this)
-        this.flow = null;
+        this.flow = null
+        // use 'true' to enable debug console log
+        // (for development only!)
+        this.debug = false
     }
 
     resetBuilder() {
@@ -117,6 +120,10 @@ export default class Upload_ReactComponent extends Component {
         // When uploading multiple files, this will be called every time a file upload completes.
         flowComponent.on('fileSuccess', (file, fileServer) => {
 
+            if (this.debug) {
+                console.log('fileSuccess', file, fileServer)
+            }
+
             if (this.props.fileNameServer) {
                 const objectServer = JSON.parse(fileServer);
                 file.fileName = objectServer[this.props.fileNameServer];
@@ -177,7 +184,9 @@ export default class Upload_ReactComponent extends Component {
 
 
         flowComponent.on('fileError', (file, errorCount) => {
-
+            if (this.debug) {
+                console.log('fileError', file, errorCount)
+            }
             if (typeof (this.props.onUploadErrorCallback) !== 'undefined') {
                 this.props.onUploadErrorCallback(file, errorCount);
             } else {
@@ -215,11 +224,17 @@ export default class Upload_ReactComponent extends Component {
     }
 
     checkFileIsOkayToBeUploaded = (e) => {
+        if (this.debug) {
+            console.log('fileAdded', e)
+        }
         var retval = this.checkFileExtensionIsOk(e.file);
         return retval
     }
 
     checkFilesAreOkayToBeUploaded = (filearray) => {
+        if (this.debug) {
+            console.log('filesAdded', filearray)
+        }
         if (this.maxFiles === undefined) {
             var lessThanMaxFiles = true
         } else {
@@ -230,7 +245,9 @@ export default class Upload_ReactComponent extends Component {
 
 
     onFilesSubmitted = (files) => {
-        console.log('onFilesSubmitted', files.length, files)
+        if (this.debug) {
+            console.log('onFilesSubmitted', files.length, files)
+        }
         this.flow.upload()
     }
 
