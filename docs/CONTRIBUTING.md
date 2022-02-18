@@ -13,7 +13,7 @@
   - [5.2 With pytest (automatic tests)](#52-with-pytest-automatic-tests)
   - [5.3  Testing React components without python](#53--testing-react-components-without-python)
 - [6. Creating new version to pip](#6-creating-new-version-to-pip)
-- [7.  More help?](#7--more-help)
+- [8.  More help?](#8--more-help)
 
 
 ## 1. How to improve this package?
@@ -168,5 +168,12 @@ python .\setup.py sdist
 ```
 twine upload .\dist\dash_uploader-x.x.x.tar.gz
 ```
-## 7.  More help?
+## 7.  How does dash-uploader work internally?
+
+Here is a diagram that tries to explain how dash-uploader works under the hood. If you find a place for improvement, please [submit a PR](https://github.com/np-8/dash-uploader/issues).
+
+
+[![](how-dash-uploader-works.svg)](https://raw.githubusercontent.com/np-8/dash-uploader/master/docs/how-dash-uploader-works.svg)
+
+## 8.  More help?
 Read also the automatically generated README text at [README-COOKIECUTTER.md](README-COOKIECUTTER.md).
