@@ -25,6 +25,8 @@ Typically you also would like to define [callbacks](#3-callbacks) (functions tha
 [4 Custom handling of HTTP Requests](#4-custom-handling-of-http-requests)
 - [`du.HttpRequestHandler`](#duhttprequesthandler)
 
+[5 How dash-uploader works internally?](#5-how-dash-uploader-works-internally)
+
 -----
 
 ## 1 Configuring dash-uploader
