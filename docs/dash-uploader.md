@@ -345,3 +345,7 @@ filename = request.form.get("resumableFilename", default="error", type=str)
 upload_id = request.form.get("upload_id", default="", type=str)
 cookie_value = request.cookies.get('some_cookie')
 ```
+
+## 5 How dash-uploader works internally?
+
+- Please refer to the [developer documentation](./CONTRIBUTING.md#7--how-does-dash-uploader-work-internally) for the details.
