@@ -7,11 +7,10 @@ import dash_uploader.settings as settings
 from dash_uploader.utils import dash_version_is_at_least
 
 
-def create_dash_callback(callback, settings):  # pylint: disable=redefined-outer-name
+def _create_dash_callback(callback, settings):  # pylint: disable=redefined-outer-name
     """Wrap the dash callback with the du.settings.
     This function could be used as a wrapper. It will add the
     configurations of dash-uploader to the callback.
-    This is a private method, and should not be exposed to users.
     """
 
     def wrapper(iscompleted, filenames, upload_id):
@@ -77,7 +76,7 @@ def callback(
             Output('callback-output', 'children')
 
         """
-        dash_callback = create_dash_callback(
+        dash_callback = _create_dash_callback(
             function,
             settings,
         )
