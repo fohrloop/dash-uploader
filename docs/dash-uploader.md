@@ -180,7 +180,7 @@ max_files = 1.
 The number of files that can be added to 
 the upload field simultaneously.
 
-**Notes**: <br>
+**Notes** (*not up to date: resumable.js -> flow.js change*): <br>
 **(1)** If even a single file which is not supported file
     type (i.e. missing in  `filetypes`), is added to the upload queue, upload process of all files will be permanently interrupted. <br>
 **(2)** Use reasonably small number in `max_files`. <br>
@@ -335,13 +335,13 @@ class HttpRequestHandler(BaseHttpRequestHandler):
 
 - The React Component of `dash-uploader` sends HTTP POST requests. It could in the future send also HTTP GET requests, or other HTTP requests.
 - The Flask server (Dash uses Flask underneath) is configured in [`configure_upload`](#duconfigure_upload) to call the `post()` function of the `http_request_handler` on every HTTP POST request directed to the API endpoint of the dash-uploader.
-- The values in the POST request are listed in [Documentation of resumable.js](https://github.com/23/resumable.js#how-do-i-set-it-up-with-my-server). Most interesting from these is probably the filename (`resumableFilename`).  In addition to these, there is `upload_id` added by the `dash-uploader`, if `use_upload_id=True` when calling [`configure_upload`](#duconfigure_upload).
+- The values in the POST request are listed in [Documentation of flow.js](https://github.com/flowjs/flow.js/). Most interesting from these is probably the filename (`resumableFilename`).  In addition to these, there is `upload_id` added by the `dash-uploader`, if `use_upload_id=True` when calling [`configure_upload`](#duconfigure_upload).
 - You can use the [flask.request](https://flask.palletsprojects.com/en/1.1.x/api/#flask.request) and [flask.session](https://flask.palletsprojects.com/en/1.1.x/api/#flask.session) proxies as you like. There you get access to all the HTTP Request parameters and Cookies, for example. As an quick example, to get the request filename, upload_id and some cookie value, you can use:
 
 ```python
 from flask import request 
 
-filename = request.form.get("resumableFilename", default="error", type=str)
+filename = request.form.get("flowFilename", default="error", type=str)
 upload_id = request.form.get("upload_id", default="", type=str)
 cookie_value = request.cookies.get('some_cookie')
 ```

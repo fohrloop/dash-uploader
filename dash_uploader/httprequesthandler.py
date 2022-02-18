@@ -129,8 +129,8 @@ class BaseHttpRequestHandler:
             logger.error(traceback.format_exc())
 
     def _get(self):
-        # resumable.js uses a GET request to check if it uploaded the file already.
-        # https://github.com/23/resumable.js#handling-get-or-test-requests
+        # flow.js uses a GET request to check if it uploaded the file already.
+        # https://github.com/flowjs/flow.js/
         # TODO: Since testChunks is set to false, this seems to be permanently disabled.
         #       Should this be removed altogether?
 
@@ -154,10 +154,10 @@ class BaseHttpRequestHandler:
         self.server.logger.debug("Getting chunk: %s", chunk_file)
 
         if os.path.isfile(chunk_file):
-            # Let resumable.js know this chunk already exists
+            # Let flow.js know this chunk already exists
             return "OK"
         else:
-            # Let resumable.js know this chunk does not exists
+            # Let flow.js know this chunk does not exists
             # and needs to be uploaded
             abort(404, "Not found")
 
