@@ -21,7 +21,7 @@ export default class Upload_ReactComponent extends Component {
     static initialState = {
         progressBar: 0,
         messageStatus: '',
-        fileList: { files: [] },
+        uploadedFiles: [],
         isPaused: false,
         isUploading: false,
         isHovered: false,
@@ -115,7 +115,8 @@ export default class Upload_ReactComponent extends Component {
         flowComponent.on('fileSuccess', this.fileSuccess);
 
 
-        flowComponent.on('progress', this.progress);
+        flowComponent.on('progress', this.onProgress);
+        flowComponent.on('complete', this.onComplete);
         flowComponent.on('fileError', this.fileError);
         flowComponent.on('filesSubmitted', this.onFilesSubmitted)
 
@@ -163,7 +164,7 @@ export default class Upload_ReactComponent extends Component {
         return lessThanMaxFiles
     }
 
-    progress = () => {
+    onProgress = () => {
         this.setState({
             isUploading: this.flow.isUploading()
         });
@@ -183,6 +184,22 @@ export default class Upload_ReactComponent extends Component {
 
     };
 
+    onComplete = () => {
+
+        if (this.debug) {
+            console.log('onComplete')
+        }
+        // Make re-upload of a file with same filename possible.
+        this.state.uploadedFiles.forEach(function (file) {
+            this.flow.removeFile(file);
+        }, this);
+
+        this.setState({
+            isUploading: false
+        });
+
+    };
+
     fileSuccess = (file, message, chunk) => {
         // file: FlowFile instance
         // message: string
@@ -192,8 +209,8 @@ export default class Upload_ReactComponent extends Component {
         }
 
         file.fileName = message;
-        const currentFiles = this.state.fileList.files;
-        currentFiles.push(file);
+        const uploadedFiles = this.state.uploadedFiles;
+        uploadedFiles.push(file);
 
         const uploadedFileNames = this.props.uploadedFileNames
         uploadedFileNames.push(file.fileName);
@@ -206,7 +223,7 @@ export default class Upload_ReactComponent extends Component {
             });
         }
         this.setState({
-            fileList: { files: currentFiles },
+            uploadedFiles: uploadedFiles,
             showEnabledButtons: false,
             messageStatus: this.props.completedMessage + file.fileName || fileServer
         }, () => {
@@ -215,8 +232,6 @@ export default class Upload_ReactComponent extends Component {
             }
         });
 
-        // Make re-upload of a file with same filename possible.
-        this.flow.removeFile(file);
     };
 
 
