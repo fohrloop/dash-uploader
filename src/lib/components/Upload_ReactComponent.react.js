@@ -112,82 +112,11 @@ export default class Upload_ReactComponent extends Component {
         // The "uploadedFileNames" is a list, even though currently uploading
         // only one file at a time is supported.
         // When uploading multiple files, this will be called every time a file upload completes.
-        flowComponent.on('fileSuccess', (file, message, chunk) => {
-            // file: FlowFile instance
-            // message: string
-            // chunk: FlowChunk instance
-            if (this.debug) {
-                console.log('fileSuccess:', file, message, chunk)
-            }
-
-            file.fileName = message;
-            const currentFiles = this.state.fileList.files;
-            currentFiles.push(file);
-
-            const uploadedFileNames = this.props.uploadedFileNames
-            uploadedFileNames.push(file.fileName);
-
-            if (this.props.setProps) {
-                this.props.setProps({
-                    uploadedFileNames: uploadedFileNames,
-                    newestUploadedFileName: file.fileName,
-                    uploadedFilesCount: this.props.uploadedFilesCount + 1,
-                });
-            }
-            this.setState({
-                fileList: { files: currentFiles },
-                showEnabledButtons: false,
-                messageStatus: this.props.completedMessage + file.fileName || fileServer
-            }, () => {
-                if (typeof this.props.onFileSuccess === 'function') {
-                    this.props.onFileSuccess(file, fileServer);
-                }
-            });
-
-            // Make re-upload of a file with same filename possible.
-            flowComponent.removeFile(file);
-        });
+        flowComponent.on('fileSuccess', this.fileSuccess);
 
 
-
-        flowComponent.on('progress', () => {
-
-
-            this.setState({
-                isUploading: flowComponent.isUploading()
-            });
-
-            if ((flowComponent.progress() * 100) < 100) {
-                this.setState({
-                    messageStatus: 'Uploading (' + (flowComponent.progress() * 100).toFixed(0) + '%)',
-                    progressBar: flowComponent.progress() * 100
-                });
-            } else {
-                setTimeout(() => {
-                    this.setState({
-                        progressBar: 0
-                    })
-                }, 1000);
-            }
-
-        });
-
-
-
-        flowComponent.on('fileError', (file, errorCount) => {
-            if (this.debug) {
-                console.log('fileError', file, errorCount)
-            }
-            if (typeof (this.props.onUploadErrorCallback) !== 'undefined') {
-                this.props.onUploadErrorCallback(file, errorCount);
-            } else {
-                console.log('fileError with flow.js! (file, errorCount)', file, errorCount)
-            }
-
-        });
-
-
-
+        flowComponent.on('progress', this.progress);
+        flowComponent.on('fileError', this.fileError);
         flowComponent.on('filesSubmitted', this.onFilesSubmitted)
 
         this.flow = flowComponent;
@@ -234,6 +163,74 @@ export default class Upload_ReactComponent extends Component {
         return lessThanMaxFiles
     }
 
+    progress = () => {
+        this.setState({
+            isUploading: this.flow.isUploading()
+        });
+
+        if ((this.flow.progress() * 100) < 100) {
+            this.setState({
+                messageStatus: 'Uploading (' + (this.flow.progress() * 100).toFixed(0) + '%)',
+                progressBar: this.flow.progress() * 100
+            });
+        } else {
+            setTimeout(() => {
+                this.setState({
+                    progressBar: 0
+                })
+            }, 1000);
+        }
+
+    };
+
+    fileSuccess = (file, message, chunk) => {
+        // file: FlowFile instance
+        // message: string
+        // chunk: FlowChunk instance
+        if (this.debug) {
+            console.log('fileSuccess:', file, message, chunk)
+        }
+
+        file.fileName = message;
+        const currentFiles = this.state.fileList.files;
+        currentFiles.push(file);
+
+        const uploadedFileNames = this.props.uploadedFileNames
+        uploadedFileNames.push(file.fileName);
+
+        if (this.props.setProps) {
+            this.props.setProps({
+                uploadedFileNames: uploadedFileNames,
+                newestUploadedFileName: file.fileName,
+                uploadedFilesCount: this.props.uploadedFilesCount + 1,
+            });
+        }
+        this.setState({
+            fileList: { files: currentFiles },
+            showEnabledButtons: false,
+            messageStatus: this.props.completedMessage + file.fileName || fileServer
+        }, () => {
+            if (typeof this.props.onFileSuccess === 'function') {
+                this.props.onFileSuccess(file, fileServer);
+            }
+        });
+
+        // Make re-upload of a file with same filename possible.
+        this.flow.removeFile(file);
+    };
+
+
+    fileError = (file, errorCount) => {
+        if (this.debug) {
+            console.log('fileError', file, errorCount)
+        }
+        if (typeof (this.props.onUploadErrorCallback) !== 'undefined') {
+            this.props.onUploadErrorCallback(file, errorCount);
+        } else {
+            console.log('fileError with flow.js! (file, errorCount)', file, errorCount)
+        }
+
+    };
 
     onFilesSubmitted = (files) => {
         if (this.debug) {
