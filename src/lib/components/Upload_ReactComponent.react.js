@@ -218,7 +218,6 @@ export default class Upload_ReactComponent extends Component {
         if (this.props.setProps) {
             this.props.setProps({
                 uploadedFileNames: uploadedFileNames,
-                newestUploadedFileName: file.fileName,
                 uploadedFilesCount: this.props.uploadedFilesCount + 1,
             });
         }
@@ -252,11 +251,10 @@ export default class Upload_ReactComponent extends Component {
             console.log('onFilesSubmitted', files.length, files)
         }
         this.props.setProps({
+            dashAppCallbackBump: 0,
             uploadedFileNames: [],
             uploadedFilesCount: 0,
             totalFilesCount: files.length,
-            dashAppCallbackBump: 0,
-            newestUploadedFileName: '',
         })
         this.flow.upload()
     }
@@ -589,12 +587,6 @@ Upload_ReactComponent.propTypes = {
      */
     totalFilesCount: PropTypes.number,
 
-
-    /**
-     *  Name of the newest uploaded file
-     */
-    newestUploadedFileName: PropTypes.string,
-
     /**
      *  Function to call on upload error (untested)
      */
@@ -619,7 +611,6 @@ Upload_ReactComponent.defaultProps = {
     textLabel: 'Click Here to Select a File',
     completedMessage: 'Complete! ',
     uploadedFileNames: [],
-    newestUploadedFileName: '',
     uploadedFilesCount: 0,
     filetypes: undefined,
     startButton: true,

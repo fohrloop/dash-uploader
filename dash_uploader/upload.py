@@ -165,7 +165,6 @@ def Upload(
         upload_id=str(upload_id),
         uploadedFilesCount=0,
         totalFilesCount=0,
-        newestUploadedFileName="",
     )
 
     if filetypes:
