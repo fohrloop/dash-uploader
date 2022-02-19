@@ -105,7 +105,7 @@ def callback(
         dash_callback = settings.app.callback(
             output,
             [Input(id, "isCompleted")],
-            [State(id, "fileNames"), State(id, "upload_id")],
+            [State(id, "uploadedFileNames"), State(id, "upload_id")],
             **kwargs
         )(dash_callback)
         return function

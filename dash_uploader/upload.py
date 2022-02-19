@@ -163,8 +163,9 @@ def Upload(
         uploadingStyle=upload_style,
         completeStyle=default_style,
         upload_id=str(upload_id),
-        uploadedFiles=0,
-        newestUploadedFileName='',
+        uploadedFilesCount=0,
+        totalFilesCount=0,
+        newestUploadedFileName="",
     )
 
     if filetypes:
