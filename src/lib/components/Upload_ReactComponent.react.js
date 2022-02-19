@@ -85,14 +85,6 @@ export default class Upload_ReactComponent extends Component {
         });
 
 
-        this.props.setProps({
-            uploadedFileNames: [],
-            uploadedFilesCount: 0,
-            totalFilesCount: 0,
-            isCompleted: false,
-            newestUploadedFileName: '',
-        });
-
         // Clicking the "this.uploader" component will open the browse files/folders dialog
         flowComponent.assignBrowse(this.uploader);
 
@@ -247,6 +239,13 @@ export default class Upload_ReactComponent extends Component {
         if (this.debug) {
             console.log('onFilesSubmitted', files.length, files)
         }
+        this.props.setProps({
+            uploadedFileNames: [],
+            uploadedFilesCount: 0,
+            totalFilesCount: files.length,
+            isCompleted: false,
+            newestUploadedFileName: '',
+        })
         this.flow.upload()
     }
 
