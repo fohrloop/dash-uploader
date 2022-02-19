@@ -118,18 +118,15 @@ export default class Upload_ReactComponent extends Component {
         // The "fileNames" is a list, even though currently uploading
         // only one file at a time is supported.
         // When uploading multiple files, this will be called every time a file upload completes.
-        flowComponent.on('fileSuccess', (file, fileServer) => {
-
+        flowComponent.on('fileSuccess', (file, message, chunk) => {
+            // file: FlowFile instance
+            // message: string
+            // chunk: FlowChunk instance
             if (this.debug) {
-                console.log('fileSuccess', file, fileServer)
+                console.log('fileSuccess:', file, message, chunk)
             }
 
-            if (this.props.fileNameServer) {
-                const objectServer = JSON.parse(fileServer);
-                file.fileName = objectServer[this.props.fileNameServer];
-            } else {
-                file.fileName = fileServer;
-            }
+            file.fileName = message;
             const currentFiles = this.state.fileList.files;
             currentFiles.push(file);
 
