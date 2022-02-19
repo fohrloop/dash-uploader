@@ -165,7 +165,7 @@ export default class Upload_ReactComponent extends Component {
 
             if ((flowComponent.progress() * 100) < 100) {
                 this.setState({
-                    messageStatus: 'Uploading "' + this.state.currentFile + '"',
+                    messageStatus: 'Uploading (' + (flowComponent.progress() * 100).toFixed(0) + '%)',
                     progressBar: flowComponent.progress() * 100
                 });
             } else {
