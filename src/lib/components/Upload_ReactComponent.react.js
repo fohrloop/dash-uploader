@@ -86,9 +86,10 @@ export default class Upload_ReactComponent extends Component {
 
 
         this.props.setProps({
+            uploadedFileNames: [],
+            uploadedFilesCount: 0,
             isCompleted: false,
             newestUploadedFileName: '',
-            uploadedFiles: 0,
         });
 
         // Clicking the "this.uploader" component will open the browse files/folders dialog
@@ -137,7 +138,7 @@ export default class Upload_ReactComponent extends Component {
                 this.props.setProps({
                     uploadedFileNames: uploadedFileNames,
                     newestUploadedFileName: file.fileName,
-                    uploadedFiles: this.props.uploadedFiles + 1,
+                    uploadedFilesCount: this.props.uploadedFilesCount + 1,
                 });
             }
             this.setState({
@@ -565,7 +566,7 @@ Upload_ReactComponent.propTypes = {
     /**
      *  Number of uploaded files.
      */
-    uploadedFiles: PropTypes.number,
+    uploadedFilesCount: PropTypes.number,
 
 
     /**
@@ -598,7 +599,7 @@ Upload_ReactComponent.defaultProps = {
     completedMessage: 'Complete! ',
     uploadedFileNames: [],
     newestUploadedFileName: '',
-    uploadedFiles: 0,
+    uploadedFilesCount: 0,
     filetypes: undefined,
     startButton: true,
     pauseButton: true,
