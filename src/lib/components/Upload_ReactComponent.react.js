@@ -243,7 +243,7 @@ export default class Upload_ReactComponent extends Component {
             uploadedFileNames: [],
             uploadedFilesCount: 0,
             totalFilesCount: files.length,
-            isCompleted: false,
+            dashAppCallbackBump: 0,
             newestUploadedFileName: '',
         })
         this.flow.upload()
@@ -554,9 +554,13 @@ Upload_ReactComponent.propTypes = {
     id: PropTypes.string,
 
     /**
-     *  The boolean flag telling if upload is completed.
+     *  A prop that is monitored by the dash app
+     *  Wheneven the value of this prop is changed,
+     *  all the props are sent to the dash application.
+     * 
+     *  This is used in the dash callbacks.
      */
-    isCompleted: PropTypes.bool,
+    dashAppCallbackBump: PropTypes.number,
 
     /**
      *  The ID for the upload event (for example, session ID)
@@ -612,7 +616,7 @@ Upload_ReactComponent.defaultProps = {
     disableDragAndDrop: false,
     id: 'default-dash-uploader-id',
     onUploadErrorCallback: undefined,
-    isCompleted: false,
+    dashAppCallbackBump: 0,
     upload_id: ''
 };
 

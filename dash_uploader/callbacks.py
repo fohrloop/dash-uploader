@@ -104,7 +104,7 @@ def callback(
         # See also: https://dash.plotly.com/basic-callbacks
         dash_callback = settings.app.callback(
             output,
-            [Input(id, "isCompleted")],
+            [Input(id, "dashAppCallbackBump")],
             [State(id, "uploadedFileNames"), State(id, "upload_id")],
             **kwargs
         )(dash_callback)

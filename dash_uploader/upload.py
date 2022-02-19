@@ -142,7 +142,7 @@ def Upload(
 
     arguments = dict(
         id=id,
-        isCompleted=False,
+        dashAppCallbackBump=0,
         # Have not tested if using many files
         # is reliable -> Do not allow
         maxFiles=max_files,

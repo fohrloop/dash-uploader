@@ -284,7 +284,7 @@ def callback_on_completion(iscompleted, filenames, upload_id):
 ```
 
 #### du.Upload properties used
-- `isCompleted`: boolean flag indicating if uploading has been completed. 
+- `dashAppCallbackBump`: An integer that changes value in the JS side to communicate the new props to dash application. This is for internal use of dash-uploader only.
 - `fileNames`: List of strings of the filenames or None. This does not have the upload folder or the upload_id in it. 
 - `upload_id`: The upload id used when initiating the `du.Upload` component.
 
