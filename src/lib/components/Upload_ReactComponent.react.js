@@ -115,7 +115,7 @@ export default class Upload_ReactComponent extends Component {
         flowComponent.on('filesAdded', this.checkFilesAreOkayToBeUploaded);
 
         // Uploading a file is completed
-        // The "fileNames" is a list, even though currently uploading
+        // The "uploadedFileNames" is a list, even though currently uploading
         // only one file at a time is supported.
         // When uploading multiple files, this will be called every time a file upload completes.
         flowComponent.on('fileSuccess', (file, message, chunk) => {
@@ -130,12 +130,12 @@ export default class Upload_ReactComponent extends Component {
             const currentFiles = this.state.fileList.files;
             currentFiles.push(file);
 
-            const fileNames = this.props.fileNames
-            fileNames.push(file.fileName);
+            const uploadedFileNames = this.props.uploadedFileNames
+            uploadedFileNames.push(file.fileName);
 
             if (this.props.setProps) {
                 this.props.setProps({
-                    fileNames: fileNames,
+                    uploadedFileNames: uploadedFileNames,
                     newestUploadedFileName: file.fileName,
                     uploadedFiles: this.props.uploadedFiles + 1,
                 });
@@ -509,7 +509,7 @@ Upload_ReactComponent.propTypes = {
     /**
      * The names of the files uploaded
      */
-    fileNames: PropTypes.arrayOf(PropTypes.string),
+    uploadedFileNames: PropTypes.arrayOf(PropTypes.string),
 
     /**
      * List of allowed file types, e.g. ['jpg', 'png']
@@ -596,7 +596,7 @@ Upload_ReactComponent.defaultProps = {
     completeStyle: {},
     textLabel: 'Click Here to Select a File',
     completedMessage: 'Complete! ',
-    fileNames: [],
+    uploadedFileNames: [],
     newestUploadedFileName: '',
     uploadedFiles: 0,
     filetypes: undefined,
