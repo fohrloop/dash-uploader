@@ -88,6 +88,7 @@ export default class Upload_ReactComponent extends Component {
         this.props.setProps({
             uploadedFileNames: [],
             uploadedFilesCount: 0,
+            totalFilesCount: 0,
             isCompleted: false,
             newestUploadedFileName: '',
         });
@@ -567,6 +568,11 @@ Upload_ReactComponent.propTypes = {
      *  Number of uploaded files.
      */
     uploadedFilesCount: PropTypes.number,
+
+    /**
+     *  Total number of files to be uploaded.
+     */
+    totalFilesCount: PropTypes.number,
 
 
     /**
