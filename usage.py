@@ -64,24 +64,16 @@ app.layout = get_app_layout
     output=Output("callback-output", "children"),
     id="dash-uploader",
 )
-def callback_on_completion(n_files, filenames, upload_id, iscompleted, latest_file):
+def callback_on_completion(status: du.UploadStatus):
 
-    if n_files == 0:
+    if status.n_uploaded == 0:
         return  # no files uploaded yet.
 
-    print(n_files, filenames, upload_id, iscompleted, latest_file)
+    print(status)
 
     out = []
-    if filenames is not None:
-        if upload_id:
-            root_folder = Path(UPLOAD_FOLDER_ROOT) / upload_id
-        else:
-            root_folder = Path(UPLOAD_FOLDER_ROOT)
-
-        for filename in filenames:
-            file = root_folder / filename
-            out.append(file)
-        return html.Ul([html.Li(str(x)) for x in out])
+    if status.uploaded_files is not None:
+        return html.Ul([html.Li(str(x)) for x in status.uploaded_files])
 
     return html.Div("No Files Uploaded Yet!")
 
