@@ -261,16 +261,14 @@ export default class Upload_ReactComponent extends Component {
 
     };
 
-    onFilesSubmitted = (files) => {
-        if (this.debug) {
-            console.log('onFilesSubmitted', files.length, files)
-        }
-
+    removeUnsupportedFileTypesFromQueue = () => {
         var n_bad_file_extension = 0
         // Remove files that do not have correct file extension.
         this.flow.files.forEach(function (file) {
             if (!this.checkFileExtensionIsOk(file)) {
-                console.log('Removing file', file)
+                if (this.debug) {
+                    console.log('Removing file as filetype is not supported', file)
+                }
                 this.flow.removeFile(file);
                 n_bad_file_extension += 1
             }
@@ -280,6 +278,15 @@ export default class Upload_ReactComponent extends Component {
         } else if (n_bad_file_extension > 1) {
             alert(n_bad_file_extension.toString() + ' files could not be uploaded, as the file extension is not supported! Allowed filetypes are: [' + this.props.filetypes.join(', ') + ']')
         }
+    }
+
+
+    onFilesSubmitted = (files) => {
+        if (this.debug) {
+            console.log('onFilesSubmitted', files.length, files)
+        }
+
+        this.removeUnsupportedFileTypesFromQueue()
 
         this.props.setProps({
             dashAppCallbackBump: 0,
