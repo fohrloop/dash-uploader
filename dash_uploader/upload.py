@@ -52,6 +52,7 @@ def Upload(
     disabled=False,
     filetypes=None,
     max_file_size=1024,
+    max_total_size=5 * 1024,
     chunk_size=1,
     default_style=None,
     upload_id=None,
@@ -90,6 +91,10 @@ def Upload(
         By default, all filetypes are accepted.
     max_file_size: numeric
         The maximum file size in Megabytes. Optional.
+        Default: 1024 (1Gb).
+    max_total_size: numeric
+        The maximum total size of files to be uploaded
+        in Megabytes. Default: 5*1024 (5Gb)
     chunk_size: numeric
         The chunk size in Megabytes. Optional.
     default_style: None or dict
@@ -146,6 +151,7 @@ def Upload(
         # Have not tested if using many files
         # is reliable -> Do not allow
         maxFiles=max_files,
+        maxTotalSize=max_total_size * 1024 * 1024,
         maxFileSize=max_file_size * 1024 * 1024,
         chunkSize=chunk_size * 1024 * 1024,
         textLabel=text,

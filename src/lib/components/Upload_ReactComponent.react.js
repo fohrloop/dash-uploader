@@ -54,7 +54,7 @@ export default class Upload_ReactComponent extends Component {
         this.flow = null
         // use 'true' to enable debug console log
         // (for development only!)
-        this.debug = true
+        this.debug = false
     }
 
     resetBuilder() {
@@ -167,14 +167,23 @@ export default class Upload_ReactComponent extends Component {
 
     checkFilesAreOkayToBeUploaded = (filearray) => {
         if (this.debug) {
-            console.log('filesAdded', filearray)
+            console.log('checkFilesAreOkayToBeUploaded')
         }
-        if (this.maxFiles === undefined) {
-            var lessThanMaxFiles = true
-        } else {
-            var lessThanMaxFiles = filearray.length < this.maxFiles
+        if ((this.maxFiles !== undefined) && (filearray.length > this.maxFiles)) {
+            alert('Too many files selected! Maximum number of files is: ', this.maxFiles.toString() + '!')
+            return false
         }
-        return lessThanMaxFiles
+        if (this.props.maxTotalSize !== undefined) {
+            var sumOfSizes = 0;
+            this.flow.files.forEach(function (file) {
+                sumOfSizes += file.size
+            }, this);
+            if (sumOfSizes > this.props.maxTotalSize) {
+                alert('Total file size too large (' + bytest_to_mb(sumOfSizes).toFixed(1) + ' Mb) ! Maximum total filesize is: ' + bytest_to_mb(this.props.maxTotalSize).toFixed(1) + ' Mb')
+                return false
+            }
+        }
+        return true
     }
 
     onProgress = () => {
@@ -212,6 +221,12 @@ export default class Upload_ReactComponent extends Component {
         });
 
     };
+
+    removeAllFilesFromFlow = () => {
+        while (this.flow.files.length > 0) {
+            this.flow.removeFile(this.flow.files[0]);
+        }
+    }
 
     fileSuccess = (file, message, chunk) => {
         // file: FlowFile instance
@@ -322,7 +337,11 @@ export default class Upload_ReactComponent extends Component {
 
         this.removeUnsupportedFileTypesFromQueue()
         this.removeTooLargeFilesFromQueue()
-
+        const isok = this.checkFilesAreOkayToBeUploaded(this.flow.files)
+        if (!isok) {
+            this.removeAllFilesFromFlow()
+            return
+        }
         this.props.setProps({
             dashAppCallbackBump: 0,
             uploadedFileNames: [],
@@ -510,6 +529,11 @@ Upload_ReactComponent.propTypes = {
      * Maximum size per file in bytes.
      */
     maxFileSize: PropTypes.number,
+
+    /**
+     * Maximum total size in bytes.
+     */
+    maxTotalSize: PropTypes.number,
 
     /**
      * Size of file chunks to send to server.
