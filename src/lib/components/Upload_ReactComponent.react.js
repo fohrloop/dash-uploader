@@ -13,6 +13,19 @@ import PropTypes from 'prop-types';
 import './progressbar.css';
 import './button.css';
 
+
+/**
+ * Convert bytes to Megabytes
+ * 
+ * @param {number} size_bytes - The bytes
+ * @return {number} size_mb - Bytes converted to megabytes
+ */
+function bytest_to_mb(size_bytes) {
+    // Mb = 1024*1024 bytes
+    return size_bytes / 1048576;
+}
+
+
 /**
  *  The Upload component
  */
@@ -217,8 +230,10 @@ export default class Upload_ReactComponent extends Component {
 
         if (this.props.setProps) {
             this.props.setProps({
+                dashAppCallbackBump: this.props.dashAppCallbackBump + 1,
                 uploadedFileNames: uploadedFileNames,
-                uploadedFilesCount: this.props.uploadedFilesCount + 1,
+                uploadedFilesSize: bytest_to_mb(this.flow.sizeUploaded()),
+                totalFilesSize: bytest_to_mb(this.flow.getSize()),
             });
         }
         this.setState({
@@ -253,8 +268,9 @@ export default class Upload_ReactComponent extends Component {
         this.props.setProps({
             dashAppCallbackBump: 0,
             uploadedFileNames: [],
-            uploadedFilesCount: 0,
             totalFilesCount: files.length,
+            uploadedFilesSize: 0,
+            totalFilesSize: 0,
         })
         this.flow.upload()
     }
@@ -577,15 +593,22 @@ Upload_ReactComponent.propTypes = {
      */
     upload_id: PropTypes.string,
 
-    /**
-     *  Number of uploaded files.
-     */
-    uploadedFilesCount: PropTypes.number,
 
     /**
      *  Total number of files to be uploaded.
      */
     totalFilesCount: PropTypes.number,
+
+    /**
+     *  Size of uploaded files (Mb). Mb = 1024*1024 bytes.
+     */
+    uploadedFilesSize: PropTypes.number,
+
+    /**
+     *   Total size of uploaded files to be uploaded (Mb). 
+     *   Mb = 1024*1024 bytes.
+     */
+    totalFilesSize: PropTypes.number,
 
     /**
      *  Function to call on upload error (untested)
@@ -611,7 +634,6 @@ Upload_ReactComponent.defaultProps = {
     textLabel: 'Click Here to Select a File',
     completedMessage: 'Complete! ',
     uploadedFileNames: [],
-    uploadedFilesCount: 0,
     filetypes: undefined,
     startButton: true,
     pauseButton: true,

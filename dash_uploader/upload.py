@@ -163,7 +163,6 @@ def Upload(
         uploadingStyle=upload_style,
         completeStyle=default_style,
         upload_id=str(upload_id),
-        uploadedFilesCount=0,
         totalFilesCount=0,
     )
 
