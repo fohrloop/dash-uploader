@@ -4,6 +4,7 @@ from dash.exceptions import PreventUpdate
 from dash.dependencies import Input, State
 
 import dash_uploader.settings as settings
+from dash_uploader.uploadstatus import UploadStatus
 from dash_uploader.utils import dash_version_is_at_least
 
 
@@ -13,22 +14,36 @@ def _create_dash_callback(callback, settings):  # pylint: disable=redefined-oute
     configurations of dash-uploader to the callback.
     """
 
-    def wrapper(iscompleted, filenames, upload_id):
-        if not iscompleted:
+    def wrapper(
+        callbackbump,
+        uploaded_filenames,
+        total_files_count,
+        uploaded_files_size,
+        total_files_size,
+        upload_id,
+    ):
+        if not callbackbump:
             raise PreventUpdate()
 
-        out = []
-        if filenames is not None:
+        uploadedfilepaths = []
+        if uploaded_filenames is not None:
             if upload_id:
                 root_folder = Path(settings.UPLOAD_FOLDER_ROOT) / upload_id
             else:
                 root_folder = Path(settings.UPLOAD_FOLDER_ROOT)
 
-            for filename in filenames:
+            for filename in uploaded_filenames:
                 file = root_folder / filename
-                out.append(str(file))
+                uploadedfilepaths.append(str(file))
 
-        return callback(out)
+        status = UploadStatus(
+            uploaded_files=uploadedfilepaths,
+            n_total=total_files_count,
+            uploaded_size_mb=uploaded_files_size,
+            total_size_mb=total_files_size,
+            upload_id=upload_id,
+        )
+        return callback(status)
 
     return wrapper
 
@@ -105,9 +120,16 @@ def callback(
         dash_callback = settings.app.callback(
             output,
             [Input(id, "dashAppCallbackBump")],
-            [State(id, "uploadedFileNames"), State(id, "upload_id")],
+            [
+                State(id, "uploadedFileNames"),
+                State(id, "totalFilesCount"),
+                State(id, "uploadedFilesSize"),
+                State(id, "totalFilesSize"),
+                State(id, "upload_id"),
+            ],
             **kwargs
         )(dash_callback)
+
         return function
 
     return add_callback
