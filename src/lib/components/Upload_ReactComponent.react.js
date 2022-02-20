@@ -124,6 +124,12 @@ export default class Upload_ReactComponent extends Component {
         // Not in use, as files are checked on onFilesSubmitted already
         // flowComponent.on('filesAdded', this.checkFilesAreOkayToBeUploaded);
 
+
+        // Check files
+        // individual files: size, filetype
+        // sum of all files: size, number of files
+        flowComponent.on('filesSubmitted', this.onFilesSubmitted)
+
         // Uploading a file is completed
         // The "uploadedFileNames" is a list, even though currently uploading
         // only one file at a time is supported.
@@ -134,7 +140,6 @@ export default class Upload_ReactComponent extends Component {
         flowComponent.on('progress', this.onProgress);
         flowComponent.on('complete', this.onComplete);
         flowComponent.on('fileError', this.fileError);
-        flowComponent.on('filesSubmitted', this.onFilesSubmitted)
 
         this.flow = flowComponent;
     }
