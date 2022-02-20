@@ -291,6 +291,30 @@ export default class Upload_ReactComponent extends Component {
         }
     }
 
+    removeTooLargeFilesFromQueue = () => {
+        var n_too_large_files = 0
+        // Remove files that do not have correct file extension.
+        const removeTheseFiles = []
+        this.flow.files.forEach(function (file) {
+            if (file.size > this.props.maxFileSize) {
+                if (this.debug) {
+                    console.log('Removing file as it is too large', file)
+                }
+                removeTheseFiles.push(file)
+                n_too_large_files += 1
+            }
+        }, this);
+
+        removeTheseFiles.forEach(function (file) {
+            this.flow.removeFile(file);
+        }, this);
+
+        if (n_too_large_files == 1) {
+            alert('1 file could not be uploaded, as the file is too large! Maximum allowed file size is ' + bytest_to_mb(this.props.maxFileSize).toFixed(1) + 'Mb')
+        } else if (n_too_large_files > 1) {
+            alert(n_too_large_files.toString() + ' files could not be uploaded, as the file is too large! Maximum allowed file size is ' + bytest_to_mb(this.props.maxFileSize).toFixed(1) + 'Mb')
+        }
+    }
 
     onFilesSubmitted = (files) => {
         if (this.debug) {
@@ -298,6 +322,7 @@ export default class Upload_ReactComponent extends Component {
         }
 
         this.removeUnsupportedFileTypesFromQueue()
+        this.removeTooLargeFilesFromQueue()
 
         this.props.setProps({
             dashAppCallbackBump: 0,
