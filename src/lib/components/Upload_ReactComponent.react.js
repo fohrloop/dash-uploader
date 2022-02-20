@@ -161,7 +161,8 @@ export default class Upload_ReactComponent extends Component {
         if (this.debug) {
             console.log('fileAdded', e)
         }
-        // var retval = this.checkFileExtensionIsOk(e.file);
+        // no revelant tests at this stage.
+        // filetype and file size are tested at onFilesSubmitted
         return true
     }
 
@@ -264,15 +265,25 @@ export default class Upload_ReactComponent extends Component {
     removeUnsupportedFileTypesFromQueue = () => {
         var n_bad_file_extension = 0
         // Remove files that do not have correct file extension.
+        const removeTheseFiles = []
         this.flow.files.forEach(function (file) {
+            if (this.debug) {
+                console.log('Checking filetype for file', file)
+            }
             if (!this.checkFileExtensionIsOk(file)) {
                 if (this.debug) {
                     console.log('Removing file as filetype is not supported', file)
                 }
-                this.flow.removeFile(file);
+                removeTheseFiles.push(file)
                 n_bad_file_extension += 1
             }
         }, this);
+
+        removeTheseFiles.forEach(function (file) {
+            this.flow.removeFile(file);
+        }, this);
+
+
         if (n_bad_file_extension == 1) {
             alert('1 file could not be uploaded, as the file extension is not supported! Allowed filetypes are: [' + this.props.filetypes.join(', ') + ']')
         } else if (n_bad_file_extension > 1) {
