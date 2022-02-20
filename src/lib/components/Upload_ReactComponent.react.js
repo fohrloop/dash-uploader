@@ -54,7 +54,7 @@ export default class Upload_ReactComponent extends Component {
         this.flow = null
         // use 'true' to enable debug console log
         // (for development only!)
-        this.debug = false
+        this.debug = true
     }
 
     resetBuilder() {
@@ -114,12 +114,15 @@ export default class Upload_ReactComponent extends Component {
         // - Use this to check the extension
         // - Use this to check if the file size is in acceptable limits
         // - Use this to check if the file already exists on the server
-        flowComponent.on('fileAdded', this.checkFileIsOkayToBeUploaded);
+        // 
+        // Not in use, as files are checked on onFilesSubmitted already
+        // flowComponent.on('fileAdded', this.checkFileIsOkayToBeUploaded);
 
         // filesAdded must also return true for file(s) that should be uploaded
         // - Use this to check if there are too many files or the 
         //   overall upload size is too large.
-        flowComponent.on('filesAdded', this.checkFilesAreOkayToBeUploaded);
+        // Not in use, as files are checked on onFilesSubmitted already
+        // flowComponent.on('filesAdded', this.checkFilesAreOkayToBeUploaded);
 
         // Uploading a file is completed
         // The "uploadedFileNames" is a list, even though currently uploading
@@ -155,15 +158,6 @@ export default class Upload_ReactComponent extends Component {
             return true;
         }
         return this.props.filetypes.includes(extension)
-    }
-
-    checkFileIsOkayToBeUploaded = (e) => {
-        if (this.debug) {
-            console.log('fileAdded', e)
-        }
-        // no revelant tests at this stage.
-        // filetype and file size are tested at onFilesSubmitted
-        return true
     }
 
     checkFilesAreOkayToBeUploaded = (filearray) => {
