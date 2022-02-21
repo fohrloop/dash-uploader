@@ -353,7 +353,7 @@ export default class Upload_ReactComponent extends Component {
     }
 
     startUpload() {
-        this.setState({ isPaused: false });
+        this.setState({ isPaused: false, isUploading: true });
     }
 
     toggleHovered() {
