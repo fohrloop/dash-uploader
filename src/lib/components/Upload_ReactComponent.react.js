@@ -187,22 +187,12 @@ export default class Upload_ReactComponent extends Component {
     }
 
     onProgress = () => {
+
         this.setState({
-            isUploading: this.flow.isUploading()
+            messageStatus: 'Uploading (' + (this.flow.progress() * 100).toFixed(0) + '%)',
+            progressBar: this.flow.progress() * 100
         });
 
-        if ((this.flow.progress() * 100) < 100) {
-            this.setState({
-                messageStatus: 'Uploading (' + (this.flow.progress() * 100).toFixed(0) + '%)',
-                progressBar: this.flow.progress() * 100
-            });
-        } else {
-            setTimeout(() => {
-                this.setState({
-                    progressBar: 0
-                })
-            }, 1000);
-        }
 
     };
 
@@ -216,9 +206,11 @@ export default class Upload_ReactComponent extends Component {
             this.flow.removeFile(file);
         }, this);
 
-        this.setState({
-            isUploading: false
-        });
+        this.setState({ isUploading: false })
+        setTimeout(() => {
+            this.setState({ progressBar: 0 })
+        }, 600);
+
 
     };
 
@@ -350,34 +342,28 @@ export default class Upload_ReactComponent extends Component {
             totalFilesSize: 0,
         })
         this.flow.upload()
+        this.setState({ isUploading: true })
+
     }
 
     cancelUpload() {
         this.flow.cancel();
         this.resetBuilder();
+        this.setState({ isUploading: false })
     }
-
 
     pauseUpload() {
         if (!this.state.isPaused) {
             this.flow.pause();
-            this.setState({
-                isPaused: true,
-                isUploading: true
-            });
+            this.setState({ isPaused: true });
         } else {
             this.flow.upload();
-            this.setState({
-                isPaused: false,
-                isUploading: true
-            });
+            this.setState({ isPaused: false });
         }
     }
 
     startUpload() {
-        this.setState({
-            isPaused: false
-        });
+        this.setState({ isPaused: false });
     }
 
     toggleHovered() {
@@ -398,7 +384,6 @@ export default class Upload_ReactComponent extends Component {
     }
 
     render() {
-
         const fileList = null;
 
         let textLabel = null;
