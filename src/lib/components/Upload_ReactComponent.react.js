@@ -373,12 +373,48 @@ export default class Upload_ReactComponent extends Component {
         return btn
     }
 
+    getLabel = () => {
+
+        let textLabel = this.props.textLabel ? this.props.textLabel : null
+
+        return <label
+            style={{
+                display: this.state.isUploading ? 'block' : 'inline-block',
+                verticalAlign: 'middle',
+                lineHeight: 'normal',
+                width: this.state.isUploading ? 'auto' : '100%',
+                paddingRight: this.state.isUploading ? '10px' : '0',
+                textAlign: 'center',
+                wordWrap: 'break-word',
+                cursor: this.state.isUploading ? 'default' : 'pointer',
+                fontSize: this.state.isUploading ? '10px' : 'inherit',
+            }}
+            onMouseEnter={this.toggleHovered}
+            onMouseLeave={this.toggleHovered}
+        >
+            {(this.state.messageStatus === '') ? textLabel : this.state.messageStatus}
+            <input
+                ref={node => this.uploader = node}
+                type="file"
+                className='btn'
+                name={this.props.id + '-upload'}
+                accept={this.props.filetypes || '*'}
+                disabled={this.state.isUploading || false}
+                style={{
+                    'opacity': '0',
+                    'width': '0',
+                    'height': '0',
+                    'position': 'absolute',
+                    'overflow': 'hidden',
+                    'zIndex': '-1',
+                }}
+            />
+        </label>
+    }
+
     render() {
 
-        let textLabel = null;
-        if (this.props.textLabel) {
-            textLabel = this.props.textLabel;
-        }
+
 
         let startButton = this.createButton(
             this.startUpload,
@@ -436,44 +472,14 @@ export default class Upload_ReactComponent extends Component {
 
         }
 
+
         return (
             <div style={getStyle()} id={this.props.id} className={getClass()} ref={node => this.dropZone = node} >
                 <div id={this.props.id + '-padding'}
                     style={{
                         padding: '10px',
                     }}>
-                    <label
-                        style={{
-                            display: this.state.isUploading ? 'block' : 'inline-block',
-                            verticalAlign: 'middle', lineHeight: 'normal',
-                            width: this.state.isUploading ? 'auto' : '100%',
-                            paddingRight: this.state.isUploading ? '10px' : '0',
-                            textAlign: 'center', wordWrap: 'break-word',
-                            cursor: this.state.isUploading ? 'default' : 'pointer',
-                            fontSize: this.state.isUploading ? '10px' : 'inherit',
-                        }}
-                        onMouseEnter={this.toggleHovered}
-                        onMouseLeave={this.toggleHovered}
-                    >
-
-                        {(this.state.messageStatus === '') ? textLabel : this.state.messageStatus}
-                        <input
-                            ref={node => this.uploader = node}
-                            type="file"
-                            className='btn'
-                            name={this.props.id + '-upload'}
-                            accept={this.props.fileAccept || '*'}
-                            disabled={this.state.isUploading || false}
-                            style={{
-                                'opacity': '0',
-                                'width': '0',
-                                'height': '0',
-                                'position': 'absolute',
-                                'overflow': 'hidden',
-                                'zIndex': '-1',
-                            }}
-                        />
-                    </label>
+                    {this.getLabel()}
                     <ProgressBar isUploading={this.state.isUploading} progressBar={this.state.progressBar}></ProgressBar>
                     {startButton}
                     {pauseButton}
