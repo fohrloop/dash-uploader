@@ -10,7 +10,7 @@ def create_file(filename, filesize_mb=1):
         The file size in Mb.
     """
     with open(filename, "wb") as f:
-        f.seek(1024 * 1024 * filesize_mb)
+        f.seek(int(1024 * 1024 * filesize_mb))
         f.write(b"0")
 
 
