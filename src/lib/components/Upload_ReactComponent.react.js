@@ -680,11 +680,6 @@ Upload_ReactComponent.propTypes = {
      *   Mb = 1024*1024 bytes.
      */
     totalFilesSize: PropTypes.number,
-
-    /**
-     *  Function to call on upload error (untested)
-     */
-    onUploadErrorCallback: PropTypes.func,
 }
 
 Upload_ReactComponent.defaultProps = {
