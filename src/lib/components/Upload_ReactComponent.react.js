@@ -178,8 +178,18 @@ export default class Upload_ReactComponent extends Component {
 
     onProgress = () => {
 
+        let parenthesisTxt = (bytest_to_mb(this.flow.sizeUploaded())).toFixed(2)
+            + ' Mb'
+        let filenameTxt = ''
+
+        if (this.props.totalFilesCount > 1) {
+            parenthesisTxt += ', File ' + (this.props.uploadedFileNames.length + 1).toString()
+                + '/' + this.props.totalFilesCount.toString()
+        } else {
+            filenameTxt = this.flow.files[0].name + ' '
+        }
         this.setState({
-            messageStatus: 'Uploading (' + (this.flow.progress() * 100).toFixed(0) + '%)',
+            messageStatus: 'Uploading ' + filenameTxt + '(' + parenthesisTxt + ')',
             progressBar: this.flow.progress() * 100
         });
 
