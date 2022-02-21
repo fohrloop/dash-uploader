@@ -384,7 +384,6 @@ export default class Upload_ReactComponent extends Component {
     }
 
     render() {
-        const fileList = null;
 
         let textLabel = null;
         if (this.props.textLabel) {
@@ -486,7 +485,6 @@ export default class Upload_ReactComponent extends Component {
                         />
                     </label>
                     <ProgressBar isUploading={this.state.isUploading} progressBar={this.state.progressBar}></ProgressBar>
-                    {fileList}
                     {startButton}
                     {pauseButton}
                     {cancelButton}
