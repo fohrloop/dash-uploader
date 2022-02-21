@@ -85,16 +85,6 @@ export default class Upload_ReactComponent extends Component {
             //  If implemented on the server-side, this will allow for upload resumes even after a browser
             //  crash or even a computer restart. (Default: true) 
             testChunks: false,
-
-            // fileType: this.props.filetypes,
-            // maxFiles: this.props.maxFiles,
-            // maxFileSize: this.props.maxFileSize,
-            // fileTypeErrorCallback: () => {
-            //     this.setState({
-            //         messageStatus: 'Invalid file type!'
-            //     });
-            // },
-            // forceChunkSize: false
         });
 
 
