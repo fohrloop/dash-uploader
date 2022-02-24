@@ -14,17 +14,15 @@ class Button extends Component {
     render() {
 
         return (
-            <div style={{ display: 'inline-block', }}>
-                <button
-                    style={{
-                        cursor: this.props.isUploading ? 'pointer' : 'default',
-                    }}
-                    disabled={this.props.disabled}
-                    className={this.props.btnClass + " btn btn-sm btn-outline-secondary"}
-                    onClick={this.props.onClick}>
-                    {this.props.text}
-                </button>
-            </div >
+            <button
+                style={{
+                    cursor: this.props.isUploading ? 'pointer' : 'default',
+                }}
+                disabled={this.props.disabled}
+                className={this.props.btnClass + " btn btn-sm btn-dash-uploader"}
+                onClick={this.props.onClick}>
+                {this.props.text}
+            </button>
         )
     }
 }

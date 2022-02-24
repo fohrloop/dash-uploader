@@ -432,7 +432,7 @@ export default class Upload_ReactComponent extends Component {
             'upload',
             this.props.startButton,
             this.state.isUploading,
-            "dash-uploader-btn-start"
+            "dash-uploader-btn-start btn-outline-secondary "
         );
 
         let cancelButton = this.createButton(
@@ -440,7 +440,7 @@ export default class Upload_ReactComponent extends Component {
             'cancel',
             this.props.cancelButton,
             !this.state.isUploading,
-            "dash-uploader-btn-cancel"
+            "dash-uploader-btn-cancel btn-outline-secondary "
         );
 
         let pauseButton = this.createButton(
@@ -448,7 +448,7 @@ export default class Upload_ReactComponent extends Component {
             (this.state.isPaused ? 'resume' : 'pause'),
             this.props.pauseButton,
             !this.state.isUploading,
-            "dash-uploader-btn-pause"
+            "dash-uploader-btn-pause btn-outline-primary "
         );
 
 
@@ -492,9 +492,11 @@ export default class Upload_ReactComponent extends Component {
                     }}>
                     {this.getLabel()}
                     <ProgressBar isUploading={this.state.isUploading} progressBar={this.state.progressBar}></ProgressBar>
-                    {startButton}
-                    {pauseButton}
-                    {cancelButton}
+                    <div className='dash-uploader-button-container'>
+                        {cancelButton}
+                        {pauseButton}
+                        {startButton}
+                    </div>
                 </div>
             </div >
         );
