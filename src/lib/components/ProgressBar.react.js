@@ -31,7 +31,7 @@ class ProgressBar extends Component {
                         height: '100%'
                     }}>
 
-                    <span className="progress-value"
+                    <span className="dash-uploader-progress-value"
                         style={{
                             position: 'absolute',
                             right: 0,

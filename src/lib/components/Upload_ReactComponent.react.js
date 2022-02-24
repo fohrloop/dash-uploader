@@ -12,6 +12,7 @@ import ProgressBar from './ProgressBar.react.js'
 import PropTypes from 'prop-types';
 import './progressbar.css';
 import './button.css';
+import './uploader.css';
 
 
 /**
@@ -402,6 +403,7 @@ export default class Upload_ReactComponent extends Component {
             }}
             onMouseEnter={this.toggleHovered}
             onMouseLeave={this.toggleHovered}
+            className="dash-uploader-label"
         >
             {(this.state.messageStatus === '') ? textLabel : this.state.messageStatus}
             <input
