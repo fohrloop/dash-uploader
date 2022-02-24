@@ -260,10 +260,13 @@ export default class Upload_ReactComponent extends Component {
         if (this.debug) {
             console.log('fileError', file, errorCount)
         }
+        if (this.debug) {
+            console.log('fileError with flow.js! (file, errorCount)', file, errorCount)
+        }
         if (typeof (this.props.onUploadErrorCallback) !== 'undefined') {
             this.props.onUploadErrorCallback(file, errorCount);
         } else {
-            console.log('fileError with flow.js! (file, errorCount)', file, errorCount)
+            alert('Unexpected error while uploading ' + file.relativePath + '!\nPlease reupload the file.')
         }
 
     };

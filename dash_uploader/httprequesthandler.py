@@ -7,6 +7,8 @@ import traceback
 from flask import request
 from flask import abort
 
+from dash_uploader.utils import retry
+
 logger = logging.getLogger(__name__)
 
 
@@ -14,7 +16,14 @@ def get_chunk_name(uploaded_filename, chunk_number):
     return uploaded_filename + "_part_%03d" % chunk_number
 
 
+def remove_file(file):
+    os.unlink(file)
+
+
 class BaseHttpRequestHandler:
+
+    remove_file = staticmethod(retry(wait_time=0.35, max_time=15.0)(remove_file))
+
     def __init__(self, server, upload_folder, use_upload_id):
         """
         Parameters
@@ -80,7 +89,7 @@ class BaseHttpRequestHandler:
         with open(lock_file_path, "a"):
             os.utime(lock_file_path, None)
         chunk_data.save(chunk_file)
-        os.unlink(lock_file_path)
+        self.remove_file(lock_file_path)
 
         # check if the upload is complete
         chunk_paths = [
@@ -111,7 +120,7 @@ class BaseHttpRequestHandler:
             target_file_name = os.path.join(temp_root, flowFilename)
             if os.path.exists(target_file_name):
                 logger.info("File %s exists already. Overwriting..", target_file_name)
-                os.unlink(target_file_name)
+                self.remove_file(target_file_name)
 
             with open(target_file_name, "ab") as target_file:
                 for p in chunk_paths:
