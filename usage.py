@@ -22,9 +22,10 @@ def get_upload_component(id):
         text="Drag and Drop files here",
         text_completed="Completed: ",
         cancel_button=True,
+        pause_button=True,
         max_file_size=130,  # 130 Mb
         max_total_size=350,
-        filetypes=["csv", "zip"],
+        # filetypes=["csv", "zip"],
         upload_id=uuid.uuid1(),  # Unique session id
         max_files=10,
     )

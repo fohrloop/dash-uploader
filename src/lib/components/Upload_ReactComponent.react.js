@@ -206,7 +206,7 @@ export default class Upload_ReactComponent extends Component {
             this.flow.removeFile(file);
         }, this);
 
-        this.setState({ isUploading: false })
+        this.setState({ isUploading: false, showEnabledButtons: false })
         setTimeout(() => {
             this.setState({ progressBar: 0 })
         }, 600);
@@ -245,7 +245,6 @@ export default class Upload_ReactComponent extends Component {
         }
         this.setState({
             uploadedFiles: uploadedFiles,
-            showEnabledButtons: false,
             messageStatus: this.props.completedMessage + file.fileName || fileServer
         }, () => {
             if (typeof this.props.onFileSuccess === 'function') {
@@ -345,6 +344,7 @@ export default class Upload_ReactComponent extends Component {
             uploadedFilesSize: 0,
             totalFilesSize: 0,
         })
+        this.setState({ showEnabledButtons: true })
         this.flow.upload()
         this.setState({ isUploading: true })
 
@@ -361,13 +361,13 @@ export default class Upload_ReactComponent extends Component {
             this.flow.pause();
             this.setState({ isPaused: true });
         } else {
-            this.flow.upload();
+            this.flow.resume();
             this.setState({ isPaused: false });
         }
     }
 
     startUpload() {
-        this.setState({ isPaused: false, isUploading: true });
+        this.setState({ isPaused: false, isUploading: true, showEnabledButtons: true });
     }
 
     toggleHovered() {
@@ -377,14 +377,11 @@ export default class Upload_ReactComponent extends Component {
     }
 
     createButton(onClick, text, btnEnabledInSettings, disabled, btnClass) {
-        let btn = null;
         if (this.state.showEnabledButtons && btnEnabledInSettings) {
-            if (typeof btnEnabledInSettings === 'string' || typeof btnEnabledInSettings === 'boolean') {
-                btn = <Button text={btnEnabledInSettings && text} btnClass={btnClass} onClick={onClick} disabled={disabled} isUploading={this.state.isUploading}></Button>
-            }
-            else { btn = btnEnabledInSettings }
+            return <Button text={btnEnabledInSettings && text} btnClass={btnClass} onClick={onClick} disabled={disabled} isUploading={this.state.isUploading}></Button>
+        } else {
+            return null;
         }
-        return btn
     }
 
     getLabel = () => {
@@ -427,8 +424,6 @@ export default class Upload_ReactComponent extends Component {
     }
 
     render() {
-
-
 
         let startButton = this.createButton(
             this.startUpload,
