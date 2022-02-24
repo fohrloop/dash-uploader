@@ -337,10 +337,11 @@ export default class Upload_ReactComponent extends Component {
             this.removeAllFilesFromFlow()
             return
         }
+
         this.props.setProps({
             dashAppCallbackBump: 0,
             uploadedFileNames: [],
-            totalFilesCount: files.length,
+            totalFilesCount: this.flow.files.length,
             uploadedFilesSize: 0,
             totalFilesSize: 0,
         })
