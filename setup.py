@@ -31,7 +31,7 @@ setup(
             # Packages needed to run the tests.
             "black",  # code formatting
             "pytest",  # running tests
-            "selenium",  # running tests
+            "selenium~=4.1.0",  # running tests
             # Switch into a virtual environment
             # pip install -r requirements.txt
             "dash[testing]>=1.1.0",
@@ -41,6 +41,7 @@ setup(
             # to update/downgrade the chromedriver binary.
             # Needs: import chromedriver_binary to the top of your test script.
             "chromedriver-binary",
+            "Werkzeug~=2.0.3",
         ]
     },
     classifiers=[
