@@ -16,7 +16,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from selenium.common.exceptions import TimeoutException
 
-from .utils import create_file, load_text_file
+from .utils import create_file, load_text_file, expect_alert
 
 # NOTE: Here are some notes for testing
 # Naming convention: test_{tcid}_{test title}
@@ -107,7 +107,7 @@ def test_disabled01_check_disabled_property_update(dash_duo):
 
     # Check the upload state, should be disabled now.
     assert (
-        upload.get_attribute("class") == "dash-uploader-disabled"
+        "dash-uploader-disabled" in upload.get_attribute("class").split()
     ), 'The current uploader class should be "dash-uploader-disabled".'
 
     # Click the checkbox named "Disabled" again.
@@ -120,9 +120,12 @@ def test_disabled01_check_disabled_property_update(dash_duo):
         )
     )
 
-    # Check the upload state, should be disabled now.
+    # Check the upload state, should not be disabled now.
     assert (
-        upload.get_attribute("class") == "dash-uploader-default"
+        "dash-uploader-disabled" not in upload.get_attribute("class").split()
+    ), 'The current uploader class should be "dash-uploader-default".'
+    assert (
+        "dash-uploader-default" in upload.get_attribute("class").split()
     ), 'The current uploader class should be "dash-uploader-default".'
 
 
@@ -142,7 +145,9 @@ def test_disabled02_check_disabled_effect(
     # Find the required components
     upload = dash_duo.find_element("#dash-uploader")
     configs = dash_duo.find_element("#uploader-configs")
+    reset_button = dash_duo.find_element("#reset-button")
     check_boxes = configs.find_elements(By.XPATH, ".//input[@type='checkbox']")
+
     assert len(check_boxes) == 2, "The provided configs for this app should be 2."
 
     # Define the upload check function.
@@ -156,18 +161,14 @@ def test_disabled02_check_disabled_effect(
         upload_input = upload_component.find_element(
             By.XPATH, ".//input[@name='dash-uploader-upload']"
         )
-        # First, upload a wrong file. This would reset the message of upload component.
-        upload_input.send_keys(str(testfileWrongType))
 
-        if (
-            not is_disabled
-        ):  # Skip this step if the component is disabled, because the message would no be changed now.
-            # Wait until the text is reset.
-            wait.until(
-                EC.text_to_be_present_in_element(
-                    (By.XPATH, "//div[@id='dash-uploader']/*/label"), "Invalid"
-                )
+        # First, reset the message of upload component.
+        reset_button.click()
+        wait.until(
+            EC.text_to_be_present_in_element(
+                (By.XPATH, "//div[@id='dash-uploader']/*/label"), "Text resetted"
             )
+        )
 
         if by_dragndrop:
             # Create a file_input, which simulates the drag and drop behavior.
@@ -231,7 +232,7 @@ def test_disabled02_check_disabled_effect(
         or uploader_class == "dash-uploader-completed"
     ), 'The current uploader class should be "dash-uploader-default" or "dash-uploader-completed".'
 
-    # Upload the file, both tests are expected to sucess.
+    # Upload the file, both tests are expected to success.
     upload_test_file_and_validate(
         upload, by_dragndrop=False, expect_success=True
     )  # By sending the file.
@@ -256,7 +257,7 @@ def test_disabled02_check_disabled_effect(
 
     # Check the upload state, should be disabled now.
     assert (
-        upload.get_attribute("class") == "dash-uploader-disabled"
+        "dash-uploader-disabled" in upload.get_attribute("class").split()
     ), 'The current uploader class should be "dash-uploader-disabled".'
 
     # Upload the file, both tests are expected to fail.
@@ -283,11 +284,10 @@ def test_disabled02_check_disabled_effect(
         )
     )
 
-    # Check the upload state, should be default or complelte now.
-    uploader_class = upload.get_attribute("class")
-    assert (
-        uploader_class == "dash-uploader-default"
-        or uploader_class == "dash-uploader-completed"
+    # Check the upload state, should be default or complete now.
+    uploader_class_list = upload.get_attribute("class").split()
+    assert ("dash-uploader-default" in uploader_class_list) or (
+        "dash-uploader-completed" in uploader_class_list
     ), 'The current uploader class should be "dash-uploader-default" or "dash-uploader-completed".'
 
     # Upload the file, the normal test is expected to success, while the drag and drop test is expected to fail.
