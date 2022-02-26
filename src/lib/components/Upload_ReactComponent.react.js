@@ -195,6 +195,7 @@ export default class Upload_ReactComponent extends Component {
         });
 
 
+
     };
 
     onComplete = () => {
@@ -207,7 +208,14 @@ export default class Upload_ReactComponent extends Component {
             this.flow.removeFile(file);
         }, this);
 
-        this.setState({ isUploading: false, showEnabledButtons: false })
+        this.setState({
+            isUploading: false,
+            showEnabledButtons: false,
+            // messagestatus must be '' in order to 
+            // show the this.props.text
+            messageStatus: '',
+        })
+
         setTimeout(() => {
             this.setState({ progressBar: 0 })
         }, 600);
@@ -249,6 +257,9 @@ export default class Upload_ReactComponent extends Component {
             messageStatus: this.props.completedMessage + file.fileName
         })
 
+        this.props.setProps({
+            text: this.props.completedMessage + file.fileName
+        });
     };
 
 
