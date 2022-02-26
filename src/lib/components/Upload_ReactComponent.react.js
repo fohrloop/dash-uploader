@@ -246,12 +246,8 @@ export default class Upload_ReactComponent extends Component {
         }
         this.setState({
             uploadedFiles: uploadedFiles,
-            messageStatus: this.props.completedMessage + file.fileName || fileServer
-        }, () => {
-            if (typeof this.props.onFileSuccess === 'function') {
-                this.props.onFileSuccess(file, fileServer);
-            }
-        });
+            messageStatus: this.props.completedMessage + file.fileName
+        })
 
     };
 
