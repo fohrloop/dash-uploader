@@ -9,11 +9,24 @@ else:
     import dash_html_components as html
 
 from dash.dependencies import Output
-
-app = dash.Dash(__name__)
+from dash_uploader.httprequesthandler import HttpRequestHandler, remove_file
 
 UPLOAD_FOLDER_ROOT = r"C:\tmp\Uploads"
-du.configure_upload(app, UPLOAD_FOLDER_ROOT)
+app = dash.Dash(__name__)
+
+# A special version of HttpRequestHandler where
+# there are *no retries* in the remove file function
+# This is used in tests to generate an error message to user
+# faster.
+
+
+class HttpRequestHandlerWithoutFileRetries(HttpRequestHandler):
+    remove_file = staticmethod(remove_file)
+
+
+du.configure_upload(
+    app, UPLOAD_FOLDER_ROOT, http_request_handler=HttpRequestHandlerWithoutFileRetries
+)
 
 
 def get_upload_component(id):
@@ -23,8 +36,8 @@ def get_upload_component(id):
         text_completed="Completed: ",
         cancel_button=True,
         pause_button=True,
-        max_file_size=130,  # 130 Mb
-        max_total_size=350,
+        # max_file_size=130,  # 130 Mb
+        # max_total_size=350,
         # filetypes=["csv", "zip"],
         upload_id=uuid.uuid1(),  # Unique session id
         max_files=10,
@@ -66,17 +79,8 @@ app.layout = get_app_layout
     id="dash-uploader",
 )
 def callback_on_completion(status: du.UploadStatus):
-
-    if status.n_uploaded == 0:
-        return  # no files uploaded yet.
-
     print(status)
-
-    out = []
-    if status.uploaded_files is not None:
-        return html.Ul([html.Li(str(x)) for x in status.uploaded_files])
-
-    return html.Div("No Files Uploaded Yet!")
+    return html.Ul([html.Li(str(x)) for x in status.uploaded_files])
 
 
 if __name__ == "__main__":

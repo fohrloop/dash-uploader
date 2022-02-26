@@ -1,48 +1,49 @@
-from packaging import version
 from pathlib import Path
 
-from dash import __version__ as dashversion
 from dash.exceptions import PreventUpdate
 from dash.dependencies import Input, State
 
 import dash_uploader.settings as settings
+from dash_uploader.uploadstatus import UploadStatus
+from dash_uploader.utils import dash_version_is_at_least
 
 
-def compare_dash_version(req_version="1.12"):
-    """Compare the version of dash.
-    Will return True if current dash version is greater than
-    the argument "req_version".
-    This is a private method, and should not be exposed to users.
-    """
-    cur_version = version.parse(dashversion)
-    if isinstance(cur_version, version.LegacyVersion):
-        return False
-    return cur_version >= version.parse(req_version)
-
-
-def create_dash_callback(callback, settings):  # pylint: disable=redefined-outer-name
+def _create_dash_callback(callback, settings):  # pylint: disable=redefined-outer-name
     """Wrap the dash callback with the du.settings.
     This function could be used as a wrapper. It will add the
     configurations of dash-uploader to the callback.
-    This is a private method, and should not be exposed to users.
     """
 
-    def wrapper(iscompleted, filenames, upload_id):
-        if not iscompleted:
+    def wrapper(
+        callbackbump,
+        uploaded_filenames,
+        total_files_count,
+        uploaded_files_size,
+        total_files_size,
+        upload_id,
+    ):
+        if not callbackbump:
             raise PreventUpdate()
 
-        out = []
-        if filenames is not None:
+        uploadedfilepaths = []
+        if uploaded_filenames is not None:
             if upload_id:
                 root_folder = Path(settings.UPLOAD_FOLDER_ROOT) / upload_id
             else:
                 root_folder = Path(settings.UPLOAD_FOLDER_ROOT)
 
-            for filename in filenames:
+            for filename in uploaded_filenames:
                 file = root_folder / filename
-                out.append(str(file))
+                uploadedfilepaths.append(str(file))
 
-        return callback(out)
+        status = UploadStatus(
+            uploaded_files=uploadedfilepaths,
+            n_total=total_files_count,
+            uploaded_size_mb=uploaded_files_size,
+            total_size_mb=total_files_size,
+            upload_id=upload_id,
+        )
+        return callback(status)
 
     return wrapper
 
@@ -90,7 +91,7 @@ def callback(
             Output('callback-output', 'children')
 
         """
-        dash_callback = create_dash_callback(
+        dash_callback = _create_dash_callback(
             function,
             settings,
         )
@@ -101,14 +102,34 @@ def callback(
             )
 
         kwargs = dict()
-        if compare_dash_version("1.12"):
+        if dash_version_is_at_least("1.12"):
+            # See: https://github.com/plotly/dash/blob/dev/CHANGELOG.md  and
+            #      https://community.plotly.com/t/dash-v1-12-0-release-pattern-matching-callbacks-fixes-shape-drawing-new-datatable-conditional-formatting-options-prevent-initial-call-and-more/38867
+            # the `prevent_initial_call` option was added in Dash v.1.12
             kwargs["prevent_initial_call"] = True
+
+        # Input: Change in the props will trigger callback.
+        #     Whenever 'this.props.setProps' is called on the JS side,
+        #     (dash specific special prop that is passed to every
+        #     component of the dash app), a HTTP request is used to
+        #     trigger a change in the property/attribute of a dash
+        #     python component.
+        # State: Pass along extra values without firing the callbacks.
+        #
+        # See also: https://dash.plotly.com/basic-callbacks
         dash_callback = settings.app.callback(
             output,
-            [Input(id, "isCompleted")],
-            [State(id, "fileNames"), State(id, "upload_id")],
+            [Input(id, "dashAppCallbackBump")],
+            [
+                State(id, "uploadedFileNames"),
+                State(id, "totalFilesCount"),
+                State(id, "uploadedFilesSize"),
+                State(id, "totalFilesSize"),
+                State(id, "upload_id"),
+            ],
             **kwargs
         )(dash_callback)
+
         return function
 
     return add_callback

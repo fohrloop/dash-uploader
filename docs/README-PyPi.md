@@ -13,7 +13,7 @@ The upload package for [Dash](https://dash.plotly.com/) applications using large
 ## Short summary
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 💾 Data file size has no limits. (Except the hard disk size)<bR>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ☎ Call easily a callback after uploading is finished.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 📦 Upload files using [resumable.js](https://github.com/23/resumable.js) 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 📦 Upload files using [flow.js](https://github.com/flowjs/flow.js/) 
 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ✅ Works with Dash 1.1.0.+ & Python 3.6+. (Possibly with other versions, too)<br>
 

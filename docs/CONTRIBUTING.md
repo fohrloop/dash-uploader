@@ -153,16 +153,6 @@ python -m pytest
 
 - The `app`  defined in the `usage.py` will be available to the tests. See the tests in the `tests/test_usage.py` to get a grasp on how it works. You could also add other `app`s available to the tests in similar manner.
 - More about testing Dash components [here](https://dash.plotly.com/testing).
-- If you get an error similar to 
-```
-selenium.common.exceptions.SessionNotCreatedException: Message: session not created: This version of ChromeDriver only supports Chrome version 90
-Current browser version is 93.0.4577.82 with binary path C:\Program Files (x86)\Google\Chrome\Application\chrome.exe
-```
-then, run
-
-```
-python -m pip install --upgrade --force-reinstall chromedriver-binary-auto
-```
 
 
 ## 6. Creating new version to pip

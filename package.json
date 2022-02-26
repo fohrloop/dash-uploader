@@ -1,7 +1,7 @@
 {
   "name": "dash_uploader",
-  "version": "0.6.0",
-  "description": "Upload large files using resumable.js",
+  "version": "0.7.0dev",
+  "description": "Upload component for Dash",
   "repository": {
     "type": "git",
     "url": "git://github.com/np-8/dash-uploader.git"
@@ -24,9 +24,9 @@
   "author": "Niko Pasanen <niko@pasanen.me>",
   "license": "MIT",
   "dependencies": {
+    "@flowjs/flow.js": "^2.14.1",
     "lodash": ">=4.17.21",
-    "ramda": "^0.27.1",
-    "resumablejs": "^1.1.0"
+    "ramda": "^0.27.1"
   },
   "devDependencies": {
     "@babel/core": "^7.16.0",
@@ -59,3 +59,4 @@
     "npm": ">=8.1.4"
   }
 }
+>>>>>>> flow-dev

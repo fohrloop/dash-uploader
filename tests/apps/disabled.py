@@ -7,9 +7,14 @@ import json
 import dash_uploader as du
 import dash
 
-# if dash <= 2.0.0, use: import dash_core_components as dcc and import dash_html_components as html
-from dash import html, dcc
+if du.utils.dash_version_is_at_least("2.0.0"):
+    from dash import html, dcc
+else:
+    import dash_html_components as html
+    import dash_core_components as dcc
+
 from dash.dependencies import Output, Input
+from dash.exceptions import PreventUpdate
 
 app = dash.Dash(__name__)
 
@@ -62,6 +67,7 @@ def get_app_layout():
                     html.Span(
                         id="configs-output", children=json.dumps([])
                     ),  # This element needs to be visible, otherwise, selenium could not find its content.
+                    html.Button(id="reset-button", n_clicks=0, children="Reset text"),
                 ],
                 style={
                     "textAlign": "left",
@@ -79,13 +85,13 @@ def get_app_layout():
 app.layout = get_app_layout
 
 
-# 3) Create a callback
+# Create a callback
 @du.callback(
     output=Output("callback-output", "children"),
     id="dash-uploader",
 )
-def get_a_list(filenames):
-    return html.Ul([html.Li(filenames)])
+def callback_on_completion(status: du.UploadStatus):
+    return html.Ul([html.Li(str(x)) for x in status.uploaded_files])
 
 
 @app.callback(Output("dash-uploader", "disabled"), [Input("uploader-configs", "value")])
@@ -118,6 +124,19 @@ def update_config_states(is_disabled, is_disableDragAndDrop):
     if is_disableDragAndDrop:
         val_configs.append(1)
     return json.dumps(val_configs)
+
+
+# Possibility to modify text of upload component with a click
+# Used in tests to reset the text of the component
+# as there will be multiple "Completed" texts expected in a row
+@app.callback(
+    Output("dash-uploader", "text"),
+    Input("reset-button", "n_clicks"),
+)
+def on_reset_click(n_clicks):
+    if not n_clicks:
+        raise PreventUpdate
+    return "Text resetted"
 
 
 if __name__ == "__main__":

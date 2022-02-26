@@ -1,0 +1,11 @@
+div.dash-uploader-button-container {
+    display: block;
+}
+
+label.dash-uploader-label {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.dash-uploader-progress-value {
+    font-family: Arial, Helvetica, sans-serif;
+}
