@@ -154,7 +154,7 @@ def Upload(
         maxTotalSize=max_total_size * 1024 * 1024,
         maxFileSize=max_file_size * 1024 * 1024,
         chunkSize=chunk_size * 1024 * 1024,
-        textLabel=text,
+        text=text,
         service=service,
         startButton=False,
         disabled=disabled,

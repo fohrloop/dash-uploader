@@ -383,7 +383,7 @@ export default class Upload_ReactComponent extends Component {
 
     getLabel = () => {
 
-        let textLabel = this.props.textLabel ? this.props.textLabel : null
+        let text = this.props.text ? this.props.text : null
 
         return <label
             style={{
@@ -401,7 +401,7 @@ export default class Upload_ReactComponent extends Component {
             onMouseLeave={this.toggleHovered}
             className="dash-uploader-label"
         >
-            {(this.state.messageStatus === '') ? textLabel : this.state.messageStatus}
+            {(this.state.messageStatus === '') ? text : this.state.messageStatus}
             <input
                 ref={node => this.uploader = node}
                 type="file"
@@ -591,7 +591,7 @@ Upload_ReactComponent.propTypes = {
     /**
      * The string to display in the upload component
      */
-    textLabel: PropTypes.string,
+    text: PropTypes.string,
 
     /**
      * Message to display when upload disabled
@@ -696,7 +696,7 @@ Upload_ReactComponent.defaultProps = {
     defaultStyle: {},
     uploadingStyle: {},
     completeStyle: {},
-    textLabel: 'Click Here to Select a File',
+    text: 'Click Here to Select a File',
     completedMessage: 'Complete! ',
     uploadedFileNames: [],
     filetypes: undefined,
