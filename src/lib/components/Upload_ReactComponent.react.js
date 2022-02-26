@@ -138,6 +138,7 @@ export default class Upload_ReactComponent extends Component {
     componentDidUpdate(prevProps) {
         const prevEnableDrop = (prevProps.disableDragAndDrop === false && prevProps.disabled === false);
         const curEnableDrop = (this.props.disableDragAndDrop === false && this.props.disabled === false);
+
         if (curEnableDrop !== prevEnableDrop) {
             if (curEnableDrop) {
                 this.flow.assignDrop(this.dropZone);
@@ -419,7 +420,7 @@ export default class Upload_ReactComponent extends Component {
                 className='btn'
                 name={this.props.id + '-upload'}
                 accept={this.props.filetypes || '*'}
-                disabled={this.state.isUploading || false}
+                disabled={this.state.isUploading || this.props.disabled}
                 style={{
                     'opacity': '0',
                     'width': '0',
