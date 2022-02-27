@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 def get_chunk_name(uploaded_filename, chunk_number):
-    return uploaded_filename + "_part_%03d" % chunk_number
+    return f"{uploaded_filename}_part_{chunk_number}"
 
 
 def remove_file(file):
