@@ -20,6 +20,34 @@ def remove_file(file):
     os.unlink(file)
 
 
+class RequestData:
+    # A helper class that contains data from the request
+    # parsed into handier form.
+
+    def __init__(self, request):
+
+        # Available fields: https://github.com/flowjs/flow.js
+        self.n_chunks_total = request.form.get("flowTotalChunks", type=int)
+        self.chunk_number = request.form.get("flowChunkNumber", default=1, type=int)
+        self.filename = request.form.get("flowFilename", default="error", type=str)
+        # 'unique' identifier for the file that is being uploaded.
+        # Made of the file size and file name (with relative path, if available)
+        self.unique_identifier = request.form.get(
+            "flowIdentifier", default="error", type=str
+        )
+        # flowRelativePath is the flowFilename with the directory structure included
+        # the path is relative to the chosen folder.
+        self.relative_path = request.form.get("flowRelativePath", default="", type=str)
+        if not self.relative_path:
+            self.relative_path = self.filename
+
+        # Get the chunk data.
+        # Type of `chunk_data`: werkzeug.datastructures.FileStorage
+        self.chunk_data = request.files["file"]
+
+        self.upload_id = request.form.get("upload_id", default="", type=str)
+
+
 class BaseHttpRequestHandler:
 
     remove_file = staticmethod(retry(wait_time=0.35, max_time=15.0)(remove_file))
@@ -53,48 +81,31 @@ class BaseHttpRequestHandler:
             logger.error(traceback.format_exc())
 
     def _post(self):
-        # Available fields: https://github.com/flowjs/flow.js
-        flowTotalChunks = request.form.get("flowTotalChunks", type=int)
-        flowChunkNumber = request.form.get("flowChunkNumber", default=1, type=int)
-        flowFilename = request.form.get("flowFilename", default="error", type=str)
-        # 'unique' identifier for the file that is being uploaded.
-        # Made of the file size and file name (with relative path, if available)
-        flowIdentifier = request.form.get("flowIdentifier", default="error", type=str)
-        flowFilename = request.form.get("flowFilename", type=str)
-        # flowRelativePath is the flowFilename with the directory structure included
-        # the path is relative to the chosen folder.
-        flowRelativePath = request.form.get("flowRelativePath", default="", type=str)
-        if not flowRelativePath:
-            flowRelativePath = flowFilename
 
-        upload_id = request.form.get("upload_id", default="", type=str)
-
-        # Get the chunk data.
-        # Type of `chunk_data`: werkzeug.datastructures.FileStorage
-        chunk_data = request.files["file"]
+        r = RequestData(request)
 
         # make our temp directory
-        temp_root = self.get_temp_root(upload_id)
-        temp_dir = os.path.join(temp_root, flowIdentifier)
+        temp_root = self.get_temp_root(r.upload_id)
+        temp_dir = os.path.join(temp_root, r.unique_identifier)
         if not os.path.isdir(temp_dir):
             os.makedirs(temp_dir)
 
         # save the chunk data
-        chunk_name = get_chunk_name(flowFilename, flowChunkNumber)
+        chunk_name = get_chunk_name(r.filename, r.chunk_number)
         chunk_file = os.path.join(temp_dir, chunk_name)
 
         # make a lock file
-        lock_file_path = os.path.join(temp_dir, ".lock_{:d}".format(flowChunkNumber))
+        lock_file_path = os.path.join(temp_dir, ".lock_{:d}".format(r.chunk_number))
 
         with open(lock_file_path, "a"):
             os.utime(lock_file_path, None)
-        chunk_data.save(chunk_file)
+        r.chunk_data.save(chunk_file)
         self.remove_file(lock_file_path)
 
         # check if the upload is complete
         chunk_paths = [
-            os.path.join(temp_dir, get_chunk_name(flowFilename, x))
-            for x in range(1, flowTotalChunks + 1)
+            os.path.join(temp_dir, get_chunk_name(r.filename, x))
+            for x in range(1, r.n_chunks_total + 1)
         ]
         upload_complete = all([os.path.exists(p) for p in chunk_paths])
 
@@ -107,7 +118,7 @@ class BaseHttpRequestHandler:
             while any(
                 [
                     os.path.isfile(os.path.join(temp_dir, ".lock_{:d}".format(chunk)))
-                    for chunk in range(1, flowTotalChunks + 1)
+                    for chunk in range(1, r.n_chunks_total + 1)
                 ]
             ):
                 tried += 1
@@ -117,7 +128,7 @@ class BaseHttpRequestHandler:
                 time.sleep(1)
 
             # Make sure some other chunk didn't trigger file reconstruction
-            target_file_name = os.path.join(temp_root, flowFilename)
+            target_file_name = os.path.join(temp_root, r.filename)
             if os.path.exists(target_file_name):
                 logger.info("File %s exists already. Overwriting..", target_file_name)
                 self.remove_file(target_file_name)
@@ -129,7 +140,7 @@ class BaseHttpRequestHandler:
             self.server.logger.debug("File saved to: %s", target_file_name)
             shutil.rmtree(temp_dir)
 
-        return flowFilename
+        return r.filename
 
     def get(self):
         try:
@@ -143,23 +154,17 @@ class BaseHttpRequestHandler:
         # TODO: Since testChunks is set to false, this seems to be permanently disabled.
         #       Should this be removed altogether?
 
-        flowIdentifier = request.args.get("flowIdentifier", type=str)
-        flowFilename = request.args.get("flowFilename", type=str)
-        flowChunkNumber = request.args.get("flowChunkNumber", type=int)
+        r = RequestData(request)
 
-        upload_id = request.args.get("upload_id", default="", type=str)
-
-        if not (flowIdentifier and flowFilename and flowChunkNumber):
+        if not (r.unique_identifier and r.filename and r.chunk_number):
             # Parameters are missing or invalid
             abort(500, "Parameter error")
 
         # chunk folder path based on the parameters
-        temp_dir = os.path.join(self.get_temp_root(upload_id), flowIdentifier)
+        temp_dir = os.path.join(self.get_temp_root(r.upload_id), r.unique_identifier)
 
         # chunk path based on the parameters
-        chunk_file = os.path.join(
-            temp_dir, get_chunk_name(flowFilename, flowChunkNumber)
-        )
+        chunk_file = os.path.join(temp_dir, get_chunk_name(r.filename, r.chunk_number))
         self.server.logger.debug("Getting chunk: %s", chunk_file)
 
         if os.path.isfile(chunk_file):
