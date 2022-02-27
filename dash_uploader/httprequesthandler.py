@@ -25,7 +25,12 @@ class RequestData:
     # parsed into handier form.
 
     def __init__(self, request):
-
+        """
+        Parameters
+        ----------
+        request: flask.request
+            The Flask request object
+        """
         # Available fields: https://github.com/flowjs/flow.js
         self.n_chunks_total = request.form.get("flowTotalChunks", type=int)
         self.chunk_number = request.form.get("flowChunkNumber", default=1, type=int)
