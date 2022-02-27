@@ -161,8 +161,8 @@ export default class Upload_ReactComponent extends Component {
         if (this.debug) {
             console.log('checkFilesAreOkayToBeUploaded')
         }
-        if ((this.maxFiles !== undefined) && (filearray.length > this.maxFiles)) {
-            alert('Too many files selected! Maximum number of files is: ', this.maxFiles.toString() + '!')
+        if ((this.props.maxFiles !== undefined) && (filearray.length > this.props.maxFiles)) {
+            alert('Too many files selected! Maximum number of files is ' + this.props.maxFiles.toString() + '.')
             return false
         }
         if (this.props.maxTotalSize !== undefined) {
