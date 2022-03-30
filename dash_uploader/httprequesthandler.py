@@ -1,4 +1,5 @@
 import logging
+import pathlib
 import os
 import shutil
 import time
@@ -76,7 +77,7 @@ class BaseHttpRequestHandler:
 
         """
         self.server = server
-        self.upload_folder = upload_folder
+        self.upload_folder = pathlib.Path(upload_folder)
         self.use_upload_id = use_upload_id
 
     def post(self):
@@ -90,26 +91,30 @@ class BaseHttpRequestHandler:
         r = RequestData(request)
 
         # make our temp directory
-        temp_root = self.get_temp_root(r.upload_id)
-        temp_dir = os.path.join(temp_root, r.unique_identifier)
-        if not os.path.isdir(temp_dir):
-            os.makedirs(temp_dir)
+        upload_session_root = self.get_upload_session_root(r.upload_id)
+        temporary_folder_for_file_chunks = upload_session_root / r.unique_identifier
+
+        if not temporary_folder_for_file_chunks.exists():
+            temporary_folder_for_file_chunks.mkdir(parents=True)
 
         # save the chunk data
         chunk_name = get_chunk_name(r.filename, r.chunk_number)
-        chunk_file = os.path.join(temp_dir, chunk_name)
+        chunk_file = temporary_folder_for_file_chunks / chunk_name
 
         # make a lock file
-        lock_file_path = os.path.join(temp_dir, ".lock_{:d}".format(r.chunk_number))
+        lock_file_path = temporary_folder_for_file_chunks / f".lock_{r.chunk_number}"
 
         with open(lock_file_path, "a"):
             os.utime(lock_file_path, None)
+
         r.chunk_data.save(chunk_file)
         self.remove_file(lock_file_path)
 
         # check if the upload is complete
         chunk_paths = [
-            os.path.join(temp_dir, get_chunk_name(r.filename, x))
+            os.path.join(
+                temporary_folder_for_file_chunks, get_chunk_name(r.filename, x)
+            )
             for x in range(1, r.n_chunks_total + 1)
         ]
         upload_complete = all([os.path.exists(p) for p in chunk_paths])
@@ -122,18 +127,28 @@ class BaseHttpRequestHandler:
             tried = 0
             while any(
                 [
-                    os.path.isfile(os.path.join(temp_dir, ".lock_{:d}".format(chunk)))
+                    os.path.isfile(
+                        os.path.join(
+                            temporary_folder_for_file_chunks, ".lock_{:d}".format(chunk)
+                        )
+                    )
                     for chunk in range(1, r.n_chunks_total + 1)
                 ]
             ):
                 tried += 1
                 if tried >= 5:
-                    logger.error("Error uploading files with temp_dir: %s.", temp_dir)
-                    raise Exception("Error uploading files with temp_dir: " + temp_dir)
+                    logger.error(
+                        "Error uploading files with temporary_folder_for_file_chunks: %s.",
+                        temporary_folder_for_file_chunks,
+                    )
+                    raise Exception(
+                        "Error uploading files with temporary_folder_for_file_chunks: "
+                        + temporary_folder_for_file_chunks
+                    )
                 time.sleep(1)
 
             # Make sure some other chunk didn't trigger file reconstruction
-            target_file_name = os.path.join(temp_root, r.filename)
+            target_file_name = os.path.join(upload_session_root, r.filename)
             if os.path.exists(target_file_name):
                 logger.info("File %s exists already. Overwriting..", target_file_name)
                 self.remove_file(target_file_name)
@@ -143,7 +158,7 @@ class BaseHttpRequestHandler:
                     with open(p, "rb") as stored_chunk_file:
                         target_file.write(stored_chunk_file.read())
             self.server.logger.debug("File saved to: %s", target_file_name)
-            shutil.rmtree(temp_dir)
+            shutil.rmtree(temporary_folder_for_file_chunks)
 
         return r.filename
 
@@ -166,10 +181,14 @@ class BaseHttpRequestHandler:
             abort(500, "Parameter error")
 
         # chunk folder path based on the parameters
-        temp_dir = os.path.join(self.get_temp_root(r.upload_id), r.unique_identifier)
+        temporary_folder_for_file_chunks = os.path.join(
+            self.get_upload_session_root(r.upload_id), r.unique_identifier
+        )
 
         # chunk path based on the parameters
-        chunk_file = os.path.join(temp_dir, get_chunk_name(r.filename, r.chunk_number))
+        chunk_file = os.path.join(
+            temporary_folder_for_file_chunks, get_chunk_name(r.filename, r.chunk_number)
+        )
         self.server.logger.debug("Getting chunk: %s", chunk_file)
 
         if os.path.isfile(chunk_file):
@@ -180,9 +199,9 @@ class BaseHttpRequestHandler:
             # and needs to be uploaded
             abort(404, "Not found")
 
-    def get_temp_root(self, upload_id):
+    def get_upload_session_root(self, upload_id):
         return (
-            os.path.join(self.upload_folder, upload_id)
+            (self.upload_folder / upload_id)
             if self.use_upload_id
             else self.upload_folder
         )
