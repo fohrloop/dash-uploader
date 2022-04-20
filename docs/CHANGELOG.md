@@ -1,14 +1,19 @@
 # Changelog
 
-## Unreleased
+## 0.7.0-a1 (2022-03-30)
+
+- This pre-release is available in PyPI with `--pre` flag.
+- [0.6.0 → 0.7.0 Migration Guide](https://github.com/np-8/dash-uploader/wiki/Migration-Guide#060--070).
 
 ### Fixed
-- WIP: Calling callback each time file is added 
+- Calling callback each time file is uploaded in multi-file upload case (Fixes: [#5](https://github.com/np-8/dash-uploader/issues/5), [#20](https://github.com/np-8/dash-uploader/issues/20) & [#44](https://github.com/np-8/dash-uploader/issues/44))
+- Progress bar problems when uploading multiple files (Fixes: [#84](https://github.com/np-8/dash-uploader/issues/84))
 - Instead of returing `None`, raise `dash.exceptions.PreventUpdate`. This should reduce errors seen in the browser console. [PR 54](https://github.com/np-8/dash-uploader/pull/54)
 - Fixed  `ImportError` which was raised when trying to import `dash_uploader` when `packaging` was not installed. [PR 54](https://github.com/np-8/dash-uploader/pull/54)
 ### Changed 
-- WIP: resumable.js -> flowjs [[Issue 21](https://github.com/np-8/dash-uploader/issues/21)]
-- **Backwards incompatible**: Changed the CSS class of the component to be `dash-uploader-completed`,  instead of `dash-uploader-complete`, when upload is completed. 
+- resumable.js -> flowjs (Closes: [#21](https://github.com/np-8/dash-uploader/issues/21))
+- ⚠️ **Backwards incompatible**: Callback syntax (@du.callback) was changed to use `status` instead of `filenames` as the callback function argument. Support for `@app.callback` syntax dropped. See the [0.6.0 -> 0.7.0 Migration Guide](https://github.com/np-8/dash-uploader/wiki/Migration-Guide#060--070) for details.
+- ⚠️**Backwards incompatible**: Changed the CSS class of the component to be `dash-uploader-completed`,  instead of `dash-uploader-complete`, when upload is completed. 
 
 ## v.0.6.0 (2021-09-19)
 ### Added 
@@ -24,7 +29,7 @@
 ### Added 
 - [`du.HttpRequestHandler`](./dash-uploader.md#duhttprequesthandler) which allows for custom HTTP POST and GET request handling. For example, custom validation logic is now possible! Used through `http_request_handler` parameter of [`du.configure_upload`](./dash-uploader.md#duconfigure_upload).
 ### Changed 
-- **Backwards incompatible changes**: Changed the CSS classes of the component to be `dash-uploader-default`, `dash-uploader-uploading`, .. etc. instead of `resumable-default`, `resumable-uploading`. 
+- ⚠️ **Backwards incompatible changes**: Changed the CSS classes of the component to be `dash-uploader-default`, `dash-uploader-uploading`, .. etc. instead of `resumable-default`, `resumable-uploading`. 
 
 ## v.0.4.2 (2021-02-20)
 - Fixed some width related CSS issues in mobile mode. See: [#19](https://github.com/np-8/dash-uploader/issues/19)
