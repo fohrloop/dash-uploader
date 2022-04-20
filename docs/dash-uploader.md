@@ -20,7 +20,7 @@ Typically you also would like to define [callbacks](#3-callbacks) (functions tha
 
 [3 Callbacks](#3-callbacks)
 - [`@du.callback`](#ducallback)
-- [`@app.callback`](#appcallback)
+- [`@du.UploadStatus`](#duuploadstatus)
  
 [4 Custom handling of HTTP Requests](#4-custom-handling-of-http-requests)
 - [`du.HttpRequestHandler`](#duhttprequesthandler)
@@ -59,6 +59,8 @@ If the folder does not exist, it will be created
 automatically.
 
 #### use_upload_id: bool (Default: True)
+*New in version **0.2.0***
+
 Determines if the uploads are put into
 folders defined by a "upload id". To define an upload id, use the `upload_id` parameter of the `du.Upload` component. In typical use case, upload id's are unique for different users. In that case, you must use a callable as the `app.layout`.
 
@@ -196,9 +198,7 @@ the upload field simultaneously.
 
 ## 3 Callbacks
 
-Callbacks can be defined using two different approaches
-- `@du.callback`: short notation, for typical use cases
-- `@app.callback`: needs more verbose code. In case you need more control than when using the `@du.callback`.
+
 
 
 In the following example it is assumed that the `du.Upload` component id is `dash-uploader`, i.e. the component was created with:
@@ -211,28 +211,19 @@ du.Upload(
 
 ###  `@du.callback`
 
-*New in version **0.3.0***
+*New in version **0.3.0**. Syntax Updated in version **0.7.0***.
 
-Easiest way to call a simple callback after uploading would be something like:
+To syntax for calling a callback after uploading file/files would be (version >=0.7.0):
 
-```python
-@du.callback(
-    output=Output('callback-output', 'children'),
-    id='dash-uploader',
-)
-def get_a_list(filenames):
-    return html.Ul([html.Li(filenames)])
-```
 
-The syntax is
 ```python
 @du.callback(
     output=<Output>,
     id=<Upload_id>,
 )
-def call_me(filenames):
+def call_me(status):
     # Do some processing
-    return <Dash component>
+    return dash_component
 ```
 
 #### output: dash.dependencies.Output
@@ -242,52 +233,71 @@ This is the Output object, just as in regular [dash callbacks](https://dash.plot
 This must be the same `id` as used when initiating your `du.Upload` component.
 
 #### call_me: function
-A function that takes exactly one argument: `filenames`.
+A function that takes exactly one argument: `status`, and returns a valid dash component, like `html.Div("hello")`, as in the regular [dash callbacks](https://dash.plotly.com/basic-callbacks).
+
+
+#### status: du.UploadStatus
+The `status` is a `du.UploadStatus` object.
+
+
+### Example of a callback (dash-uploader >= 0.7.0)
+A simple example using the `du.callback` is:
+
+```python
+@du.callback(
+    output=Output("callback-output", "children"),
+    id="dash-uploader",
+)
+def callback_on_completion(status: du.UploadStatus):
+    return html.Ul([html.Li(str(x)) for x in status.uploaded_files])
+```
+
+### Example of a callback (dash-uploader 0.3.0 ... 0.6.0):
+
+In older dash-uploader versions (0.3.0 to 0.6.0), the one would use `filenames` (list of str) instead of `status`;
+```python
+@du.callback(
+    output=Output('callback-output', 'children'),
+    id='dash-uploader',
+)
+def get_a_list(filenames):
+    return html.Ul([html.Li(filenames)])
+```
+
+
 
 #### filenames: list of str
 A list of strings. These will be the uploaded files. For example: 
 `['C:\tmp\Uploads\166d6f24-a80d-11ea-aa00-f48c5012fb50\dataset.csv']`
 
-#### Dash component
-The return value of the `call_me` should be a dash component, as in the regular [dash callbacks].
+### `du.UploadStatus`
+*New in version **0.7.0***
 
+ The `status` argument expected by callbacks created with `@du.callback` are of type `du.UploadStatus`. It has following attributes:
 
-### `@app.callback`
+- `status.latest_file` (pathlib.Path): The full file path to the file that has been latest uploaded.
+- `status.uploaded_files` (list of pathlib.Path): The list of full file paths to all of the uploaded files. (uploaded in this session)
+- `status.is_completed` (bool): True if all the files have been uploaded
+- `status.n_uploaded` (int): The number of files already uploaded in this session
+- `status.n_total` (int): The number of files to be uploaded.
+- `status.uploaded_size_mb` (float):  Size of files uploaded in Megabytes
+- `status.total_size_mb` (float):  Total size of files to be uploaded in Megabytes
+- `status.upload_id` (str or None): The upload id used in the upload process, if any.
+- `status.progress` (float): From 0 to 1, indicating the current upload progress of all files. From `flow.progress()`. This is based on the total file size.
 
-This method needs more verbose code and it is the conventional "[dash way]((https://dash.plotly.com/basic-callbacks))" to create a callback.  Use this if `@du.callback` does not give you enough control.
+Example of `du.UploadStatus` attributes:
 
-The syntax can be seen in the following example
-```python
-@app.callback(
-    Output('callback-output', 'children'),
-    [Input('dash-uploader', 'isCompleted')],
-    [State('dash-uploader', 'fileNames'),
-     State('dash-uploader', 'upload_id')],
-)
-def callback_on_completion(iscompleted, filenames, upload_id):
-    if not iscompleted:
-        return
-
-    out = []
-    if filenames is not None:
-        if upload_id:
-            root_folder = Path(UPLOAD_FOLDER_ROOT) / upload_id
-        else:
-            root_folder = Path(UPLOAD_FOLDER_ROOT)
-
-        for filename in filenames:
-            file = root_folder / filename
-            out.append(file)
-        return html.Ul([html.Li(str(x)) for x in out])
-
-    return html.Div("No Files Uploaded Yet!")
 ```
-
-#### du.Upload properties used
-- `dashAppCallbackBump`: An integer that changes value in the JS side to communicate the new props to dash application. This is for internal use of dash-uploader only.
-- `fileNames`: List of strings of the filenames or None. This does not have the upload folder or the upload_id in it. 
-- `upload_id`: The upload id used when initiating the `du.Upload` component.
-
+status.latest_file = WindowsPath("C:\tmp\Uploads\f4605571-c0a0-11ec-930f-2016b9d15494\bootstrap-3.3.7.min.css")
+status.uploaded_files = [WindowsPath("C:\tmp\Uploads\f4605571-c0a0-11ec-930f-2016b9d15494\base.css"), WindowsPath("C:\tmp\Uploads\f4605571-c0a0-11ec-930f-2016b9d15494\bootstrap-3.3.7.min.css")]
+status.is_completed = False
+status.n_uploaded = 2
+status.n_total = 4
+status.uploaded_size_mb = 0.11781978607177734
+status.total_size_mb = 0.24998188018798828
+status.progress = 0.47131330472103006
+status.upload_id = f4605571-c0a0-11ec-930f-2016b9d15494
+```
 
 ## 4 Custom handling of HTTP Requests
 ### `du.HttpRequestHandler`

@@ -74,8 +74,8 @@ if __name__ == '__main__':
 ```
 
 ## Example with callback (and other options)
-- **New in version 0.3.0:** New short callback syntax using `@du.callback`.
-- **New in version 0.2.0:** The configure_upload accepts additional parameter `use_upload_id`, which is a boolean flag (Defaults to True). When True, the uploaded files are put into subfolders `<upload_folder>/<upload_id>`. This way different users can be forced to upload to different folders. 
+- **New in version 0.7.0:** Functions decorated with `@du.callback` must take `status` (`du.UploadStatus`) object as the only input parameter (previously, `filenames`)
+
 
 ```python
 from pathlib import Path
