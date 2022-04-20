@@ -66,17 +66,7 @@ app.layout = get_app_layout
     id="dash-uploader",
 )
 def callback_on_completion(status: du.UploadStatus):
-
-    if status.n_uploaded == 0:
-        return  # no files uploaded yet.
-
-    print(status)
-
-    out = []
-    if status.uploaded_files is not None:
-        return html.Ul([html.Li(str(x)) for x in status.uploaded_files])
-
-    return html.Div("No Files Uploaded Yet!")
+    return html.Ul([html.Li(str(x)) for x in status.uploaded_files])
 
 
 if __name__ == "__main__":
