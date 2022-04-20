@@ -129,11 +129,12 @@ app.layout = get_app_layout
 
 
 @du.callback(
-    output=Output('callback-output', 'children'),
-    id='dash-uploader',
+    output=Output("callback-output", "children"),
+    id="dash-uploader",
 )
-def get_a_list(filenames):
-    return html.Ul([html.Li(filenames)])
+def callback_on_completion(status: du.UploadStatus):
+    return html.Ul([html.Li(str(x)) for x in status.uploaded_files])
+
 
 
 if __name__ == '__main__':
