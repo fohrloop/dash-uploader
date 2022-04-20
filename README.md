@@ -6,6 +6,17 @@
 
 The alternative upload component for [Dash](https://dash.plotly.com/) applications. 
 
+## 📢 dash-uploader 0.7.0 pre-release available 
+
+🎉 There is pre-release version of dash-uploader 0.7.0 available in PyPI! 🎉 
+
+```
+python -m pip install dash-uploader --pre
+```
+
+- It fixes the multi-file upload issues!  
+- Please, test it and give feedback to this [discussion](https://github.com/np-8/dash-uploader/discussions/88). 
+
 
 ## Table of contents
 - [Short summary](#short-summary)
@@ -74,7 +85,7 @@ if __name__ == '__main__':
 ```
 
 ## Example with callback (and other options)
-- **New in version 0.7.0:** Functions decorated with `@du.callback` must take `status` (`du.UploadStatus`) object as the only input parameter (previously, `filenames`)
+- **New in version 0.7.0:** Functions decorated with [`@du.callback`](https://github.com/np-8/dash-uploader/blob/dev/docs/dash-uploader.md#ducallback) must take `status` ([`du.UploadStatus`](https://github.com/np-8/dash-uploader/blob/dev/docs/dash-uploader.md#duuploadstatus)) object as the only input parameter (previously, `filenames`)
 
 
 ```python
@@ -153,11 +164,13 @@ if __name__ == '__main__':
 | 💡  Want to submit a feature request? | <a href="https://community.plotly.com/t/show-and-tell-dash-uploader-upload-large-files/38451">🎭 Discuss about it on community.plotly.com</a><br><a href="https://github.com/np-8/dash-uploader/issues">🎫 File an Issue (feature request)</a> |
 | 🧙  Want to write code?               | 🔥 <a href="./docs/CONTRIBUTING.md">Here's how you get started!</a>                                                                                                                                                                           |
 ## Documentation
-- See: [Documentation](docs/dash-uploader.md) and [Developer documentation](docs/CONTRIBUTING.md) .
+- [Documentation](docs/dash-uploader.md)
+- [Developer documentation](docs/CONTRIBUTING.md)
+- [Migration Guide](https://github.com/np-8/dash-uploader/wiki/Migration-Guide)
 
 ## Changelog
 
-- See: [Changelog](./docs/CHANGELOG.md)
+- [Changelog](./docs/CHANGELOG.md)
 ## Credits
 - History: This package is based on the React 16 compatible version [dash-resumable-upload](https://github.com/westonkjones/dash-resumable-upload) (0.0.4) by [Weston Jones](https://github.com/westonkjones/) which in turn is based on [dash-resumable-upload](https://github.com/rmarren1/dash-resumable-upload) (0.0.3) by [Ryan Marren](https://github.com/rmarren1) 
 - The package boilerplate is taken from the [dash-component-boilerplate](https://github.com/plotly/dash-component-boilerplate).
