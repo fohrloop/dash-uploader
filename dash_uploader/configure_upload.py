@@ -9,12 +9,12 @@ logger = logging.getLogger("dash_uploader")
 
 
 def configure_upload(
-    app, 
-    folder, 
-    use_upload_id=True, 
-    upload_api=None, 
-    http_request_handler=None, 
-    s3_config: settings.S3Configuration=None
+    app,
+    folder,
+    use_upload_id=True,
+    upload_api=None,
+    http_request_handler=None,
+    s3_config: settings.S3Configuration = None,
 ):
     r"""
     Configure the upload APIs for dash app.
@@ -50,7 +50,7 @@ def configure_upload(
         See the documentation of dash_uploader.HttpRequestHandler for
         more details.
     s3_config: None or class
-        Used for uploading file to a s3 bucket. If provided, `folder` will be used for 
+        Used for uploading file to a s3 bucket. If provided, `folder` will be used for
         temp folder for chunks during multipart upload
 
     """
@@ -90,7 +90,7 @@ def decorate_server(
     upload_api,
     http_request_handler,
     use_upload_id=True,
-    s3_config: settings.S3Configuration=None
+    s3_config: settings.S3Configuration = None,
 ):
     """
     Parameters
@@ -112,12 +112,15 @@ def decorate_server(
         all files from all sessions are uploaded into
         same folder (not recommended).
     s3_config: None or class
-        Used for uploading file to a s3 bucket. If provided, `folder` will be used for 
+        Used for uploading file to a s3 bucket. If provided, `folder` will be used for
         temp folder for chunks during multipart upload
     """
 
     handler = http_request_handler(
-        server, upload_folder=temp_base, use_upload_id=use_upload_id, s3_config=s3_config
+        server,
+        upload_folder=temp_base,
+        use_upload_id=use_upload_id,
+        s3_config=s3_config,
     )
 
     server.add_url_rule(upload_api, None, handler.get, methods=["GET"])

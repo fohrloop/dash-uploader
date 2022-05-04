@@ -22,6 +22,7 @@ requests_pathname_prefix = "/"
 # not `url_base_pathname`.
 routes_pathname_prefix = "/"
 
+
 # Confguration parameters if the files to be uploaded to a S3 bucket
 @dataclass
 class S3Configuration:
@@ -34,7 +35,7 @@ class S3Configuration:
     endpoint_url: str
     # access key id
     aws_access_key_id: str
-    # secret key 
+    # secret key
     aws_secret_access_key: str
     # whether to use secure connection
     use_ssl: Optional[bool] = True

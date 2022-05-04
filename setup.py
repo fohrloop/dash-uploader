@@ -43,9 +43,7 @@ setup(
             "chromedriver-binary",
             "Werkzeug~=2.0.3",
         ],
-        "s3" : [
-             "boto3>=1.22.5"
-        ]
+        "s3": ["boto3>=1.22.5"],
     },
     classifiers=[
         "Framework :: Dash",

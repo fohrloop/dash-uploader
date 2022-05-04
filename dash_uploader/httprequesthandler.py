@@ -71,16 +71,13 @@ class RequestData:
 
 class BaseHttpRequestHandler:
 
-    UPLOADS: Dict[str,dict] = {}
+    UPLOADS: Dict[str, dict] = {}
 
     remove_file = staticmethod(retry(wait_time=0.35, max_time=15.0)(remove_file))
 
     def __init__(
-        self, 
-        server, 
-        upload_folder, 
-        use_upload_id, 
-        s3_config: S3Configuration=None):
+        self, server, upload_folder, use_upload_id, s3_config: S3Configuration = None
+    ):
         """
         Parameters
         ----------
@@ -97,7 +94,7 @@ class BaseHttpRequestHandler:
             all files from all sessions are uploaded into
             same folder (not recommended).
         s3_config: None or class
-            Used for uploading file to a s3 bucket. If provided, `folder` will be used for 
+            Used for uploading file to a s3 bucket. If provided, `folder` will be used for
             temp folder for chunks during multipart upload
 
         """
@@ -105,12 +102,13 @@ class BaseHttpRequestHandler:
         self.upload_folder = pathlib.Path(upload_folder)
         self.use_upload_id = use_upload_id
 
-
         if not s3_config:
             self.upload_to_s3 = False
         else:
             if not HAS_BOTO:
-                raise ValueError("`s3_config` is provided but boto3 is missing. Please re-install dash_uploader with 's3' feature enabled")
+                raise ValueError(
+                    "`s3_config` is provided but boto3 is missing. Please re-install dash_uploader with 's3' feature enabled"
+                )
             self.upload_to_s3 = True
             self.s3 = boto3.client(
                 "s3",
@@ -120,12 +118,13 @@ class BaseHttpRequestHandler:
                 aws_access_key_id=s3_config.aws_access_key_id,
                 aws_secret_access_key=s3_config.aws_secret_access_key,
             )
-            self.bucket = s3_config.bucket #"my-bucket"
-            pf = s3_config.prefix # "my-root-folder/"
+            self.bucket = s3_config.bucket  # "my-bucket"
+            pf = s3_config.prefix  # "my-root-folder/"
             # append trailing separator if provided
-            pf = pf +  "/" if pf and not pf.endswith("/") else pf
+            pf = pf + "/" if pf and not pf.endswith("/") else pf
             # remove leading slash if present
             self.prefix = pf.removeprefix("/")
+
     def post(self):
         try:
             return self._post()
@@ -148,16 +147,23 @@ class BaseHttpRequestHandler:
                     # chunk size should be greater than 5Mb for s3 multipart upload
                     if r.chunk_number == 1 and r.chunk_size <= S3_MIN_CHUNK_SIZE:
                         # set chunkSize to a value greater than 5 for Upload component
-                        abort(500, "Chunk size should be greater than 5 Mb for multipart upload")
+                        abort(
+                            500,
+                            "Chunk size should be greater than 5 Mb for multipart upload",
+                        )
 
-                    res = self.s3.create_multipart_upload(Bucket=self.bucket, Key=self.prefix + r.relative_path)
+                    res = self.s3.create_multipart_upload(
+                        Bucket=self.bucket, Key=self.prefix + r.relative_path
+                    )
                     upload_id = res["UploadId"]
-                    self.UPLOADS[r.unique_identifier] = {"UploadId" : upload_id, "Parts": []}
+                    self.UPLOADS[r.unique_identifier] = {
+                        "UploadId": upload_id,
+                        "Parts": [],
+                    }
                     self.server.logger.debug("Start multipart upload %s" % upload_id)
                 else:
                     # do nothing for single chunks, just upload later
                     pass
-
 
         # save the chunk data
         chunk_name = get_chunk_name(r.filename, r.chunk_number)
@@ -172,30 +178,29 @@ class BaseHttpRequestHandler:
         r.chunk_data.save(chunk_file)
 
         if self.upload_to_s3:
-                with open(chunk_file, "rb") as stored_chunk_file:
-                    if r.n_chunks_total > 1:
-                        s3_upload =  self.UPLOADS.get(r.unique_identifier)
-                        part = self.s3.upload_part(
-                            Body=stored_chunk_file, 
-                            Bucket=self.bucket, 
-                            Key=self.prefix + r.relative_path, 
-                            UploadId=s3_upload["UploadId"], 
-                            PartNumber=r.chunk_number
-                        )
-                        self.server.logger.debug("Uploaded part to s3: %s - %s", r.chunk_number, part)
-                        s3_upload["Parts"].append(
-                            {
-                                "PartNumber": r.chunk_number, 
-                                "ETag": part["ETag"]
-                            }
-                        )
-                    else:
-                        # upload chunk directly
-                        self.s3.upload_fileobj(
-                                Fileobj=stored_chunk_file,
-                                Bucket=self.bucket, 
-                                Key=self.prefix + r.relative_path, 
-                            )
+            with open(chunk_file, "rb") as stored_chunk_file:
+                if r.n_chunks_total > 1:
+                    s3_upload = self.UPLOADS.get(r.unique_identifier)
+                    part = self.s3.upload_part(
+                        Body=stored_chunk_file,
+                        Bucket=self.bucket,
+                        Key=self.prefix + r.relative_path,
+                        UploadId=s3_upload["UploadId"],
+                        PartNumber=r.chunk_number,
+                    )
+                    self.server.logger.debug(
+                        "Uploaded part to s3: %s - %s", r.chunk_number, part
+                    )
+                    s3_upload["Parts"].append(
+                        {"PartNumber": r.chunk_number, "ETag": part["ETag"]}
+                    )
+                else:
+                    # upload chunk directly
+                    self.s3.upload_fileobj(
+                        Fileobj=stored_chunk_file,
+                        Bucket=self.bucket,
+                        Key=self.prefix + r.relative_path,
+                    )
 
         self.remove_file(lock_file_path)
 
@@ -238,19 +243,21 @@ class BaseHttpRequestHandler:
 
             if self.upload_to_s3 and r.n_chunks_total > 1:
                 # we need to complete the multipart upload process
-                s3_upload =  self.UPLOADS.get(r.unique_identifier)
+                s3_upload = self.UPLOADS.get(r.unique_identifier)
                 result = self.s3.complete_multipart_upload(
                     Bucket=self.bucket,
                     Key=self.prefix + r.relative_path,
                     UploadId=s3_upload["UploadId"],
-                    MultipartUpload={"Parts": s3_upload["Parts"]}
+                    MultipartUpload={"Parts": s3_upload["Parts"]},
                 )
-                self.server.logger.debug("Uploaded file to s3")
+                self.server.logger.debug("Uploaded file to s3: %s", result)
             else:
                 # Make sure some other chunk didn't trigger file reconstruction
                 target_file_name = os.path.join(upload_session_root, r.filename)
                 if os.path.exists(target_file_name):
-                    logger.info("File %s exists already. Overwriting..", target_file_name)
+                    logger.info(
+                        "File %s exists already. Overwriting..", target_file_name
+                    )
                     self.remove_file(target_file_name)
 
                 with open(target_file_name, "ab") as target_file:

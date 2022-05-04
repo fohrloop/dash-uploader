@@ -3,7 +3,6 @@ import uuid
 import dash_uploader as du
 import dash
 
-from dash_uploader.settings import S3Configuration
 
 if du.utils.dash_version_is_at_least("2.0.0"):
     from dash import html  # if dash <= 2.0.0, use: import dash_html_components as html
@@ -15,7 +14,7 @@ from dash.dependencies import Output
 app = dash.Dash(__name__)
 
 s3_config = None
-### uncomment the following lines to get stored credentials from env or aws config files
+# uncomment the following lines to get stored credentials from env or aws config files
 
 # import boto3
 # session = boto3.Session()
@@ -23,6 +22,7 @@ s3_config = None
 # credentials = credentials.get_frozen_credentials()
 # access_key = credentials.access_key
 # secret_key = credentials.secret_key
+# from dash_uploader.settings import S3Configuration
 # s3_config = S3Configuration(
 #         region_name = "eu-central-1",
 #         endpoint_url="https://s3.eu-central-1.amazonaws.com",
@@ -34,11 +34,7 @@ s3_config = None
 # )
 
 UPLOAD_FOLDER_ROOT = r"/tmp/Uploads"
-du.configure_upload(
-    app=app, 
-    folder=UPLOAD_FOLDER_ROOT,
-    s3_config=s3_config
-)
+du.configure_upload(app=app, folder=UPLOAD_FOLDER_ROOT, s3_config=s3_config)
 
 
 def get_upload_component(id):
@@ -87,6 +83,7 @@ app.layout = get_app_layout
 
 # uncomment the following line to get the logs
 # app.server.logger.setLevel(logging.DEBUG)
+
 
 # 3) Create a callback
 @du.callback(
