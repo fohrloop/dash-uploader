@@ -1,3 +1,6 @@
+from typing import Optional
+from dataclasses import dataclass
+
 # The default upload api endpoint
 # The du.configure_upload can change this
 upload_api = "/API/dash-uploader"
@@ -18,3 +21,22 @@ requests_pathname_prefix = "/"
 # `requests_pathname_prefix` and `routes_pathname_prefix`,
 # not `url_base_pathname`.
 routes_pathname_prefix = "/"
+
+# Confguration parameters if the files to be uploaded to a S3 bucket
+@dataclass
+class S3Configuration:
+    # s3 region name
+    region_name: str
+    # bucket name
+    bucket: str
+    # s3 endpoint URL like 'example.xxx.amazonaws.com'
+    #  if "http/https" scheme provided `use_ssl` is ignored
+    endpoint_url: str
+    # access key id
+    aws_access_key_id: str
+    # secret key 
+    aws_secret_access_key: str
+    # whether to use secure connection
+    use_ssl: Optional[bool] = True
+    # optional prefix under the bucket if provided should end with '/'
+    prefix: Optional[str] = ""
