@@ -9,7 +9,7 @@ if du.utils.dash_version_is_at_least("2.0.0"):
 else:
     import dash_html_components as html
 
-from dash.dependencies import Output
+from dash.dependencies import Output, State
 
 app = dash.Dash(__name__)
 
@@ -22,15 +22,19 @@ s3_config = None
 # credentials = credentials.get_frozen_credentials()
 # access_key = credentials.access_key
 # secret_key = credentials.secret_key
-# from dash_uploader.settings import S3Configuration
-# s3_config = S3Configuration(
+# from dash_uploader import s3
+# s3_config = s3.S3Configuration(
+#     location=s3.S3Location(
 #         region_name = "eu-central-1",
 #         endpoint_url="https://s3.eu-central-1.amazonaws.com",
 #         use_ssl=True,
-#         aws_access_key_id=credentials.access_key,
-#         aws_secret_access_key=credentials.secret_key,
 #         bucket="my-bucket",
 #         prefix="my-prefix",
+#     ),
+#     credentials=s3.S3Credentials(
+#         aws_access_key_id=credentials.access_key,
+#         aws_secret_access_key=credentials.secret_key,
+#     )
 # )
 
 UPLOAD_FOLDER_ROOT = r"/tmp/Uploads"
@@ -89,8 +93,9 @@ app.layout = get_app_layout
 @du.callback(
     output=Output("callback-output", "children"),
     id="dash-uploader",
+    state=State("callback-output", "children"),
 )
-def callback_on_completion(status: du.UploadStatus):
+def callback_on_completion(status: du.UploadStatus, state):
     return html.Ul([html.Li(str(x)) for x in status.uploaded_files])
 
 

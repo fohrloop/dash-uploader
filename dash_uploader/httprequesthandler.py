@@ -8,7 +8,7 @@ from typing import Dict, Final
 
 from flask import request
 from flask import abort
-from dash_uploader.settings import S3Configuration
+from dash_uploader.s3 import S3Configuration
 from dash_uploader.utils import retry
 
 # try importing boto3 as it is a feature dependency
@@ -112,14 +112,14 @@ class BaseHttpRequestHandler:
             self.upload_to_s3 = True
             self.s3 = boto3.client(
                 "s3",
-                region_name=s3_config.region_name,
-                use_ssl=s3_config.use_ssl,
-                endpoint_url=s3_config.endpoint_url,
-                aws_access_key_id=s3_config.aws_access_key_id,
-                aws_secret_access_key=s3_config.aws_secret_access_key,
+                region_name=s3_config.location.region_name,
+                use_ssl=s3_config.location.use_ssl,
+                endpoint_url=s3_config.location.endpoint_url,
+                aws_access_key_id=s3_config.credentials.aws_access_key_id,
+                aws_secret_access_key=s3_config.credentials.aws_secret_access_key,
             )
-            self.bucket = s3_config.bucket  # "my-bucket"
-            pf = s3_config.prefix  # "my-root-folder/"
+            self.bucket = s3_config.location.bucket  # "my-bucket"
+            pf = s3_config.location.prefix  # "my-root-folder/"
             # append trailing separator if provided
             pf = pf + "/" if pf and not pf.endswith("/") else pf
             # remove leading slash if present
@@ -153,14 +153,14 @@ class BaseHttpRequestHandler:
                         )
 
                     res = self.s3.create_multipart_upload(
-                        Bucket=self.bucket, Key=self.prefix + r.relative_path
+                        Bucket=self.bucket, Key=self.get_s3_path(r)
                     )
-                    upload_id = res["UploadId"]
+                    s3_upload_id = res["UploadId"]
                     self.UPLOADS[r.unique_identifier] = {
-                        "UploadId": upload_id,
+                        "UploadId": s3_upload_id,
                         "Parts": [],
                     }
-                    self.server.logger.debug("Start multipart upload %s" % upload_id)
+                    self.server.logger.debug("Start multipart upload %s" % s3_upload_id)
                 else:
                     # do nothing for single chunks, just upload later
                     pass
@@ -184,7 +184,7 @@ class BaseHttpRequestHandler:
                     part = self.s3.upload_part(
                         Body=stored_chunk_file,
                         Bucket=self.bucket,
-                        Key=self.prefix + r.relative_path,
+                        Key=self.get_s3_path(r),
                         UploadId=s3_upload["UploadId"],
                         PartNumber=r.chunk_number,
                     )
@@ -199,7 +199,7 @@ class BaseHttpRequestHandler:
                     self.s3.upload_fileobj(
                         Fileobj=stored_chunk_file,
                         Bucket=self.bucket,
-                        Key=self.prefix + r.relative_path,
+                        Key=self.get_s3_path(r),
                     )
 
         self.remove_file(lock_file_path)
@@ -246,7 +246,7 @@ class BaseHttpRequestHandler:
                 s3_upload = self.UPLOADS.get(r.unique_identifier)
                 result = self.s3.complete_multipart_upload(
                     Bucket=self.bucket,
-                    Key=self.prefix + r.relative_path,
+                    Key=self.get_s3_path(r),
                     UploadId=s3_upload["UploadId"],
                     MultipartUpload={"Parts": s3_upload["Parts"]},
                 )
@@ -315,6 +315,9 @@ class BaseHttpRequestHandler:
             if self.use_upload_id
             else self.upload_folder
         )
+
+    def get_s3_path(self, r: RequestData):
+        return os.path.join(self.prefix, r.upload_id, r.relative_path)
 
 
 class HttpRequestHandler(BaseHttpRequestHandler):
