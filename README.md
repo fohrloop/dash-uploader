@@ -190,8 +190,14 @@ du.configure_upload(app=app, folder=UPLOAD_FOLDER_ROOT, s3_config=s3_config)
 
 ```
 
+> If `s3_config` is not specified, then a standard upload to local storage will be used.
+
+Files will be uploaded to `<endpoint_url>/<bucket>/<prefix>/[<upload_id>/]`. (`<upload_id>/` will be used only if `use_upload_id` set to `True` in `du.configure_upload`)
+
 >⚠️ Large files will be uploaded to s3 in chunks using multiple upload functionality.
 `boto3` supports multiple upload only if the chunks are larger than 5Mib. This can be set while creating the `du.Upload` component.
+
+> `UPLOAD_FOLDER_ROOT` is still required to store the chunks of large files being uploaded to s3.
 
 
 ## Passing multiple states to `du.callback`
