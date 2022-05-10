@@ -41,8 +41,8 @@ def _create_dash_callback(callback, settings):  # pylint: disable=redefined-oute
             # build root folder 
             if s3_location:
                 _url = urljoin(s3_location.endpoint_url, s3_location.bucket)
-                _url = urljoin(_url, s3_location.prefix)
-                _url = urljoin(_url, _upload_id)
+                _url = urljoin(_url, s3_location.prefix, allow_fragments=True)
+                _url = urljoin(_url, _upload_id, allow_fragments=True)
                 root_folder = Path(_url)
             else:
                 root_folder = Path(settings.UPLOAD_FOLDER_ROOT) / _upload_id
