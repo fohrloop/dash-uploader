@@ -153,6 +153,62 @@ if __name__ == '__main__':
 
 ```
 
+## S3 upload support
+Direct S3 support is can be enabled by installing the package with `s3` option (`python -m pip install dash-uploader[s3]`).
+In order to upload the files directly to an S3 bucket, you could set up an `S3Configuration` object and pass it
+to the `configure_upload` method.
+
+Here is a minimal example;
+
+```python
+import boto3
+session = boto3.Session()
+# credentials will be fetched from environment variables or local aws configuration
+# see https://boto3.amazonaws.com/v1/documentation/api/latest/guide/credentials.html on 
+# how to configure credentials for s3
+credentials = session.get_credentials()
+credentials = credentials.get_frozen_credentials()
+access_key = credentials.access_key
+secret_key = credentials.secret_key
+from dash_uploader import s3
+s3_config = s3.S3Configuration(
+    location=s3.S3Location(
+        region_name = "eu-central-1",
+        endpoint_url="https://s3.eu-central-1.amazonaws.com",
+        use_ssl=True,
+        bucket="my-bucket",
+        prefix="my-prefix",
+    ),
+    credentials=s3.S3Credentials(
+        aws_access_key_id=credentials.access_key,
+        aws_secret_access_key=credentials.secret_key,
+    )
+)
+
+UPLOAD_FOLDER_ROOT = r"/tmp/Uploads"
+du.configure_upload(app=app, folder=UPLOAD_FOLDER_ROOT, s3_config=s3_config)
+
+```
+
+>⚠️ Large files will be uploaded to s3 in chunks using multiple upload functionality.
+`boto3` supports multiple upload only if the chunks are larger than 5Mib. This can be set while creating the `du.Upload` component.
+
+
+## Passing multiple states to `du.callback`
+
+Now it is possible to capture Dash components states in a `du.callback`. Simply pass `State` object(s) like you would typically do for a Dash callback.
+
+```python
+@du.callback(
+    output=Output("callback-output", "children"),
+    id="dash-uploader",
+    state=State("callback-output", "children"),
+)
+def callback_on_completion(status: du.UploadStatus, state):
+    return html.Ul([html.Li(str(x)) for x in status.uploaded_files])
+
+```
+
 
 ## Contributing
 
