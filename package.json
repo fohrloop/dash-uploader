@@ -43,7 +43,7 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.25.3",
     "eslint-plugin-react": "^7.27.1",
-    "npm": "^8.3.0",
+    "npm": "^8.11.0",
     "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-docgen": "^5.4.0",
