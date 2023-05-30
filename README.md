@@ -3,8 +3,12 @@
 ![upload large files with dash-uploader](docs/upload-demo.gif)
 
 # 📤 dash-uploader
-
 The alternative upload component for [Dash](https://dash.plotly.com/) applications. 
+
+## 👨‍💻 Looking for maintainer(s)
+
+This project is looking for maintainer(s)! See [#22](https://github.com/np-8/dash-uploader/discussions/122)
+
 
 ## 📢 dash-uploader 0.7.0 pre-release available 
 
@@ -16,6 +20,7 @@ python -m pip install dash-uploader --pre
 
 - It fixes the multi-file upload issues!  
 - Please, test it and give feedback to this [discussion](https://github.com/np-8/dash-uploader/discussions/88). 
+
 
 
 ## Table of contents
