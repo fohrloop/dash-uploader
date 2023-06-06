@@ -1,5 +1,5 @@
 import logging
-
+from dash_uploader import s3
 import dash_uploader.settings as settings
 from dash_uploader.upload import update_upload_api
 from dash_uploader.httprequesthandler import HttpRequestHandler
@@ -9,7 +9,12 @@ logger = logging.getLogger("dash_uploader")
 
 
 def configure_upload(
-    app, folder, use_upload_id=True, upload_api=None, http_request_handler=None
+    app,
+    folder,
+    use_upload_id=True,
+    upload_api=None,
+    http_request_handler=None,
+    s3_config: s3.S3Configuration = None,
 ):
     r"""
     Configure the upload APIs for dash app.
@@ -28,8 +33,10 @@ def configure_upload(
     use_upload_id: bool
         Determines if the uploads are put into
         folders defined by a "upload id" (upload_id).
-        If True, uploads will be put into `folder`/<upload_id>/;
-        that is, every user (for example with different
+        If True, uploads will be put into 
+        `folder`/<upload_id>/ or `s3_config.location.prefix`//<upload_id>/
+        if s3_config is provided.
+        That is, every user (for example with different
         session id) will use their own folder. If False,
         all files from all sessions are uploaded into
         same folder (not recommended).
@@ -44,9 +51,14 @@ def configure_upload(
         If you provide a class, use a subclass of HttpRequestHandler.
         See the documentation of dash_uploader.HttpRequestHandler for
         more details.
+    s3_config: None or class
+        Used for uploading file to a s3 bucket. If provided, `folder` will be used for
+        temp folder for chunks during multipart upload
+
     """
     settings.UPLOAD_FOLDER_ROOT = folder
     settings.app = app
+    settings.s3_config = s3_config
 
     if upload_api is None:
         upload_api = settings.upload_api
@@ -71,6 +83,7 @@ def configure_upload(
         upload_api,
         http_request_handler=http_request_handler,
         use_upload_id=use_upload_id,
+        s3_config=s3_config,
     )
 
 
@@ -80,6 +93,7 @@ def decorate_server(
     upload_api,
     http_request_handler,
     use_upload_id=True,
+    s3_config: s3.S3Configuration = None,
 ):
     """
     Parameters
@@ -100,10 +114,16 @@ def decorate_server(
         session id) will use their own folder. If False,
         all files from all sessions are uploaded into
         same folder (not recommended).
+    s3_config: None or class
+        Used for uploading file to a s3 bucket. If provided, `folder` will be used for
+        temp folder for chunks during multipart upload
     """
 
     handler = http_request_handler(
-        server, upload_folder=temp_base, use_upload_id=use_upload_id
+        server,
+        upload_folder=temp_base,
+        use_upload_id=use_upload_id,
+        s3_config=s3_config,
     )
 
     server.add_url_rule(upload_api, None, handler.get, methods=["GET"])

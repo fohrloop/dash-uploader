@@ -1,3 +1,4 @@
+
 # The default upload api endpoint
 # The du.configure_upload can change this
 upload_api = "/API/dash-uploader"
@@ -18,3 +19,7 @@ requests_pathname_prefix = "/"
 # `requests_pathname_prefix` and `routes_pathname_prefix`,
 # not `url_base_pathname`.
 routes_pathname_prefix = "/"
+
+
+# s3 config to be used by httphandler and UploadStatus
+s3_config = None

@@ -1,7 +1,9 @@
 from pathlib import Path
+from urllib.parse import urljoin
 
 from dash.exceptions import PreventUpdate
 from dash.dependencies import Input, State
+from dash_uploader.s3 import S3Location
 
 import dash_uploader.settings as settings
 from dash_uploader.uploadstatus import UploadStatus
@@ -21,20 +23,35 @@ def _create_dash_callback(callback, settings):  # pylint: disable=redefined-oute
         uploaded_files_size,
         total_files_size,
         upload_id,
+        *args,
+        **kwargs,
     ):
         if not callbackbump:
             raise PreventUpdate()
 
         uploadedfilepaths = []
+        s3_location = None
         if uploaded_filenames is not None:
-            if upload_id:
-                root_folder = Path(settings.UPLOAD_FOLDER_ROOT) / upload_id
-            else:
-                root_folder = Path(settings.UPLOAD_FOLDER_ROOT)
 
+            # get config and upload id
+            s3_config = settings.s3_config
+            s3_location:S3Location = s3_config.location if s3_config else None 
+            _upload_id = upload_id or ""
+
+            # build root folder 
+            if s3_location:
+                _url = urljoin(s3_location.endpoint_url, s3_location.bucket)
+                _url = urljoin(_url, s3_location.prefix, allow_fragments=True)
+                _url = urljoin(_url, _upload_id, allow_fragments=True)
+                root_folder = Path(_url)
+            else:
+                root_folder = Path(settings.UPLOAD_FOLDER_ROOT) / _upload_id
+
+            # construct full paths to the uploaded files, local or s3
             for filename in uploaded_filenames:
                 file = root_folder / filename
                 uploadedfilepaths.append(str(file))
+
 
         status = UploadStatus(
             uploaded_files=uploadedfilepaths,
@@ -42,8 +59,9 @@ def _create_dash_callback(callback, settings):  # pylint: disable=redefined-oute
             uploaded_size_mb=uploaded_files_size,
             total_size_mb=total_files_size,
             upload_id=upload_id,
+            s3_location=s3_location,
         )
-        return callback(status)
+        return callback(status, *args, **kwargs)
 
     return wrapper
 
@@ -51,6 +69,7 @@ def _create_dash_callback(callback, settings):  # pylint: disable=redefined-oute
 def callback(
     output,
     id="dash-uploader",
+    state=None,
 ):
     """
     Add a callback to dash application.
@@ -63,12 +82,15 @@ def callback(
         The output dash component
     id: str
         The id of the du.Upload component.
+    state: dash State(s)
+        The state dash component
 
     Example
     -------
     @du.callback(
        output=Output('callback-output', 'children'),
        id='dash-uploader',
+       state=State('callback-state', 'children'),
     )
     def get_a_list(filenames):
         return html.Ul([html.Li(filenames)])
@@ -108,6 +130,11 @@ def callback(
             # the `prevent_initial_call` option was added in Dash v.1.12
             kwargs["prevent_initial_call"] = True
 
+        # input states from application
+        extra_states = []
+        if state:
+            extra_states = [state] if isinstance(state, State) else state
+
         # Input: Change in the props will trigger callback.
         #     Whenever 'this.props.setProps' is called on the JS side,
         #     (dash specific special prop that is passed to every
@@ -126,8 +153,9 @@ def callback(
                 State(id, "uploadedFilesSize"),
                 State(id, "totalFilesSize"),
                 State(id, "upload_id"),
-            ],
-            **kwargs
+            ]
+            + extra_states,
+            **kwargs,
         )(dash_callback)
 
         return function

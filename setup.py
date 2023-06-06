@@ -42,7 +42,8 @@ setup(
             # Needs: import chromedriver_binary to the top of your test script.
             "chromedriver-binary",
             "Werkzeug~=2.0.3",
-        ]
+        ],
+        "s3": ["boto3>=1.22.5"],
     },
     classifiers=[
         "Framework :: Dash",

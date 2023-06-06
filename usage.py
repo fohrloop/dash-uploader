@@ -3,17 +3,42 @@ import uuid
 import dash_uploader as du
 import dash
 
+
 if du.utils.dash_version_is_at_least("2.0.0"):
     from dash import html  # if dash <= 2.0.0, use: import dash_html_components as html
 else:
     import dash_html_components as html
 
-from dash.dependencies import Output
+from dash.dependencies import Output, State
 
 app = dash.Dash(__name__)
 
-UPLOAD_FOLDER_ROOT = r"C:\tmp\Uploads"
-du.configure_upload(app, UPLOAD_FOLDER_ROOT)
+s3_config = None
+# uncomment the following lines to get stored credentials from env or aws config files
+
+# import boto3
+# session = boto3.Session()
+# credentials = session.get_credentials()
+# credentials = credentials.get_frozen_credentials()
+# access_key = credentials.access_key
+# secret_key = credentials.secret_key
+# from dash_uploader import s3
+# s3_config = s3.S3Configuration(
+#     location=s3.S3Location(
+#         region_name = "eu-central-1",
+#         endpoint_url="https://s3.eu-central-1.amazonaws.com",
+#         use_ssl=True,
+#         bucket="my-bucket",
+#         prefix="my-prefix",
+#     ),
+#     credentials=s3.S3Credentials(
+#         aws_access_key_id=credentials.access_key,
+#         aws_secret_access_key=credentials.secret_key,
+#     )
+# )
+
+UPLOAD_FOLDER_ROOT = r"/tmp/Uploads"
+du.configure_upload(app=app, folder=UPLOAD_FOLDER_ROOT, s3_config=s3_config)
 
 
 def get_upload_component(id):
@@ -25,6 +50,7 @@ def get_upload_component(id):
         pause_button=True,
         max_file_size=130,  # 130 Mb
         max_total_size=350,
+        # chunk_size=6, # 6 MB to use multipart upload to s3
         # filetypes=["csv", "zip"],
         upload_id=uuid.uuid1(),  # Unique session id
         max_files=10,
@@ -59,13 +85,17 @@ def get_app_layout():
 # This way we can use unique session id's as upload_id's
 app.layout = get_app_layout
 
+# uncomment the following line to get the logs
+# app.server.logger.setLevel(logging.DEBUG)
+
 
 # 3) Create a callback
 @du.callback(
     output=Output("callback-output", "children"),
     id="dash-uploader",
+    state=State("callback-output", "children"),
 )
-def callback_on_completion(status: du.UploadStatus):
+def callback_on_completion(status: du.UploadStatus, state):
     return html.Ul([html.Li(str(x)) for x in status.uploaded_files])
 
 

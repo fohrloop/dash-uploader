@@ -1,5 +1,6 @@
 from pathlib import Path
 import warnings
+from dash_uploader.s3 import S3Location
 
 
 class UploadStatus:
@@ -22,6 +23,8 @@ class UploadStatus:
         Total size of files to be uploaded in Megabytes
     status.upload_id (str or None):
         The upload id used in the upload process, if any.
+    status.s3_location (S3Location or None):
+        The S3 location used for uploading, if any
     """
 
     def __init__(
@@ -31,6 +34,7 @@ class UploadStatus:
         uploaded_size_mb,
         total_size_mb,
         upload_id=None,
+        s3_location: S3Location = None,
     ):
         """
         Parameters
@@ -47,6 +51,8 @@ class UploadStatus:
             The size of all files to be uploaded
         upload_id: None or str
             The upload id used.
+        s3_location (S3Location or None):
+            The S3 location used for uploading, if any
         """
 
         self.uploaded_files = [Path(x) for x in uploaded_files]
@@ -65,6 +71,7 @@ class UploadStatus:
         self.uploaded_size_mb = uploaded_size_mb
         self.total_size_mb = total_size_mb
         self.progress = uploaded_size_mb / total_size_mb
+        self.s3_location = s3_location
 
     def __str__(self):
 
@@ -78,5 +85,6 @@ class UploadStatus:
             f"total_size_mb = {self.total_size_mb}",
             f"progress = {self.progress}",
             f"upload_id = {self.upload_id}",
+            f"s3_location = {self.s3_location}",
         ]
         return "<UploadStatus: " + ", ".join(vals) + ">"
