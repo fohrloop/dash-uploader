@@ -17,8 +17,6 @@ def dash_version_is_at_least(req_version="1.12"):
     the argument "req_version".
     This is a private method, and should not be exposed to users.
     """
-    if isinstance(dash_version, version.LegacyVersion):
-        return False
     return dash_version >= version.parse(req_version)
 
 
