@@ -27,7 +27,7 @@ setup(
     install_requires=["dash>=1.1.0", "packaging>= 21.0"],
     extras_require={
         "dev": [
-            "pyyaml~=5.3.1",  # building with dash-generate-components
+            "pyyaml~=6.0",  # building with dash-generate-components
             # Packages needed to run the tests.
             "black",  # code formatting
             "pytest",  # running tests
@@ -42,6 +42,7 @@ setup(
             # Needs: import chromedriver_binary to the top of your test script.
             "chromedriver-binary",
             "Werkzeug~=2.0.3",
+            "packaging>22"
         ]
     },
     classifiers=[

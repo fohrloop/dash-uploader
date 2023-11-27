@@ -1,4 +1,5 @@
 import uuid
+import sys
 
 import dash_uploader as du
 import dash
@@ -12,7 +13,7 @@ from dash.dependencies import Output
 
 app = dash.Dash(__name__)
 
-UPLOAD_FOLDER_ROOT = r"C:\tmp\Uploads"
+UPLOAD_FOLDER_ROOT = r"C:\tmp\Uploads" if sys.platform.startswith("win") else "/tmp/Uploads"
 du.configure_upload(app, UPLOAD_FOLDER_ROOT)
 
 
