@@ -5,11 +5,14 @@ import dash_uploader as du
 import dash
 
 if du.utils.dash_version_is_at_least("2.0.0"):
+    from dash import dcc
     from dash import html  # if dash <= 2.0.0, use: import dash_html_components as html
 else:
     import dash_html_components as html
+    import dash_core_components as dcc
 
-from dash.dependencies import Output
+
+from dash.dependencies import Output, State
 
 app = dash.Dash(__name__)
 
@@ -49,6 +52,7 @@ def get_app_layout():
                     "display": "inline-block",
                 },
             ),
+            dcc.Store(id="example-token", storage_type="memory", data="some token")
         ],
         style={
             "textAlign": "center",
@@ -65,8 +69,10 @@ app.layout = get_app_layout
 @du.callback(
     output=Output("callback-output", "children"),
     id="dash-uploader",
+    state=State("example-token", "data"), #  List of State also acceptable
 )
-def callback_on_completion(status: du.UploadStatus):
+def callback_on_completion(status: du.UploadStatus, token):
+    print("example-token is ", token)
     return html.Ul([html.Li(str(x)) for x in status.uploaded_files])
 
 
