@@ -22,7 +22,7 @@ import './uploader.css';
  * @return {number} size_mb - Bytes converted to megabytes
  */
 function bytest_to_mb(size_bytes) {
-    // Mb = 1024*1024 bytes
+    // MB = 1024*1024 bytes
     return size_bytes / 1048576;
 }
 
@@ -171,7 +171,7 @@ export default class Upload_ReactComponent extends Component {
                 sumOfSizes += file.size
             }, this);
             if (sumOfSizes > this.props.maxTotalSize) {
-                alert('Total file size too large (' + bytest_to_mb(sumOfSizes).toFixed(1) + ' Mb) ! Maximum total filesize is: ' + bytest_to_mb(this.props.maxTotalSize).toFixed(1) + ' Mb')
+                alert('Total file size too large (' + bytest_to_mb(sumOfSizes).toFixed(1) + ' MB) ! Maximum total filesize is: ' + bytest_to_mb(this.props.maxTotalSize).toFixed(1) + ' MB')
                 return false
             }
         }
@@ -181,7 +181,7 @@ export default class Upload_ReactComponent extends Component {
     onProgress = () => {
 
         let parenthesisTxt = (bytest_to_mb(this.flow.sizeUploaded())).toFixed(2)
-            + ' Mb'
+            + ' MB'
         let filenameTxt = ''
 
         if (this.props.totalFilesCount > 1) {
@@ -327,9 +327,9 @@ export default class Upload_ReactComponent extends Component {
         }, this);
 
         if (n_too_large_files == 1) {
-            alert('1 file could not be uploaded, as the file is too large! Maximum allowed file size is ' + bytest_to_mb(this.props.maxFileSize).toFixed(1) + 'Mb')
+            alert('1 file could not be uploaded, as the file is too large! Maximum allowed file size is ' + bytest_to_mb(this.props.maxFileSize).toFixed(1) + 'MB')
         } else if (n_too_large_files > 1) {
-            alert(n_too_large_files.toString() + ' files could not be uploaded, as the file is too large! Maximum allowed file size is ' + bytest_to_mb(this.props.maxFileSize).toFixed(1) + 'Mb')
+            alert(n_too_large_files.toString() + ' files could not be uploaded, as the file is too large! Maximum allowed file size is ' + bytest_to_mb(this.props.maxFileSize).toFixed(1) + 'MB')
         }
     }
 
@@ -682,13 +682,13 @@ Upload_ReactComponent.propTypes = {
     totalFilesCount: PropTypes.number,
 
     /**
-     *  Size of uploaded files (Mb). Mb = 1024*1024 bytes.
+     *  Size of uploaded files (MB). MB = 1024*1024 bytes.
      */
     uploadedFilesSize: PropTypes.number,
 
     /**
-     *   Total size of uploaded files to be uploaded (Mb). 
-     *   Mb = 1024*1024 bytes.
+     *   Total size of uploaded files to be uploaded (MB). 
+     *   MB = 1024*1024 bytes.
      */
     totalFilesSize: PropTypes.number,
 }

@@ -28,7 +28,7 @@ from .utils import create_file, load_text_file, expect_alert
 
 
 @pytest.fixture
-def testfile10Mb_csv():
+def testfile10MB_csv():
     file = Path(__file__).resolve().parent / "mytestfile.csv"
     create_file(file, filesize_mb=10)
     yield file
@@ -130,7 +130,7 @@ def test_disabled01_check_disabled_property_update(dash_duo):
 
 
 def test_disabled02_check_disabled_effect(
-    dash_duo, testfile10Mb_csv, testfileWrongType, js_drag_and_drop
+    dash_duo, testfile10MB_csv, testfileWrongType, js_drag_and_drop
 ):
     """Check the effectiveness of the disabled and disableDragAndDrop property.
     The upload component with "disabled" triggered would not accept any files.
@@ -176,7 +176,7 @@ def test_disabled02_check_disabled_effect(
             drag_and_drag_input = driver.execute_script(
                 js_drag_and_drop, upload, 20, 20
             )
-            drag_and_drag_input.send_keys(str(testfile10Mb_csv))
+            drag_and_drag_input.send_keys(str(testfile10MB_csv))
         else:
             # Ensure the uploading button is clickable.
             if expect_success:
@@ -192,7 +192,7 @@ def test_disabled02_check_disabled_effect(
                 return
 
             # Wait until file is uploaded
-            upload_input.send_keys(str(testfile10Mb_csv))
+            upload_input.send_keys(str(testfile10MB_csv))
 
         # The fail case would be used for checking the drag and drop mode.
         if expect_success:
@@ -218,9 +218,9 @@ def test_disabled02_check_disabled_effect(
         uploaded_file = callback_output.find_element(By.XPATH, "//ul").text
         uploaded_file = Path(uploaded_file)
 
-        assert uploaded_file.name == testfile10Mb_csv.name
+        assert uploaded_file.name == testfile10MB_csv.name
         assert uploaded_file.exists()
-        assert uploaded_file.stat().st_size == testfile10Mb_csv.stat().st_size
+        assert uploaded_file.stat().st_size == testfile10MB_csv.stat().st_size
 
         # cleanup
         shutil.rmtree(uploaded_file.parent)

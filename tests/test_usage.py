@@ -21,7 +21,7 @@ from .utils import create_file
 
 
 @pytest.fixture
-def testfile10Mb_csv():
+def testfile10MB_csv():
     file = Path(__file__).resolve().parent / "mytestfile.csv"
     create_file(file, filesize_mb=10)
     yield file
@@ -42,7 +42,7 @@ def test_render01_render_component(dash_duo):
 
 
 # Run with pytest -k upload01
-def test_upload01_upload_a_file(dash_duo, testfile10Mb_csv):
+def test_upload01_upload_a_file(dash_duo, testfile10MB_csv):
     app = import_app("usage")
     dash_duo.start_server(app)
 
@@ -57,7 +57,7 @@ def test_upload01_upload_a_file(dash_duo, testfile10Mb_csv):
     upload_input = upload.find_element(
         By.XPATH, "//input[@name='dash-uploader-upload']"
     )
-    upload_input.send_keys(str(testfile10Mb_csv))
+    upload_input.send_keys(str(testfile10MB_csv))
     # Wait until file is uploaded
 
     upload_label = upload.find_element(By.XPATH, "//label")
@@ -77,9 +77,9 @@ def test_upload01_upload_a_file(dash_duo, testfile10Mb_csv):
     uploaded_file = callback_output.find_element(By.XPATH, "//ul").text
     uploaded_file = Path(uploaded_file)
 
-    assert uploaded_file.name == testfile10Mb_csv.name
+    assert uploaded_file.name == testfile10MB_csv.name
     assert uploaded_file.exists()
-    assert uploaded_file.stat().st_size == testfile10Mb_csv.stat().st_size
+    assert uploaded_file.stat().st_size == testfile10MB_csv.stat().st_size
 
     # cleanup
     shutil.rmtree(uploaded_file.parent)

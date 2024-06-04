@@ -159,7 +159,7 @@ The maximum file size in Megabytes. Default: 1024 (=1Gb).
 #### chunk_size: numeric
 *New in version **[0.6.0]***
 
-The chunk size in Megabytes. Optional. Default: 1 (=1Mb).
+The chunk size in Megabytes. Optional. Default: 1 (=1MB).
 
 #### default_style: None or dict
 Inline CSS styling for the main div element. 
