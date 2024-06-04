@@ -52,7 +52,7 @@ python -m pip install dash-uploader --pre
 |                       | dash-uploader                                      | [dcc.Upload](https://dash.plotly.com/dash-core-components/upload)                                                                                                                    |
 | --------------------- | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Underlying technology | [flow.js](https://github.com/flowjs/flow.js/)      | HTML5 API                                                                                                                                                                            |
-| File size             | Unlimited                                          | max ~150-200Mb ([link](https://community.plotly.com/t/dash-upload-component-decoding-large-files/8033/11))                                                                           |
+| File size             | Unlimited                                          | max ~150-200MB ([link](https://community.plotly.com/t/dash-upload-component-decoding-large-files/8033/11))                                                                           |
 | Uploads to            | Hard disk (server side)                            | First to browser memory (user side) Then, to server using callbacks.                                                                                                                 |
 | Data type             | Uploaded as file; no need to parse at server side. | Uploaded as byte64 encoded string  -> Needs parsing                                                                                                                                  |
 | See upload progress?  | Progressbar out of the box                         | No upload indicators out of the box. Generic loading indicator possible. [Progressbar not possible](https://community.plotly.com/t/upload-after-confirmation-and-progress-bar/7172). |
@@ -110,7 +110,7 @@ du.configure_upload(app, UPLOAD_FOLDER_ROOT)
 def get_upload_component(id):
     return du.Upload(
         id=id,
-        max_file_size=1800,  # 1800 Mb
+        max_file_size=1800,  # 1800 MB
         filetypes=['csv', 'zip'],
         upload_id=uuid.uuid1(),  # Unique session id
     )

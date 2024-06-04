@@ -36,7 +36,7 @@ def create_file(filename, filesize_mb=1):
     filename: str
         The filename
     filesize_mb: numeric
-        The file size in Mb.
+        The file size in MB.
     """
     with open(filename, "wb") as f:
         f.seek(int(1024 * 1024 * filesize_mb))
