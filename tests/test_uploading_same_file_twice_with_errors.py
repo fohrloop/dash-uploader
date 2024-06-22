@@ -1,3 +1,4 @@
+import sys
 from pathlib import Path
 import shutil
 import threading
@@ -139,6 +140,7 @@ def test_uploadtwice01_upload_a_file_twice_and_reserve_it(
 
 
 # Run with pytest -k uploadtwice02
+@pytest.mark.skipif(sys.platform in ["linux", "darwin"], reason="os.unlik() is not blocking on Linux and MacOS")
 def test_uploadtwice02_upload_a_file_twice_with_error(
     dash_duo, testfile10kb_csv, testfile10kb_2_csv
 ):
