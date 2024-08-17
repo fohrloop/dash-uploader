@@ -42,7 +42,6 @@ setup(
             # Needs: import chromedriver_binary to the top of your test script.
             "chromedriver-binary",
             "Werkzeug~=2.0.3",
-            "packaging>22"
         ]
     },
     classifiers=[
