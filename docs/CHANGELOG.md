@@ -1,11 +1,12 @@
 # Changelog
 
-## 0.7.0-a1 (2022-03-30)
+## 0.7.0 (unreleased)
 
-- This pre-release is available in PyPI with `--pre` flag.
 - [0.6.0 → 0.7.0 Migration Guide](https://github.com/np-8/dash-uploader/wiki/Migration-Guide#060--070).
 
 ### Fixed
+- Addressed an issue where a fresh install would encounter an `AttributeError` due to the removal of `LegacyVersion` class in `packaging.version`. This resolution is detailed in [PR 128](https://github.com/fohrloop/dash-uploader/pull/128), effectively resolving issue [#111](https://github.com/fohrloop/dash-uploader/issues/111).
+- Clarified size units by changing "Mb" to "MB" for better readability and consistency. See the details in [PR 133](https://github.com/fohrloop/dash-uploader/pull/133).
 - Calling callback each time file is uploaded in multi-file upload case (Fixes: [#5](https://github.com/np-8/dash-uploader/issues/5), [#20](https://github.com/np-8/dash-uploader/issues/20) & [#44](https://github.com/np-8/dash-uploader/issues/44))
 - Progress bar problems when uploading multiple files (Fixes: [#84](https://github.com/np-8/dash-uploader/issues/84))
 - Instead of returing `None`, raise `dash.exceptions.PreventUpdate`. This should reduce errors seen in the browser console. [PR 54](https://github.com/np-8/dash-uploader/pull/54)
