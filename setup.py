@@ -13,7 +13,7 @@ setup(
     name=package_name,
     version=package["version"],
     author=package["author"],
-    author_email="niko@pasanen.me",
+    author_email="fohrloop@gmail.com",
     url=package["homepage"],
     packages=[
         package_name,
