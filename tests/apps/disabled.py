@@ -1,24 +1,29 @@
 """
 Test app used by test_disabled.
 """
-import uuid
-import json
 
-import dash_uploader as du
+import json
+import sys
+import uuid
+
 import dash
 
+import dash_uploader as du
+
 if du.utils.dash_version_is_at_least("2.0.0"):
-    from dash import html, dcc
+    from dash import dcc, html
 else:
     import dash_html_components as html
     import dash_core_components as dcc
 
-from dash.dependencies import Output, Input
+from dash.dependencies import Input, Output
 from dash.exceptions import PreventUpdate
 
 app = dash.Dash(__name__)
 
-UPLOAD_FOLDER_ROOT = r"C:\tmp\Uploads"
+UPLOAD_FOLDER_ROOT = (
+    r"C:\tmp\Uploads" if sys.platform == "win32" else "/tmp/dash-uploader-uploads"
+)
 du.configure_upload(app, UPLOAD_FOLDER_ROOT)
 
 
