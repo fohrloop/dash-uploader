@@ -1,19 +1,20 @@
-import sys
-from pathlib import Path
 import shutil
+import sys
 import threading
 import time
+from pathlib import Path
 
 import chromedriver_binary
-
-from dash.testing.application_runners import import_app
 import pytest
+from dash.testing.application_runners import import_app
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
+from selenium.webdriver.support.ui import WebDriverWait
 
 from .utils import create_file
+
+# On *nix or not?
+ON_NIX = sys.platform in ["linux", "darwin"]
 
 
 @pytest.fixture
@@ -33,9 +34,21 @@ def testfile10kb_2_csv():
 
 
 def reserve_file_for_while(filepath, wait_time):
-    f = open(filepath, "r")
+
+    if ON_NIX:
+        filepath.chmod(0o000)
+        # import pdb
+
+        # pdb.set_trace()
+    else:
+        f = open(filepath, "r")  # reserves the file on Windows
+
     time.sleep(wait_time)
-    f.close()
+
+    if ON_NIX:
+        ...
+    else:
+        f.close()
 
 
 HOLD_TIME_FOR_FILE = 1.5  # seconds
@@ -140,7 +153,6 @@ def test_uploadtwice01_upload_a_file_twice_and_reserve_it(
 
 
 # Run with pytest -k uploadtwice02
-@pytest.mark.skipif(sys.platform in ["linux", "darwin"], reason="os.unlik() is not blocking on Linux and MacOS")
 def test_uploadtwice02_upload_a_file_twice_with_error(
     dash_duo, testfile10kb_csv, testfile10kb_2_csv
 ):
