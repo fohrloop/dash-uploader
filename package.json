@@ -21,7 +21,7 @@
     "build:activated": "npm run build:js && npm run build:py-activated",
     "test:react": "react-scripts test"
   },
-  "author": "Niko Pasanen <niko@pasanen.me>",
+  "author": "Niko Föhr <fohrloop@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "@flowjs/flow.js": "^2.14.1",
