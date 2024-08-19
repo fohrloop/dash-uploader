@@ -33,22 +33,10 @@ def testfile10kb_2_csv():
     file.unlink()
 
 
-def reserve_file_for_while(filepath, wait_time):
-
-    if ON_NIX:
-        filepath.chmod(0o000)
-        # import pdb
-
-        # pdb.set_trace()
-    else:
-        f = open(filepath, "r")  # reserves the file on Windows
-
+def reserve_file_for_while_on_windows(filepath, wait_time):
+    f = open(filepath, "r")  # reserves the file on Windows
     time.sleep(wait_time)
-
-    if ON_NIX:
-        ...
-    else:
-        f.close()
+    f.close()
 
 
 HOLD_TIME_FOR_FILE = 1.5  # seconds
@@ -59,7 +47,7 @@ def test_uploadtwice01_upload_a_file_twice_and_reserve_it(
 ):
     # This simulates the case when sometimes for some reason
     # the file might get reserved. (e.g. because of antivirus check, Windows
-    # indexing or similar.) (Happens escpecially on Windows)
+    # indexing or similar.) (Happens escpecially (only?) on Windows)
     #
     # (1) Upload a file
     # (2) Reserve that file for a while
@@ -121,7 +109,8 @@ def test_uploadtwice01_upload_a_file_twice_and_reserve_it(
     # Reserve file & make it impossible to upload testfile10kb_csv
     # Hold the file for 1.5 seconds
     file_reserve_thread = threading.Thread(
-        target=reserve_file_for_while, args=(uploaded_file, HOLD_TIME_FOR_FILE)
+        target=reserve_file_for_while_on_windows,
+        args=(uploaded_file, HOLD_TIME_FOR_FILE),
     )
     file_reserve_thread.start()
 
@@ -153,11 +142,20 @@ def test_uploadtwice01_upload_a_file_twice_and_reserve_it(
 
 
 # Run with pytest -k uploadtwice02
+@pytest.mark.skipif(
+    ON_NIX,
+    reason=(
+        "Opening a file is not blocking on Linux and MacOS, and there was problem only"
+        " on Windows. Therefore, the test needs also to be ran on Windows."
+    ),
+)
 def test_uploadtwice02_upload_a_file_twice_with_error(
     dash_duo, testfile10kb_csv, testfile10kb_2_csv
 ):
     # Same as test_uploadtwice01_upload_a_file_twice_and_reserve_it
-    # but force an error
+    # but force an error. This is only tested on Windows as the original
+    # problem may only occur on Windows. (or, at least seems not the be easily
+    # reproducible on Linux)
 
     # This app does not have retries on the "remove_file"
     # function, and therefore the error alert will appear
@@ -216,7 +214,8 @@ def test_uploadtwice02_upload_a_file_twice_with_error(
     # Reserve file & make it impossible to upload testfile10kb_csv
     # Hold the file for 4 seconds
     file_reserve_thread = threading.Thread(
-        target=reserve_file_for_while, args=(uploaded_file, HOLD_TIME_FOR_FILE)
+        target=reserve_file_for_while_on_windows,
+        args=(uploaded_file, HOLD_TIME_FOR_FILE),
     )
     file_reserve_thread.start()
 
