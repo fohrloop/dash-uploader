@@ -14,8 +14,6 @@ def compare_dash_version(req_version="1.12"):
     This is a private method, and should not be exposed to users.
     """
     cur_version = version.parse(dashversion)
-    if isinstance(cur_version, version.LegacyVersion):
-        return False
     return cur_version >= version.parse(req_version)
 
 
