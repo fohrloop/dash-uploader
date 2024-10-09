@@ -1,13 +1,13 @@
 
-![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/np-8/dash-uploader)&nbsp;![PyPI](https://img.shields.io/pypi/v/dash-uploader)&nbsp;![PyPI - Downloads](https://img.shields.io/pypi/dm/dash-uploader)&nbsp;![GitHub](https://img.shields.io/github/license/np-8/dash-uploader)
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/fohrloop/dash-uploader)&nbsp;![PyPI](https://img.shields.io/pypi/v/dash-uploader)&nbsp;![PyPI - Downloads](https://img.shields.io/pypi/dm/dash-uploader)&nbsp;![GitHub](https://img.shields.io/github/license/fohrloop/dash-uploader)
 
-![upload large files with dash-uploader](https://github.com/np-8/dash-uploader/blob/0.2.0/docs/upload-demo.gif?raw=true)
+![upload large files with dash-uploader](https://github.com/fohrloop/dash-uploader/blob/0.2.0/docs/upload-demo.gif?raw=true)
 
 # 📤 dash-uploader
 The upload package for [Dash](https://dash.plotly.com/) applications using large data files. 
 
 ### 🏠 Homepage & Documentation
-[https://github.com/np-8/dash-uploader](https://github.com/np-8/dash-uploader)
+[https://github.com/fohrloop/dash-uploader](https://github.com/fohrloop/dash-uploader)
 
 
 ## Short summary

@@ -17,7 +17,7 @@
 - [8.  More help?](#8--more-help)
 ## 1. How to improve this package?
 
-Maybe you already have an idea. If not, see if there are any open [issues](https://github.com/np-8/dash-uploader/issues) that need help. 
+Maybe you already have an idea. If not, see if there are any open [issues](https://github.com/fohrloop/dash-uploader/issues) that need help. 
 ## 2. Setting up development environment
 - Clone this repository. Change current directory to project root.
 - Install [npm and Node.js (16.x)](https://nodejs.org) for building JS.
@@ -169,10 +169,10 @@ twine upload .\dist\dash_uploader-x.x.x.tar.gz
 ```
 ## 7.  How does dash-uploader work internally?
 
-Here is a diagram that tries to explain how dash-uploader works under the hood. If you find a place for improvement, please [submit a PR](https://github.com/np-8/dash-uploader/issues).
+Here is a diagram that tries to explain how dash-uploader works under the hood. If you find a place for improvement, please [submit a PR](https://github.com/fohrloop/dash-uploader/issues).
 
 
-[![](how-dash-uploader-works.svg)](https://raw.githubusercontent.com/np-8/dash-uploader/master/docs/how-dash-uploader-works.svg)
+[![](how-dash-uploader-works.svg)](https://raw.githubusercontent.com/fohrloop/dash-uploader/master/docs/how-dash-uploader-works.svg)
 
 ## 8.  More help?
 Read also the automatically generated README text at [README-COOKIECUTTER.md](README-COOKIECUTTER.md).
