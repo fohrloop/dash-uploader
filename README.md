@@ -1,4 +1,4 @@
-![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/np-8/dash-uploader)&nbsp;![PyPI](https://img.shields.io/pypi/v/dash-uploader)&nbsp;![PyPI - Downloads](https://img.shields.io/pypi/dm/dash-uploader)&nbsp;![GitHub](https://img.shields.io/github/license/np-8/dash-uploader)
+![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/fohrloop/dash-uploader)&nbsp;![PyPI](https://img.shields.io/pypi/v/dash-uploader)&nbsp;![PyPI - Downloads](https://img.shields.io/pypi/dm/dash-uploader)&nbsp;![GitHub](https://img.shields.io/github/license/fohrloop/dash-uploader)
 
 ![upload large files with dash-uploader](docs/upload-demo.gif)
 
@@ -7,7 +7,7 @@ The alternative upload component for [Dash](https://dash.plotly.com/) applicatio
 
 ## 👨‍💻 Looking for maintainer(s)
 
-This project is looking for maintainer(s)! See [#22](https://github.com/np-8/dash-uploader/discussions/122)
+This project is looking for maintainer(s)! See [#22](https://github.com/fohrloop/dash-uploader/discussions/122)
 
 
 ## 📢 dash-uploader 0.7.0 pre-release available 
@@ -19,7 +19,7 @@ python -m pip install dash-uploader --pre
 ```
 
 - It fixes the multi-file upload issues!  
-- Please, test it and give feedback to this [discussion](https://github.com/np-8/dash-uploader/discussions/88). 
+- Please, test it and give feedback to this [discussion](https://github.com/fohrloop/dash-uploader/discussions/88). 
 
 
 
@@ -65,7 +65,7 @@ pip install dash-uploader
 # Quickstart
 
 Full documentation [here](docs/dash-uploader.md) 
->⚠️**Security note**: The Upload component allows POST requests and uploads of arbitrary files to the server harddisk and one should take this into account (with user token checking etc.) if used as part of a public website! For this you can utilize the  `http_request_handler` argument of the [du.configure_upload](https://github.com/np-8/dash-uploader/blob/master/docs/dash-uploader.md#duconfigure_upload). (New in version 0.5.0)
+>⚠️**Security note**: The Upload component allows POST requests and uploads of arbitrary files to the server harddisk and one should take this into account (with user token checking etc.) if used as part of a public website! For this you can utilize the  `http_request_handler` argument of the [du.configure_upload](https://github.com/fohrloop/dash-uploader/blob/master/docs/dash-uploader.md#duconfigure_upload). (New in version 0.5.0)
 
 ## Simple example
 
@@ -90,7 +90,7 @@ if __name__ == '__main__':
 ```
 
 ## Example with callback (and other options)
-- **New in version 0.7.0:** Functions decorated with [`@du.callback`](https://github.com/np-8/dash-uploader/blob/dev/docs/dash-uploader.md#ducallback) must take `status` ([`du.UploadStatus`](https://github.com/np-8/dash-uploader/blob/dev/docs/dash-uploader.md#duuploadstatus)) object as the only input parameter (previously, `filenames`)
+- **New in version 0.7.0:** Functions decorated with [`@du.callback`](https://github.com/fohrloop/dash-uploader/blob/dev/docs/dash-uploader.md#ducallback) must take `status` ([`du.UploadStatus`](https://github.com/fohrloop/dash-uploader/blob/dev/docs/dash-uploader.md#duuploadstatus)) object as the only input parameter (previously, `filenames`)
 
 
 ```python
@@ -164,14 +164,14 @@ if __name__ == '__main__':
 
 | What?                                | How?                                                                                                                                                                                                                                         |
 | :----------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 🐞 Found a bug?                       | 🎟 <a href="https://github.com/np-8/dash-uploader/issues">File an Issue</a>                                                                                                                                                                   |
+| 🐞 Found a bug?                       | 🎟 <a href="https://github.com/fohrloop/dash-uploader/issues">File an Issue</a>                                                                                                                                                                   |
 | 🙋‍♂️ Need help?                         | ❔  <a href="https://stackoverflow.com/questions/ask">Ask a question on StackOverflow</a> <br><a href="https://community.plotly.com/t/show-and-tell-dash-uploader-upload-large-files/38451">📧 Use this thread on community.plotly.com</a>     |
-| 💡  Want to submit a feature request? | <a href="https://community.plotly.com/t/show-and-tell-dash-uploader-upload-large-files/38451">🎭 Discuss about it on community.plotly.com</a><br><a href="https://github.com/np-8/dash-uploader/issues">🎫 File an Issue (feature request)</a> |
+| 💡  Want to submit a feature request? | <a href="https://community.plotly.com/t/show-and-tell-dash-uploader-upload-large-files/38451">🎭 Discuss about it on community.plotly.com</a><br><a href="https://github.com/fohrloop/dash-uploader/issues">🎫 File an Issue (feature request)</a> |
 | 🧙  Want to write code?               | 🔥 <a href="./docs/CONTRIBUTING.md">Here's how you get started!</a>                                                                                                                                                                           |
 ## Documentation
 - [Documentation](docs/dash-uploader.md)
 - [Developer documentation](docs/CONTRIBUTING.md)
-- [Migration Guide](https://github.com/np-8/dash-uploader/wiki/Migration-Guide)
+- [Migration Guide](https://github.com/fohrloop/dash-uploader/wiki/Migration-Guide)
 
 ## Changelog
 

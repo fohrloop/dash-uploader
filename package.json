@@ -4,12 +4,12 @@
   "description": "Upload component for Dash",
   "repository": {
     "type": "git",
-    "url": "git://github.com/np-8/dash-uploader.git"
+    "url": "git://github.com/fohrloop/dash-uploader.git"
   },
   "bugs": {
-    "url": "https://github.com/np-8/dash-uploader/issues"
+    "url": "https://github.com/fohrloop/dash-uploader/issues"
   },
-  "homepage": "https://github.com/np-8/dash-uploader",
+  "homepage": "https://github.com/fohrloop/dash-uploader",
   "main": "build/index.js",
   "scripts": {
     "validate-init": "python _validate_init.py",

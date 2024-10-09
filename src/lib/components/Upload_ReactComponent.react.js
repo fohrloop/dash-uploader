@@ -1,4 +1,4 @@
-//  https://github.com/np-8/dash-uploader 
+//  https://github.com/fohrloop/dash-uploader 
 // 
 // Credits:
 // This file is based on following repositories
