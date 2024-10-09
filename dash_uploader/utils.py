@@ -1,12 +1,19 @@
 import logging
-from typing import final
-from packaging import version
-import pkg_resources
+import sys
 import time
 
-## Dash version
-dash_version_str = pkg_resources.get_distribution("dash").version
-dash_version = version.parse(dash_version_str)
+from packaging.version import parse as parse_version
+
+if sys.version_info < (3, 8):
+    import pkg_resources
+
+    DASH_VERSION_STR = pkg_resources.get_distribution("dash").version
+else:
+    from importlib.metadata import version as get_version
+
+    DASH_VERSION_STR = get_version("dash")
+
+DASH_VERSION = parse_version(DASH_VERSION_STR)
 
 
 def dash_version_is_at_least(req_version="1.12"):
@@ -17,7 +24,7 @@ def dash_version_is_at_least(req_version="1.12"):
     the argument "req_version".
     This is a private method, and should not be exposed to users.
     """
-    return dash_version >= version.parse(req_version)
+    return DASH_VERSION >= parse_version(req_version)
 
 
 def retry(wait_time, max_time):
