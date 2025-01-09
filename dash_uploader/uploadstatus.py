@@ -64,7 +64,7 @@ class UploadStatus:
 
         self.uploaded_size_mb = uploaded_size_mb
         self.total_size_mb = total_size_mb
-        self.progress = uploaded_size_mb / total_size_mb
+        self.progress = uploaded_size_mb / total_size_mb if total_size_mb else 1
 
     def __str__(self):
 
