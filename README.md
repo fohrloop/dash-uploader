@@ -1,13 +1,12 @@
+## 🚨 dash-uploader is archived 2025-07-19. See: [#153](https://github.com/fohrloop/dash-uploader/issues/153)
+--------
+
 ![GitHub tag (latest by date)](https://img.shields.io/github/v/tag/fohrloop/dash-uploader)&nbsp;![PyPI](https://img.shields.io/pypi/v/dash-uploader)&nbsp;![PyPI - Downloads](https://img.shields.io/pypi/dm/dash-uploader)&nbsp;![GitHub](https://img.shields.io/github/license/fohrloop/dash-uploader)
 
 ![upload large files with dash-uploader](docs/upload-demo.gif)
 
 # 📤 dash-uploader
 The alternative upload component for [Dash](https://dash.plotly.com/) applications. 
-
-## 👨‍💻 Looking for maintainer(s)
-
-This project is looking for maintainer(s)! See [#22](https://github.com/fohrloop/dash-uploader/discussions/122)
 
 
 ## 📢 dash-uploader 0.7.0 pre-release available 
